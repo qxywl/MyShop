@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="MountRuleDaoImpl">
+
+ 	<resultMap type="MountRuleModel" id="MountRule_query_list">
+        <result property="id" column="mount_id"/>
+        <result property="categoryId" column="category_id"/>
+        <result property="categoryCode" column="category_code"/>
+        <result property="deleteFlag" column="delete_flag"/>
+        <result property="productName" column="product_name"/>
+        <result property="productPrefix" column="product_prefix"/>
+        <result property="productSuffix" column="product_suffix"/>
+        <result property="productSearchTags" column="product_search_tags"/>
+        <result property="brandCodeList" column="brand_codes"/>
+        <result property="baseCategoryCodeList" column="category_codes"/>
+    </resultMap>
+
+	<sql id="query">
+	        and  mount_id <![CDATA[ % #{total} = #{remainder} ]]>
+    </sql>
+
+
+	<select id="totCountByEffective" parameterType="BalanceInfoModel" resultType="java.lang.Long">
+		select count(*) from  t_salecategory_product_mount_rule 
+		where delete_flag=0 
+		<include refid="query"/>
+	</select>
+
+	<select id="queryPage" parameterType="BalanceInfoModel" resultMap="MountRule_query_list">
+       SELECT
+       	   mount_id,
+		   category_id,
+		   category_code,
+		   delete_flag,
+		   product_name,
+		   product_prefix,
+		   product_suffix,
+		   product_search_tags,
+		   brand_codes,
+		   category_codes
+	   FROM t_salecategory_product_mount_rule  
+         WHERE delete_flag=0 
+         <include refid="query"/> 
+          limit #{start},#{rows}
+	</select>	
+	
+	<select id="queryDeleteRuleByDelDate" parameterType="BalanceInfoModel" resultMap="MountRule_query_list">
+       SELECT
+       	   mount_id,
+		   category_id,
+		   category_code,
+		   delete_flag,
+		   product_name,
+		   product_prefix,
+		   product_suffix,
+		   product_search_tags,
+		   brand_codes,
+		   category_codes
+	   FROM t_salecategory_product_mount_rule  
+         WHERE date_format(last_update_time,'%Y-%m-%d') = #{dateStr} and delete_flag=1 
+         <include refid="query"/>
+	</select>	
+
+</mapper>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ProductInfoExamineDaoImpl">
+	
+	<resultMap type="ProductInfoExamineModel" id="productInfoExamineModel">
+		   <result property="id" column="id" javaType="java.lang.Long" />
+		   <result property="productInfoAuthId" column="product_info_auth_id" javaType="java.lang.Long" />
+		   <result property="productName" column="product_name" javaType="java.lang.String" />
+		   <result property="productCode" column="product_code" javaType="java.lang.String" />
+		   <result property="catCode" column="cat_code" javaType="java.lang.String" />
+		   <result property="catName" column="cat_name" javaType="java.lang.String" />
+		   <result property="brandCode" column="brand_code" javaType="java.lang.String" />
+		   <result property="brandName" column="brand_name" javaType="java.lang.String" />
+		   <result property="supplierId" column="supplier_id" javaType="java.lang.Long" />
+		   <result property="productDesc" column="product_desc" javaType="java.lang.String" />
+		   <result property="productShelves" column="product_shelves" javaType="java.lang.Long" />		  
+		   <result property="productId" column="product_id" javaType="java.lang.Long" />
+		   <result property="productProducer" column="product_producer" javaType="java.lang.String" />
+		   <result property="productWeight" column="product_weight" javaType="java.lang.Double" />
+		   <result property="productLong" column="product_long" javaType="java.lang.Double" />
+		   <result property="productWidth" column="product_width" javaType="java.lang.Double" />
+		   <result property="productHeight" column="product_height" javaType="java.lang.Double" />
+		   <result property="productDensity" column="product_density" javaType="java.lang.Double" />
+		   <result property="productAtrNumber" column="product_atr_number" javaType="java.lang.String" />
+		   <result property="productShortName" column="product_short_name" javaType="java.lang.String" />
+		   <result property="productPrefix" column="product_prefix" javaType="java.lang.String" />
+		   <result property="productSuffix" column="product_suffix" javaType="java.lang.String" />
+		   <result property="productKeyword" column="product_keyword" javaType="java.lang.String" />
+		   <result property="productDownShow" column="product_down_show" javaType="java.lang.Long" />
+		   <result property="productPriceRate" column="product_price_rate" javaType="java.lang.Double" />
+		   <result property="productVideoUrl" column="product_video_url" javaType="java.lang.String" />
+	</resultMap>
+
+
+	 <insert id="add" parameterType="ProductInfoExamineModel">
+        <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER">
+    		SELECT @@IDENTITY as id
+    	</selectKey>
+        insert into t_product_info_examine
+          (product_info_auth_id,product_name,product_code,cat_code,cat_name,brand_code,brand_name,supplier_id,product_desc,product_shelves,
+           product_id,product_producer,product_weight,product_long,product_width,product_height,
+           product_density,product_atr_number,product_short_name,product_prefix,
+           product_suffix,product_keyword,product_down_show,product_price_rate,product_video_url)
+        values
+          (#{productInfoAuthId},#{productName},#{productCode},#{catCode},#{catName},#{brandCode},#{brandName},#{supplierId},#{productDesc},#{productShelves},
+           #{productId},#{productProducer},#{productWeight},#{productLong},
+           #{productWidth},#{productHeight},#{productDensity},#{productAtrNumber},
+           #{productShortName}, #{productPrefix},#{productSuffix},#{productKeyword},
+           #{productDownShow},#{productPriceRate},#{productVideoUrl})
+    </insert>
+	
+	<select id="queryOne" parameterType="ProductInfoExamineModel"
+	resultMap="productInfoExamineModel">
+	select
+	          product_info_auth_id
+	          
+	from  t_product_info_examine t
+	where t.product_info_auth_id=#{productInfoAuthId}
+	</select>
+	
+</mapper>

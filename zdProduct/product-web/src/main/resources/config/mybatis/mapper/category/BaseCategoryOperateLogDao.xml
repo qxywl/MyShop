@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="BaseCategoryOperateLogDaoImpl">
+	
+	<resultMap type="BaseCategoryOperateLog" id="baseCategoryOperateLog">
+		   <result property="id" column="id" javaType="java.lang.Long" />
+		   <result property="categoryId" column="category_id" javaType="java.lang.Long" />
+		   <result property="categoryName" column="category_name" javaType="java.lang.String" />
+		   <result property="categoryCode" column="category_code" javaType="java.lang.String" />
+		   <result property="parentId" column="parent_id" javaType="java.lang.Long" />
+		   <result property="parentCode" column="parent_code" javaType="java.lang.String" />
+		   <result property="operateType" column="operate_type" javaType="java.lang.Integer" />
+		   <result property="operateUser" column="operate_user" javaType="java.lang.String" />
+		   <result property="operateTime" column="operate_time" javaType="java.sql.Timestamp" />
+		   <result property="logDate" column="log_date" javaType="java.sql.Timestamp" />
+		   <result property="logDateFrom" column="log_date" javaType="java.sql.Timestamp" />
+		   <result property="logDateTo" column="log_date" javaType="java.sql.Timestamp" />
+	</resultMap>
+
+    <sql id="query">
+	        <if test="id != null and id !=''">
+					and t.id=#{id}
+		    </if>
+	        <if test="categoryId != null and categoryId !=''">
+					and t.category_id=#{categoryId}
+		    </if>
+	        <if test="categoryName != null and categoryName !=''">
+		        	and t.category_name like CONCAT(CONCAT('%', #{categoryName}), '%') 
+		    </if>
+	        <if test="categoryCode != null and categoryCode !=''">
+		        	and t.category_code like CONCAT(CONCAT('%', #{categoryCode}), '%') 
+		    </if>
+	        <if test="parentId != null and parentId !=''">
+					and t.parent_id=#{parentId}
+		    </if>
+	        <if test="parentCode != null and parentCode !=''">
+		        	and t.parent_code like CONCAT(CONCAT('%', #{parentCode}), '%') 
+		    </if>
+	        <if test="operateType != null and operateType !=''">
+		        	and t.operate_type like CONCAT(CONCAT('%', #{operateType}), '%') 
+		    </if>
+	        <if test="operateUser != null and operateUser !=''">
+		        	and t.operate_user like CONCAT(CONCAT('%', #{operateUser}), '%') 
+		    </if>
+	        <if test="operateTime != null and operateTime !=''">
+					and t.operate_time=#{operateTime}
+		    </if>
+	        <if test="logDate != null and logDate !=''">
+					and t.log_date=#{logDate}
+		    </if>
+		    <if test="logDateFrom != null and logDateFrom !=''">
+					and t.log_date >= #{logDateFrom}
+		    </if>
+		    <if test="logDateTo != null and logDateTo !=''">
+					and t.log_date <![CDATA[<=]]> #{logDateTo}
+		    </if>
+	    
+    </sql>
+
+
+	<select id="queryOne" parameterType="BaseCategoryOperateLog"
+	resultMap="baseCategoryOperateLog">
+	select
+	          id,
+	          category_id,
+	          category_name,
+	          category_code,
+	          parent_id,
+	          parent_code,
+	          operate_type,
+	          operate_user,
+	          operate_time,
+	          log_date
+	from  t_basecategory_operate_log t
+	where t.id=#{id}
+	</select>
+	<select id="queryListPage" parameterType="BaseCategoryOperateLog"
+		resultMap="baseCategoryOperateLog">
+		select 
+	          id,
+	          category_id,
+	          category_name,
+	          category_code,
+	          parent_id,
+	          parent_code,
+	          operate_type,
+	          operate_user,
+	          operate_time,
+	          log_date
+	     from  t_basecategory_operate_log t
+		where 1=1
+		<include refid="query"/>
+		order by log_date desc
+	</select>
+
+	<select id="countListPage" parameterType="BaseCategoryOperateLog"
+		resultType="java.lang.Long">
+		select count(1) from  t_basecategory_operate_log t
+		where 1=1
+		<include refid="query"/>
+	 </select>
+<!-- <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER">
+    		SELECT @@IDENTITY as id
+    	</selectKey> -->
+	<insert id="insert" parameterType="BaseCategoryOperateLog" useGeneratedKeys="true" keyProperty="id">
+		insert into  t_basecategory_operate_log
+		(
+		    category_id,
+		    category_name,
+		    category_code,
+			parent_id,
+		    parent_code,
+		    operate_type,
+		    operate_user,
+		    operate_time,
+			log_date
+        )
+		values
+		(
+		    #{categoryId},
+		    #{categoryName},
+		    #{categoryCode},
+			#{parentId},
+		    #{parentCode},
+		    #{operateType},
+		    #{operateUser},
+		    #{operateTime},
+			#{logDate}
+        )
+	</insert>
+	
+	<!-- 批量插入 -->
+	<insert id="inserts" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="id">
+		insert into  t_basecategory_operate_log
+		(
+		    category_id,
+		    category_name,
+		    category_code,
+			parent_id,
+		    parent_code,
+		    operate_type,
+		    operate_user,
+		    operate_time,
+			log_date
+        )
+		values
+		<foreach collection="list" item="item" index="index" separator=",">
+			(
+			    #{item.categoryId},
+			    #{item.categoryName},
+			    #{item.categoryCode},
+				#{item.parentId},
+			    #{item.parentCode},
+			    #{item.operateType},
+			    #{item.operateUser},
+			    #{item.operateTime},
+				#{item.logDate}
+	        )
+        </foreach>
+	</insert>
+
+	<update id="update" parameterType="BaseCategoryOperateLog">
+		update  t_basecategory_operate_log t 
+		  <set>
+			         <if test="categoryId != null  and categoryId !=''">
+				          t.category_id=#{categoryId},
+				    </if>
+			         <if test="categoryName != null  and categoryName !=''">
+				          t.category_name=#{categoryName},
+				    </if>
+			         <if test="categoryCode != null  and categoryCode !=''">
+				          t.category_code=#{categoryCode},
+				    </if>
+			         <if test="parentId != null  and parentId !=''">
+				          t.parent_id=#{parentId},
+				    </if>
+			         <if test="parentCode != null  and parentCode !=''">
+				          t.parent_code=#{parentCode},
+				    </if>
+			         <if test="operateType != null  and operateType !=''">
+				          t.operate_type=#{operateType},
+				    </if>
+			         <if test="operateUser != null  and operateUser !=''">
+				          t.operate_user=#{operateUser},
+				    </if>
+			         <if test="operateTime != null  and operateTime !=''">
+				          t.operate_time=#{operateTime},
+				    </if>
+			         <if test="logDate != null  and logDate !=''">
+				          t.log_date=#{logDate}
+				    </if>
+		    </set>
+		where 
+		t.id=#{id}
+	</update>
+	
+	<delete id="delete" parameterType="BaseCategoryOperateLog">
+    	delete from  t_basecategory_operate_log  where 
+    	id =#{id}
+    </delete>
+    
+    <delete id="deleteByIds" parameterType="java.util.List">
+    	delete from t_basecategory_operate_log  where 
+    	id in
+    	<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+    </delete>
+
+</mapper>

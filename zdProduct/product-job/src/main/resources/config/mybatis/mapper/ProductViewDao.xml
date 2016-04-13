@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ProductViewDaoImpl">
+    
+    <delete id="deleteSkuViewByProductCodes" parameterType="java.util.List">
+    	delete from t_product_sku_view  where LEFT (product_sku_code, 12) 
+    	 in
+    	<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+    </delete>
+    
+    <delete id="deleteMallViewByProductCodes" parameterType="java.util.List">
+    	delete from t_product_mall_view  where product_code  
+    	 in
+    	<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+    </delete>
+    
+    <insert id="addSkuViewList" parameterType="java.util.List">
+    	INSERT INTO t_product_sku_view (
+			product_sku_id,
+			product_id,
+			product_sku_code,
+			attr_color_name,
+			attr_color_value,
+			attr_spec_name,
+			attr_spec_value,
+			main_sku,
+			cost_price,
+			tsh_price,
+			tb,
+			market_price,
+			if_show,
+			color_value_alias,
+			spec_value_alias,
+			is_available
+		) SELECT
+			a.product_sku_id,
+			a.product_id,
+			a.product_sku_code,
+			a.attr_color_name,
+			a.attr_color_value,
+			a.attr_spec_name,
+			a.attr_spec_value,
+			a.main_sku,
+			b.cost_price,
+			b.tsh_price,
+			b.tb,
+			b.market_price,
+			a.if_show,
+			a.color_value_alias,
+			a.spec_value_alias,
+			a.is_available
+		FROM
+			(
+				SELECT
+					c.product_sku_id,
+					c.product_id,
+					c.product_sku_code,
+					c.attr_color_name,
+					c.attr_color_value,
+					c.attr_spec_name,
+					c.attr_spec_value,
+					c.main_sku,
+					c.if_show,
+					c.color_value_alias,
+					c.spec_value_alias,
+					c.is_available
+				FROM
+					t_product_sku c
+				INNER JOIN (
+					SELECT
+						product_id
+					FROM
+						t_product_sku
+					WHERE
+						LEFT (product_sku_code, 12) IN 
+						<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+							#{item}
+						</foreach> 
+					GROUP BY
+						product_id
+				) d ON c.product_id = d.product_id
+			) a
+		INNER JOIN t_product_price b ON a.product_sku_id = b.product_sku_id
+    </insert>
+    
+    <insert id="addMallViewList" parameterType="java.util.List">
+    	INSERT INTO t_product_mall_view (
+			product_id,
+			product_name,
+			product_code,
+			product_desc,
+			product_shelves,
+			create_time,
+			create_by,
+			create_user_name,
+			update_time,
+			update_by,
+			update_user_name,
+			first_shelves,
+			first_shelves_name,
+			first_shelves_time,
+			last_shelves,
+			last_shelves_name,
+			last_shelves_time,
+			down_shelves,
+			down_shelves_name,
+			down_shelves_time,
+			cost_price,
+			tsh_price,
+			tb,
+			market_price,
+			brand_code,
+			brand_name,
+			cat_code,
+			cat_name,
+			type,
+			STATUS,
+			main_pic,
+			supplier_id,
+			shop_id,
+			integrity,
+			integrity_desc,
+			product_short_name,
+			product_prefix,
+			product_suffix,
+			product_keyword,
+			product_down_show,
+			product_auto_up,
+			product_size_compare,
+			product_cat_code,
+			product_cat_name,
+			product_level,
+			product_price_rate,
+			product_weight,
+			product_long,
+			product_width,
+			product_height,
+			product_producer,
+			product_density,
+			Column_3,
+			Column_4,
+			product_video_url,
+			product_thumbnail,
+			is_expensive,
+			zero_flag,
+			user_max_num,
+			user_max_type,
+			zero_max_count
+		) SELECT
+			t.product_id,
+			t.product_name,
+			product_code,
+			product_desc,
+			product_shelves,
+			create_time,
+			create_by,
+			create_user_name,
+			update_time,
+			update_by,
+			update_user_name,
+			first_shelves,
+			first_shelves_name,
+			first_shelves_time,
+			last_shelves,
+			last_shelves_name,
+			last_shelves_time,
+			down_shelves,
+			down_shelves_name,
+			down_shelves_time,
+			cost_price,
+			tsh_price,
+			tb,
+			market_price,
+			brand_code,
+			brand_name,
+			cat_code,
+			cat_name,
+			type,
+			staus,
+			main_pic,
+			supplier_id,
+			shop_id,
+			integrity,
+			integrity_desc,
+			product_short_name,
+			product_prefix,
+			product_suffix,
+			product_keyword,
+			product_down_show,
+			product_auto_up,
+			product_size_compare,
+			product_cat_code,
+			product_cat_name,
+			product_level,
+			product_price_rate,
+			product_weight,
+			product_long,
+			product_width,
+			product_height,
+			product_producer,
+			product_density,
+			Column_3,
+			Column_4,
+			product_video_url,
+			product_thumbnail,
+			is_expensive,
+			0,
+			user_max_num,
+			user_max_type,
+			zero_max_count
+		FROM
+			t_product t,
+			t_product_operate t1,
+			t_product_mall t2
+		WHERE
+			t.product_id = t1.product_id
+		AND t.product_id = t2.product_id
+		AND product_code IN 
+		<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+			#{item}
+		</foreach>;
+    </insert>
+    
+    <update id="updateMallViewZeroType" parameterType="java.util.List">
+    	update t_product_mall_view t  set  zero_flag=1
+    	where   type='02' and    product_code IN 
+		<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+			#{item}
+		</foreach>;
+    </update> 
+    
+    <update id="updateMallViewPrice" parameterType="ProductModel">
+    	update t_product_mall_view t
+    	<set>
+    		<if test="costPrice != null  and costPrice !=''">
+				t.cost_price=#{costPrice},
+			</if>
+			<if test="tshPrice != null  and tshPrice !=''">
+				t.tsh_price=#{tshPrice},
+			</if>
+			<if test="tb != null  and tb !=''">
+				t.tb=#{tb},
+			</if>
+			<if test="marketPrice != null  and marketPrice !=''">
+				t.market_price=#{marketPrice}
+			</if>
+    	</set>
+    	where t.product_code=#{productCode}
+    </update>
+</mapper>

@@ -1,0 +1,437 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.zhaidou.product.attributies.dao.impl.ProductAttrDaoImpl">
+	
+	<resultMap type="ProductAttrModel" id="productAttrModel">
+		   <result property="attrId" column="attr_id" javaType="java.lang.Long" />
+		   <result property="attrCode" column="attr_code" javaType="java.lang.String" />
+		   <result property="attrName" column="attr_name" javaType="java.lang.String" />
+		   <result property="attrEname" column="attr_ename" javaType="java.lang.String" />
+		   <result property="attrInfo" column="attr_info" javaType="java.lang.String" />
+		   <result property="attrDesign" column="attr_design" javaType="java.lang.Integer" />
+		   <result property="attrNum" column="attr_num" javaType="java.lang.Integer" />
+		   <result property="updateTime" column="update_time" javaType="java.lang.Long" />
+		   <result property="updateUser" column="update_user" javaType="java.lang.String" />
+		   <result property="createTime" column="create_time" javaType="java.lang.Long" />
+		   <result property="creator" column="creator" javaType="java.lang.String" />
+		   <result property="attrStatus" column="attr_status" javaType="java.lang.Integer" />
+		   <result property="required" column="required" javaType="java.lang.Integer" />
+	</resultMap>
+   
+   
+   <insert id="insert" useGeneratedKeys="true" keyProperty="attrId"  parameterType="ProductAttrModel">
+   		
+		insert into  t_product_attr
+		(
+	          			    attr_code,
+	          			    attr_name,
+	          			    attr_ename,
+	          				attr_info,
+	          			    attr_design,
+	          			    attr_num,
+	          			    update_time,
+	          			    update_user,
+	          			    create_time,
+	          			    creator,
+	          			    attr_status,
+	          			    required
+        )
+		values
+		(
+		          			    #{attrCode},
+		          			    #{attrName},
+		          			    #{attrEname},
+		          				#{attrInfo},
+		          			    #{attrDesign},
+		          			    #{attrNum},
+		          			    #{updateTime},
+		          			    #{updateUser},
+		          			    #{createTime},
+	          				    #{creator},
+	          				    #{attrStatus},
+	          				    #{required}
+        )
+	</insert>
+
+	<update id="update" parameterType="ProductAttrModel">
+		update  t_product_attr t 
+		  <set>
+			        
+			        <if test="attrCode != null  and attrCode !=''">
+				          t.attr_code=#{attrCode},
+				    </if>
+			        <if test="attrName != null  and attrName !=''">
+				          t.attr_name=#{attrName},
+				    </if>
+			        <if test="attrEname != null  and attrEname !=''">
+				          t.attr_ename=#{attrEname},
+				    </if>
+			        <if test="attrInfo != null  and attrInfo !=''">
+				          t.attr_info=#{attrInfo},
+				    </if>
+			        <if test="attrDesign != null  and attrDesign !=''">
+				          t.attr_design=#{attrDesign},
+				    </if>
+			         <if test="attrNum != null  and attrNum !=''">
+				          t.attr_num=#{attrNum},
+				    </if>
+			         <if test="updateTime != null  and updateTime !=''">
+				          t.update_time=#{updateTime},
+				    </if>
+			         <if test="updateUser != null  and updateUser !=''">
+				          t.update_user=#{updateUser},
+				    </if>
+			        <if test="creator != null  and creator !=''">
+				          t.creator=#{creator}
+				    </if>
+				     <if test="attrStatus != null">
+				          t.attr_status=#{attrStatus}
+				    </if>
+				     <if test="required != null">
+				          t.required=#{required}
+				    </if>
+		    </set>
+		where 
+		t.attr_id = #{attrId}
+	</update>
+	
+	<delete id="delete" parameterType="java.lang.Long">
+    	update t_product_attr set attr_status = 3 where attr_id = #{attrId}
+    </delete>
+    
+    <delete id="deleteByIds" parameterType="java.util.List">
+    	update t_product_attr set attr_status = 3 where attr_id
+    	 in
+    	<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+    </delete>
+   
+    <sql id="query">
+	        <if test="attrId != null and attrId !=''">
+					and t.attr_id=#{attrId}
+		    </if>
+	        <if test="attrCode != null and attrCode !=''">
+		        	and t.attr_code like CONCAT(CONCAT('%', #{attrCode}), '%') 
+		    </if>
+	        <if test="attrName != null and attrName !=''">
+		        	and t.attr_name like CONCAT(CONCAT('%', #{attrName}), '%') 
+		    </if>
+	        <if test="attrEname != null and attrEname !=''">
+		        	and t.attr_ename like CONCAT(CONCAT('%', #{attrEname}), '%') 
+		    </if>
+	        <if test="attrInfo != null and attrInfo !=''">
+		        	and t.attr_info like CONCAT(CONCAT('%', #{attrInfo}), '%') 
+		    </if>
+	        <if test="attrDesign != null and attrDesign !=''">
+					and t.attr_design=#{attrDesign}
+		    </if>
+	        <if test="attrNum != null and attrNum !=''">
+					and t.attr_num=#{attrNum}
+		    </if>
+	        <if test="updateTime != null and updateTime !=''">
+					and t.update_time<![CDATA[>=]]>#{updateTime}
+		    </if>
+		    <if test="endTime2 != null and endTime2 !=''">
+					and t.update_time<![CDATA[<=]]>#{endTime2}
+		    </if>
+	        <if test="updateUser != null and updateUser !=''">
+		        	and t.update_user like CONCAT(CONCAT('%', #{updateUser}), '%') 
+		    </if>
+	        <if test="createTime != null and createTime !=''">
+					and t.create_time<![CDATA[>=]]>#{createTime}
+		    </if>
+		    <if test="endTime1 != null and endTime1 !=''">
+					and t.create_time<![CDATA[<=]]>#{endTime1}
+		    </if>
+	        <if test="creator != null and creator !=''">
+		        	and t.creator like CONCAT(CONCAT('%', #{creator}), '%') 
+		    </if>
+	    
+    </sql>
+
+
+	<select id="queryOne" parameterType="java.lang.Long"
+	resultMap="productAttrModel">
+	select
+	          attr_id,
+	          attr_code,
+	          attr_name,
+	          attr_ename,
+	          attr_info,
+	          attr_design,
+	          attr_num,
+	          update_time,
+	          update_user,
+	          create_time,
+	          creator,
+	          attr_status,
+	          required
+	from  t_product_attr t
+	where attr_status != 3
+	 <if test="attrId != null and attrId !=''">
+					and t.attr_id=#{attrId}
+		    </if>
+	        <if test="attrCode != null and attrCode !=''">
+		        	and t.attr_code = #{attrCode}
+		    </if>
+		    <if test="attrStatus != null">
+		        	and t.attr_status = #{attrStatus}
+		    </if>
+	</select>
+
+	<select id="selectByAttrName" parameterType="java.lang.String"
+	resultMap="productAttrModel">
+	select
+	          attr_id,
+	          attr_code,
+	          attr_name,
+	          attr_ename,
+	          attr_info,
+	          attr_design,
+	          attr_num,
+	          update_time,
+	          update_user,
+	          create_time,
+	          creator,
+	          attr_status,
+	          required
+	from  t_product_attr t
+	where attr_name = #{attrName} and attr_status != 3 limit 0,1
+	</select>
+	
+	<select id="queryListPage" parameterType="ProductAttrModel"
+		resultMap="productAttrModel">
+		select 
+	          attr_id,
+	    
+	          attr_code,
+	    
+	          attr_name,
+	    
+	          attr_ename,
+	    
+	          attr_info,
+	    
+	          attr_design,
+	    
+	          attr_num,
+	    
+	          update_time,
+	    
+	          update_user,
+	    
+	          create_time,
+	    
+	          creator,
+	          
+	          attr_status,
+	          
+	          required
+	     from  t_product_attr t
+		where  attr_status != 3
+		<include refid="query"/>
+		
+	</select>
+
+	<select id="countListPage" parameterType="ProductAttrModel"
+		resultType="java.lang.Long">
+		select count(1) from  t_product_attr t
+		where  attr_status != 3
+		<include refid="query"/>
+	 </select>
+
+	<select id="queryAttrListByGroupCode" parameterType="java.lang.String"
+		resultMap="productAttrModel">
+		select 
+	          t.attr_id,
+	    
+	          t.attr_code,
+	    
+	          t.attr_name,
+	    
+	          t.attr_ename,
+	    
+	          t.attr_info,
+	    
+	          t.attr_design,
+	    
+	          t.attr_num,
+	    
+	          t.update_time,
+	    
+	          t.update_user,
+	    
+	          t.create_time,
+	    
+	          t.creator,
+	          
+	          t.attr_status,
+	          
+	          t.required
+	     from  t_product_attr t,t_relation_group_attr tr
+		
+		where t.attr_id = tr.attr_id and tr.group_code = #{groupCode} and t.attr_design=1 and  attr_status != 3
+		
+	</select>
+
+
+	<select id="countListPageByGroupCode" parameterType="java.lang.String"
+		resultType="java.lang.Long">
+		select count(1) from   t_product_attr t,t_relation_group_attr tr
+		where  attr_status != 3 and t.attr_id = tr.attr_id and tr.group_code = #{groupCode}
+	 </select>
+	 
+	 <select id="queryAttrListByAttrName" parameterType="java.lang.String"
+		resultMap="productAttrModel">
+		select 
+	          t.attr_id,
+	    
+	          t.attr_code,
+	    
+	          t.attr_name,
+	    
+	          t.attr_ename,
+	    
+	          t.attr_info,
+	    
+	          t.attr_design,
+	    
+	          t.attr_num,
+	    
+	          t.update_time,
+	    
+	          t.update_user,
+	    
+	          t.create_time,
+	    
+	          t.creator,
+	          
+	          t.attr_status,
+
+	          t.required
+	     from  t_product_attr t
+		
+		where t.attr_name like CONCAT(CONCAT('%', #{attrName}), '%')  and attr_status != 3
+		
+	</select>
+	
+	<select id="queryGroupRelationAttrList" parameterType="ProductAttrModel"
+		resultMap="productAttrModel">
+		select distinct
+	          t.attr_id,
+	    
+	          t.attr_code,
+	    
+	          t.attr_name,
+	    
+	          t.attr_ename,
+	    
+	          t.attr_info,
+	    
+	          t.attr_design,
+	    
+	          t.attr_num,
+	    
+	          t.update_time,
+	    
+	          t.update_user,
+	    
+	          t.create_time,
+	    
+	          t.creator,
+	          
+	          t.attr_status,
+	          
+	          t.required
+	     from  t_product_attr t,t_relation_group_attr tr
+		
+		where t.attr_id = tr.attr_id and tr.group_id = #{attrId} and  attr_status != 3
+		<include refid="query_relation"/>
+		
+	</select>
+	
+	<select id="countQueryGroupRelationAttrList" parameterType="ProductAttrModel"
+		resultType="java.lang.Long">
+		select count(1)  
+			FROM (SELECT DISTINCT t.attr_code,t.attr_id FROM
+		t_product_attr t,
+		t_relation_group_attr tr
+		where
+		t.attr_id = tr.attr_id and tr.group_id = #{attrId} and t.attr_status != 3
+		<include refid="query_relation"/>
+		) td where  1=1
+		
+	 </select>
+	 
+	 <select id="queryGroupRelationAttrNotBundList" parameterType="ProductAttrModel"
+		resultMap="productAttrModel">
+		select distinct
+	          t.attr_id,
+	    
+	          t.attr_code,
+	    
+	          t.attr_name,
+	    
+	          t.attr_ename,
+	    
+	          t.attr_info,
+	    
+	          t.attr_design,
+	    
+	          t.attr_num,
+	    
+	          t.update_time,
+	    
+	          t.update_user,
+	    
+	          t.create_time,
+	    
+	          t.creator,
+	          
+	          t.attr_status,
+	          
+	          t.required
+	     from  t_product_attr t
+		
+		where  attr_status != 3 and t.attr_id NOT IN (
+		SELECT
+			attr_id
+		FROM
+			t_relation_group_attr
+		WHERE
+			group_id = #{attrId}
+	    )
+		<include refid="query_relation"/>
+		
+	</select>
+	
+	<select id="countQueryGroupRelationAttrNotBundList" parameterType="ProductAttrModel"
+		resultType="java.lang.Long">
+		
+		
+		SELECT count(1)  FROM t_product_attr t WHERE  attr_status != 3 and t.attr_id NOT IN
+		
+		 ( SELECT DISTINCT tr.attr_id FROM t_relation_group_attr tr WHERE tr.group_id = #{attrId} 
+		 <include refid="query_relation"/>)
+		
+		
+	 </select>
+	  <sql id="query_relation">
+	        <if test="attrCode != null and attrCode !=''">
+		        	and t.attr_code like CONCAT(CONCAT('%', #{attrCode}), '%') 
+		    </if>
+	        <if test="attrName != null and attrName !=''">
+		        	and t.attr_name like CONCAT(CONCAT('%', #{attrName}), '%') 
+		    </if>
+		     <if test="attrEname != null and attrEname !=''">
+		        	and t.attr_ename like CONCAT(CONCAT('%', #{attrEname}), '%') 
+		    </if>
+    </sql>
+	 
+	 <select id="getMaxId" resultType="java.lang.Long">
+		select  ifnull(max(attr_id),0) + 1  from  t_product_attr 
+	</select>
+</mapper>

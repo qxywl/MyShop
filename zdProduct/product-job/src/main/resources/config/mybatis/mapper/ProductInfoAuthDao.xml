@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ProductInfoAuthDaoImpl">
+	
+	<resultMap type="ProductInfoAuthModel" id="productInfoAuthModel">
+		   <result property="productInfoAuthId" column="product_info_auth_id" javaType="java.lang.Long" />
+		   <result property="productSkuId" column="product_sku_id" javaType="java.lang.Long" />
+		   <result property="productSkuCode" column="product_sku_code" javaType="java.lang.String" />
+		   <result property="productCode" column="product_code" javaType="java.lang.String" />
+		   <result property="type" column="type" javaType="java.lang.Long" />
+		   <result property="oldValue" column="old_value" javaType="java.lang.String" />
+		   <result property="newValue" column="new_Value" javaType="java.lang.String" />
+		   <result property="createTime" column="create_Time" javaType="java.lang.Long" />
+		   <result property="synTime" column="syn_time" javaType="java.lang.Long" />
+		   <result property="createBy" column="create_by" javaType="java.lang.Long" />
+		   <result property="createUserName" column="create_user_name" javaType="java.lang.String" />
+		   <result property="updateTime" column="update_time" javaType="java.lang.Long" />
+		   <result property="updateBy" column="update_by" javaType="java.lang.Long" />
+		   <result property="updateUserName" column="update_user_name" javaType="java.lang.String" />
+		   <result property="staus" column="staus" javaType="java.lang.Long" />
+		   <result property="sourceType" column="source_type" javaType="java.lang.Integer" />
+		   <result property="reason" column="reason" javaType="java.lang.String" />
+	</resultMap>
+
+    <sql id="query">
+	        and t.staus=#{staus}   and  product_info_auth_id <![CDATA[ % #{total} = #{remainder} ]]>
+    </sql>
+
+
+	<select id="queryOne" parameterType="ProductInfoAuthModel"
+	resultMap="productInfoAuthModel">
+	select
+	          product_info_auth_id,
+	          product_sku_id,
+	          product_sku_code,
+	          product_code,
+	          type,
+	          old_value,
+	          new_Value,
+	          create_Time,
+	          create_by,
+	          create_user_name,
+	          update_time,
+	          update_by,
+	          update_user_name,
+	          source_type,
+	          reason,
+	          staus 
+	from  t_product_info_auth t
+	where t.product_info_auth_id=#{productInfoAuthId}
+	</select>
+	
+	<select id="getInfoAuthByProductCode" parameterType="ProductInfoAuthModel"
+	resultMap="productInfoAuthModel">
+	select
+	          product_info_auth_id,
+	          product_sku_id,
+	          product_sku_code,
+	          product_code,
+	          type,
+	          old_value,
+	          new_Value,
+	          create_Time,
+	          create_by,
+	          create_user_name,
+	          update_time,
+	          update_by,
+	          update_user_name,
+	          source_type,
+	          reason,
+	          staus 
+	from  t_product_info_auth t
+	where t.product_code=#{productCode}
+	</select>
+	
+	<select id="queryListPage" parameterType="ProductInfoAuthModel"
+		resultMap="productInfoAuthModel">
+		select 
+	          product_info_auth_id,
+	    
+	          product_sku_id,
+	          
+	          product_sku_code,
+	    
+	          product_code,
+	    
+	          type,
+	          
+	          old_value,
+	    
+	          new_Value,
+	    
+	          create_Time,
+	    
+	          create_by,
+	    
+	          create_user_name,
+	          
+	          update_time,
+	          
+	          update_by,
+	          
+	          update_user_name,
+	          
+	          source_type,
+	          
+	          reason,
+	    
+	          staus 
+	     from  t_product_info_auth t
+		where 1=1
+		<include refid="query"/>
+	</select>
+
+	<select id="countListPage" parameterType="ProductInfoAuthModel"
+		resultType="java.lang.Long">
+		select count(1) from  t_product_info_auth t
+		where 1=1
+		<include refid="query"/>
+	 </select>
+
+	<insert id="insert" parameterType="ProductInfoAuthModel">
+		<selectKey resultType="java.lang.Long" keyProperty="productInfoAuthId" order="AFTER">
+    		SELECT @@IDENTITY as productInfoAuthId
+    	</selectKey>
+		insert into  t_product_info_auth
+		(
+	          			    product_sku_id,
+	          			    product_sku_code,
+	          			    product_code,
+	          			    type,
+	          			    old_value,
+	          				new_Value,
+	          			    create_Time,
+	          			    create_by,
+	          			    create_user_name,
+	          			    update_time,
+	          			    update_by,
+	          			    update_user_name,
+	          			    source_type,
+	          			    reason,
+	          			    staus 
+        )
+		values
+		(
+		          			    #{productSkuId},
+		          			    #{productSkuCode},
+		          			    #{productCode},
+		          			    #{type},
+		          			    #{oldValue},
+		          				#{newValue},
+		          				#{createTime},
+		          			    #{createBy},
+		          			    #{createUserName},
+		          			    #{updateTime},
+		          			    #{updateBy},
+		          			    #{updateUserName},
+		          			    #{sourceType},
+		          			    #{reason},
+		          			    #{staus} 
+        )
+	</insert>
+
+	<update id="update" parameterType="ProductInfoAuthModel">
+		update  t_product_info_auth t 
+		  <set>
+			         <if test="productInfoAuthId != null  and productInfoAuthId !=''">
+				          t.product_info_auth_id=#{productInfoAuthId},
+				    </if>
+			         <if test="productSkuId != null  and productSkuId !=''">
+				          t.product_sku_id=#{productSkuId},
+				    </if>
+				    <if test="productSkuCode != null  and productSkuCode !=''">
+				          t.product_sku_code=#{productSkuCode},
+				    </if>
+			         <if test="productCode != null  and productCode !=''">
+				          t.product_code=#{productCode},
+				    </if>
+			         <if test="type != null  and type !=''">
+				          t.type=#{type},
+				    </if>
+				    <if test="oldValue != null  and oldValue !=''">
+				          t.old_value=#{oldValue},
+				    </if>
+			         <if test="newValue != null  and newValue !=''">
+				          t.new_Value=#{newValue},
+				    </if>
+			         <if test="createTime != null  and createTime !=''">
+				          t.create_Time=#{createTime},
+				    </if>
+			         <if test="createBy != null  and createBy !=''">
+				          t.create_by=#{createBy},
+				    </if>
+			         <if test="createUserName != null  and createUserName !=''">
+				          t.create_user_name=#{createUserName},
+				    </if>
+				    <if test="updateTime != null  and updateTime !=''">
+				          t.update_time=#{updateTime},
+				    </if>
+				    <if test="updateBy != null  and updateBy !=''">
+				          t.update_by=#{updateBy},
+				    </if>
+				    <if test="updateUserName != null  and updateUserName !=''">
+				          t.update_user_name=#{updateUserName},
+				    </if>
+				    <if test="synTime != null  and synTime !=''">
+				          t.syn_time=#{synTime},
+				    </if>
+				    <if test="reason != null  and reason !=''">
+				          t.reason=#{reason},
+				    </if>
+			        <if test="staus != null  and staus !=''">
+				          t.staus=#{staus}
+				    </if>
+				    
+		    </set>
+		where 
+		t.product_info_auth_id=#{productInfoAuthId}
+	</update>
+	
+	<update id="updateStatusList" parameterType="java.util.Map">
+		update t_product_info_auth t 
+		<set>
+			<if test="synTime != null and synTime !=''">
+				 t.syn_time=#{synTime},
+			</if>
+			<if test=" status!=null">
+				 t.staus=#{status}
+			</if>
+		  </set>
+		  where t.product_info_auth_id in
+		<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</update>
+	
+	<delete id="delete" parameterType="ProductInfoAuthModel">
+    	delete from  t_product_info_auth  where 
+    	product_info_auth_id =#{productInfoAuthId}
+    </delete>
+    
+    <delete id="deleteByIds" parameterType="java.util.List">
+    	delete from t_product_info_auth  where 
+    	product_info_auth_id in
+    	<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+    </delete>
+
+</mapper>

@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ProductPriceJobDaoImpl">
+
+	<resultMap type="ProductPriceJobModel" id="productPriceJobModel">
+		<result property="productPriceJob" column="product_price_job_id"
+			javaType="java.lang.Long" />
+		<result property="productPriceId" column="product_price_id"
+			javaType="java.lang.Long" />
+		<result property="productSkuCode" column="product_sku_code"
+			javaType="java.lang.String" />
+		<result property="productSkuId" column="product_sku_id"
+			javaType="java.lang.Long" />
+		<result property="costPrice" column="cost_price" javaType="java.lang.Double" />
+		<result property="tshPrice" column="tsh_price" javaType="java.lang.Double" />
+		<result property="tb" column="tb" javaType="java.lang.Long" />
+		<result property="marketPrice" column="market_price" javaType="java.lang.Double" />
+		<result property="staus" column="staus" javaType="java.lang.Integer" />
+		<result property="createTime" column="create_time" javaType="java.lang.Long" />
+		<result property="timeStart" column="time_start" javaType="java.lang.Long" />
+	</resultMap>
+
+	<sql id="query">
+		<if test="productPriceJob != null and productPriceJob !=''">
+			and t.product_price_job_id=#{productPriceJob}
+		</if>
+		<if test="productPriceId != null and productPriceId !=''">
+			and t.product_price_id=#{productPriceId}
+		</if>
+		<if test="productSkuCode != null and productSkuCode !=''">
+			and t.product_sku_code like CONCAT(CONCAT('%', #{productSkuCode}), '%')
+		</if>
+		<if test="productSkuId != null and productSkuId !=''">
+			and t.product_sku_id=#{productSkuId}
+		</if>
+		<if test="costPrice != null and costPrice !=''">
+			and t.cost_price=#{costPrice}
+		</if>
+		<if test="tshPrice != null and tshPrice !=''">
+			and t.tsh_price=#{tshPrice}
+		</if>
+		<if test="tb != null and tb !=''">
+			and t.tb=#{tb}
+		</if>
+		<if test="marketPrice != null and marketPrice !=''">
+			and t.market_price=#{marketPrice}
+		</if>
+		<if test="staus != null and staus !=''">
+			and t.staus=#{staus}
+		</if>
+		<if test="createTime != null and createTime !=''">
+			and t.create_time=#{createTime}
+		</if>
+
+		<if test="timeStart != null  and timeStart !=''">
+			and a.time_start=#{timeStart}
+		</if>
+	</sql>
+
+
+	<select id="queryOne" parameterType="ProductPriceJobModel"
+		resultMap="productPriceJobModel">
+		select
+		product_price_job_id,
+		product_price_id,
+		product_sku_code,
+		product_sku_id,
+		cost_price,
+		tsh_price,
+		tb,
+		market_price,
+		staus,
+		create_time,
+		time_start
+		from t_product_price_job t
+		where t.product_price_job_id=#{productPriceJob}
+	</select>
+	<select id="queryListPage" parameterType="ProductPriceJobModel"
+		resultMap="productPriceJobModel">
+		select
+		product_price_job_id,
+
+		product_price_id,
+
+		product_sku_code,
+
+		product_sku_id,
+
+		cost_price,
+
+		tsh_price,
+
+		tb,
+
+		market_price,
+
+		staus,
+
+		create_time,
+		time_start
+		from t_product_price_job t
+		where 1=1
+		<include refid="query" />
+	</select>
+
+	<select id="countListPage" parameterType="ProductPriceJobModel"
+		resultType="java.lang.Long">
+		select count(1) from t_product_price_job t
+		where 1=1
+		<include refid="query" />
+	</select>
+
+	<insert id="insert" parameterType="ProductPriceJobModel">
+		<selectKey resultType="java.lang.Long" keyProperty="id"
+			order="AFTER">
+			SELECT @@IDENTITY as id
+		</selectKey>
+		insert into t_product_price_job
+		(
+		product_price_job_id,
+		product_price_id,
+		product_sku_code,
+		product_sku_id
+		cost_price,
+		tsh_price,
+		tb,
+		market_price,
+		staus,
+		create_time,
+		time_start
+		)
+		values
+		(
+		#{productPriceJob},
+		#{productPriceId},
+		#{productSkuCode},
+		#{productSkuId}
+		#{costPrice},
+		#{tshPrice},
+		#{tb},
+		#{marketPrice},
+		#{staus},
+		#{createTime},
+		#{timeStart}
+		)
+	</insert>
+
+	<update id="update" parameterType="ProductPriceJobModel">
+		update t_product_price_job t
+		<set>
+			<if test="productPriceJob != null  and productPriceJob !=''">
+				t.product_price_job_id=#{productPriceJob},
+			</if>
+			<if test="productPriceId != null  and productPriceId !=''">
+				t.product_price_id=#{productPriceId},
+			</if>
+			<if test="productSkuCode != null  and productSkuCode !=''">
+				t.product_sku_code=#{productSkuCode},
+			</if>
+			<if test="productSkuId != null  and productSkuId !=''">
+				t.product_sku_id=#{productSkuId},
+			</if>
+			<if test="costPrice != null  and costPrice !=''">
+				t.cost_price=#{costPrice},
+			</if>
+			<if test="tshPrice != null  and tshPrice !=''">
+				t.tsh_price=#{tshPrice},
+			</if>
+			<if test="tb != null  and tb !=''">
+				t.tb=#{tb},
+			</if>
+			<if test="marketPrice != null  and marketPrice !=''">
+				t.market_price=#{marketPrice},
+			</if>
+			<if test="staus != null  and staus !=''">
+				t.staus=#{staus},
+			</if>
+			<if test="timeStart != null  and timeStart !=''">
+				t.time_start=#{timeStart},
+			</if>
+			<if test="createTime != null  and createTime !=''">
+				t.create_time=#{createTime}
+			</if>
+		</set>
+		where
+		t.product_price_job_id=#{productPriceJob}
+	</update>
+
+	<delete id="delete" parameterType="ProductPriceJobModel">
+		delete from t_product_price_job where
+		product_price_job_id =#{productPriceJob}
+	</delete>
+
+	<delete id="deleteByIds" parameterType="java.util.List">
+		delete from t_product_price_job where
+		product_price_job_id in
+		<foreach item="item" index="index" collection="list" open="("
+			separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+
+</mapper>

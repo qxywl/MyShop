@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ProductFlowerDaoImpl">
+	
+	<resultMap type="ProductFlowerModel" id="productFlowerModel">
+		   <result property="productFlowerId" column="product_flower_id" javaType="java.lang.Long" />
+		   <result property="productId" column="product_id" javaType="java.lang.Long" />
+		   <result property="column3" column="Column_3" javaType="java.lang.String" />
+		   <result property="column4" column="Column_4" javaType="java.lang.String" />
+		   <result property="column5" column="Column_5" javaType="java.lang.String" />
+		   <result property="column6" column="Column_6" javaType="java.lang.String" />
+		   <result property="column7" column="Column_7" javaType="java.lang.String" />
+		   <result property="column8" column="Column_8" javaType="java.lang.String" />
+		   <result property="column9" column="Column_9" javaType="java.lang.String" />
+		   <result property="column10" column="Column_10" javaType="java.lang.String" />
+	</resultMap>
+
+    <sql id="query">
+	        <if test="productFlowerId != null and productFlowerId !=''">
+					and t.product_flower_id=#{productFlowerId}
+		    </if>
+	        <if test="productId != null and productId !=''">
+					and t.product_id=#{productId}
+		    </if>
+	        <if test="column3 != null and column3 !=''">
+		        	and t.Column_3 like CONCAT(CONCAT('%', #{column3}), '%') 
+		    </if>
+	        <if test="column4 != null and column4 !=''">
+		        	and t.Column_4 like CONCAT(CONCAT('%', #{column4}), '%') 
+		    </if>
+	        <if test="column5 != null and column5 !=''">
+		        	and t.Column_5 like CONCAT(CONCAT('%', #{column5}), '%') 
+		    </if>
+	        <if test="column6 != null and column6 !=''">
+		        	and t.Column_6 like CONCAT(CONCAT('%', #{column6}), '%') 
+		    </if>
+	        <if test="column7 != null and column7 !=''">
+		        	and t.Column_7 like CONCAT(CONCAT('%', #{column7}), '%') 
+		    </if>
+	        <if test="column8 != null and column8 !=''">
+		        	and t.Column_8 like CONCAT(CONCAT('%', #{column8}), '%') 
+		    </if>
+	        <if test="column9 != null and column9 !=''">
+		        	and t.Column_9 like CONCAT(CONCAT('%', #{column9}), '%') 
+		    </if>
+	        <if test="column10 != null and column10 !=''">
+		        	and t.Column_10 like CONCAT(CONCAT('%', #{column10}), '%') 
+		    </if>
+	    
+    </sql>
+
+
+	<select id="queryOne" parameterType="ProductFlowerModel"
+	resultMap="productFlowerModel">
+	select
+	          product_flower_id,
+	          product_id,
+	          Column_3,
+	          Column_4,
+	          Column_5,
+	          Column_6,
+	          Column_7,
+	          Column_8,
+	          Column_9,
+	          Column_10
+	from  t_product_flower t
+	where t.product_flower_id=#{productFlowerId};
+	</select>
+	<select id="queryListPage" parameterType="ProductFlowerModel"
+		resultMap="productFlowerModel">
+		select 
+	          product_flower_id,
+	    
+	          product_id,
+	    
+	          Column_3,
+	    
+	          Column_4,
+	    
+	          Column_5,
+	    
+	          Column_6,
+	    
+	          Column_7,
+	    
+	          Column_8,
+	    
+	          Column_9,
+	    
+	          Column_10
+	     from  t_product_flower t
+		where 1=1
+		<include refid="query"/>
+	</select>
+
+	<select id="countListPage" parameterType="ProductFlowerModel"
+		resultType="java.lang.Long">
+		select count(1) from  t_product_flower t
+		where 1=1
+		<include refid="query"/>
+	 </select>
+
+	<insert id="insert" parameterType="ProductFlowerModel">
+		<selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER">
+    		SELECT @@IDENTITY as id
+    	</selectKey>
+		insert into  t_product_flower
+		(
+	          			    product_flower_id,
+	          			    product_id,
+	          				Column_3
+	          			    Column_4,
+	          			    Column_5,
+	          			    Column_6,
+	          			    Column_7,
+	          			    Column_8,
+	          			    Column_9,
+	          				Column_10
+        )
+		values
+		(
+		          			    #{productFlowerId},
+		          			    #{productId},
+		          				#{column3}
+		          			    #{column4},
+		          			    #{column5},
+		          			    #{column6},
+		          			    #{column7},
+		          			    #{column8},
+		          			    #{column9},
+	          					#{column10}
+        )
+	</insert>
+
+	<update id="update" parameterType="ProductFlowerModel">
+		update  t_product_flower t 
+		  <set>
+			         <if test="productFlowerId != null  and productFlowerId !=''">
+				          t.product_flower_id=#{productFlowerId},
+				    </if>
+			         <if test="productId != null  and productId !=''">
+				          t.product_id=#{productId},
+				    </if>
+			         <if test="column3 != null  and column3 !=''">
+				          t.Column_3=#{column3},
+				    </if>
+			         <if test="column4 != null  and column4 !=''">
+				          t.Column_4=#{column4},
+				    </if>
+			         <if test="column5 != null  and column5 !=''">
+				          t.Column_5=#{column5},
+				    </if>
+			         <if test="column6 != null  and column6 !=''">
+				          t.Column_6=#{column6},
+				    </if>
+			         <if test="column7 != null  and column7 !=''">
+				          t.Column_7=#{column7},
+				    </if>
+			         <if test="column8 != null  and column8 !=''">
+				          t.Column_8=#{column8},
+				    </if>
+			         <if test="column9 != null  and column9 !=''">
+				          t.Column_9=#{column9},
+				    </if>
+			         <if test="column10 != null  and column10 !=''">
+				          t.Column_10=#{column10}
+				    </if>
+		    </set>
+		where 
+		t.product_flower_id=#{productFlowerId};
+	</update>
+	
+	<delete id="delete" parameterType="ProductFlowerModel">
+    	delete from  t_product_flower  where product_flower_id=#{productFlowerId};
+    </delete>
+    
+    <delete id="deleteByIds" parameterType="java.util.List">
+    	delete from t_product_flower  where product_flower_id
+    	 in
+    	<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+    </delete>
+
+</mapper>

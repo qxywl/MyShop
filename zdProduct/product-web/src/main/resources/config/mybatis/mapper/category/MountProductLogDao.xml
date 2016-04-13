@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="MountProductLogDaoImpl">
+
+	<resultMap type="MountProductLog" id="salecategoryProductRelationLogModel">
+		<result property="id" column="id" javaType="java.lang.Long" />
+		<result property="relationId" column="relation_id" javaType="java.lang.Long" />
+		<result property="categoryId" column="category_id" javaType="java.lang.Long" />
+		<result property="categoryCode" column="category_code"
+			javaType="java.lang.String" />
+		<result property="productId" column="product_id" javaType="java.lang.Long" />
+		<result property="productCode" column="product_code" javaType="java.lang.String" />
+		<result property="mountType" column="mount_type" javaType="java.lang.Integer" />
+		<result property="orderValue" column="order_value" javaType="java.lang.Long" />
+		<result property="optType" column="opt_type" javaType="java.lang.Integer" />
+		<result property="description" column="description" javaType="java.lang.String" />
+		<result property="operateUser" column="operate_user" javaType="java.lang.String" />
+		<result property="operateTime" column="operate_time" javaType="java.sql.Timestamp" />
+		<result property="logDate" column="log_date" javaType="java.sql.Timestamp" />
+	</resultMap>
+
+	<sql id="query">
+		<if test="id != null and id !=''">
+			and t.id=#{id}
+		</if>
+		<if test="relationId != null and relationId !=''">
+			and t.relation_id=#{relationId}
+		</if>
+		<if test="categoryId != null and categoryId !=''">
+			and t.category_id=#{categoryId}
+		</if>
+		<if test="categoryCode != null and categoryCode !=''">
+			and t.category_code like CONCAT(CONCAT('%', #{categoryCode}), '%')
+		</if>
+		<if test="productId != null and productId !=''">
+			and t.product_id=#{productId}
+		</if>
+		<if test="productCode != null and productCode !=''">
+			and t.product_code like CONCAT(CONCAT('%', #{productCode}), '%')
+		</if>
+		<if test="mountType != null and mountType !=''">
+			and t.mount_type like CONCAT(CONCAT('%', #{mountType}), '%')
+		</if>
+		<if test="orderValue != null and orderValue !=''">
+			and t.order_value like CONCAT(CONCAT('%', #{orderValue}), '%')
+		</if>
+		<if test="optType != null and optType !=''">
+			and t.opt_type like CONCAT(CONCAT('%', #{optType}), '%')
+		</if>
+		<if test="description != null and description !=''">
+			and t.description like CONCAT(CONCAT('%', #{description}), '%')
+		</if>
+		<if test="operateUser != null and operateUser !=''">
+			and t.operate_user like CONCAT(CONCAT('%', #{operateUser}), '%')
+		</if>
+		<if test="operateTime != null and operateTime !=''">
+			and t.operate_time=#{operateTime}
+		</if>
+		<if test="logDate != null and logDate !=''">
+			and t.log_date=#{logDate}
+		</if>
+		<if test="logDateFrom != null and logDateFrom !=''">
+			and t.log_date >= #{logDateFrom}
+		</if>
+		<if test="logDateTo != null and logDateTo !=''">
+			and t.log_date <![CDATA[<=]]>
+			#{logDateTo}
+		</if>
+
+	</sql>
+
+
+	<select id="queryOne" parameterType="MountProductLog"
+		resultMap="salecategoryProductRelationLogModel">
+		select
+		id,
+		relation_id,
+		category_id,
+		category_code,
+		product_id,
+		product_code,
+		mount_type,
+		order_value,
+		opt_type,
+		description,
+		operate_user,
+		operate_time,
+		log_date
+		from t_salecategory_product_relation_log t
+		where t.id=#{id}
+	</select>
+	<select id="queryListPage" parameterType="MountProductLog"
+		resultMap="salecategoryProductRelationLogModel">
+		select
+		id,
+
+		relation_id,
+
+		category_id,
+
+		category_code,
+
+		product_id,
+
+		product_code,
+
+		mount_type,
+
+		order_value,
+
+		opt_type,
+
+		description,
+
+		operate_user,
+
+		operate_time,
+
+		log_date
+		from t_salecategory_product_relation_log t
+		where 1=1
+			<include refid="query" />
+		order by log_date desc
+	</select>
+
+	<select id="countListPage" parameterType="MountProductLog"
+		resultType="java.lang.Long">
+		select count(1) from t_salecategory_product_relation_log t
+		where 1=1
+		<include refid="query" />
+	</select>
+
+	<insert id="insert" parameterType="MountProductLog">
+		<selectKey resultType="java.lang.Long" keyProperty="id"
+			order="AFTER">
+			SELECT @@IDENTITY as id
+		</selectKey>
+		insert into t_salecategory_product_relation_log
+		(
+		relation_id,
+		category_id,
+		category_code,
+		product_id,
+		product_code,
+		mount_type,
+		order_value,
+		opt_type,
+		description,
+		operate_user,
+		operate_time,
+		log_date
+		)
+		values
+		(
+		#{relationId},
+		#{categoryId},
+		#{categoryCode},
+		#{productId},
+		#{productCode},
+		#{mountType},
+		#{orderValue},
+		#{optType},
+		#{description},
+		#{operateUser},
+		#{operateTime},
+		#{logDate}
+		)
+	</insert>
+
+	<insert id="batchInsert" parameterType="MountProductLog"
+		 useGeneratedKeys="true">
+		insert into	t_salecategory_product_relation_log
+		(
+			relation_id,
+			category_id,
+			category_code,
+			product_id,
+			product_code,
+			mount_type,
+			order_value,
+			opt_type,
+			description,
+			operate_user,
+			operate_time,
+			log_date
+		)
+		values
+		<foreach collection="list" index="index" separator="," item="item">
+		(
+			#{item.relationId},
+			#{item.categoryId},
+			#{item.categoryCode},
+			#{item.productId},
+			#{item.productCode},
+			#{item.mountType},
+			#{item.orderValue},
+			#{item.optType},
+			#{item.description},
+			#{item.operateUser},
+			#{item.operateTime},
+			#{item.logDate}
+		)
+		</foreach>
+	</insert>
+
+	<update id="update" parameterType="MountProductLog">
+		update t_salecategory_product_relation_log t
+		<set>
+			<if test="relationId != null  and relationId !=''">
+				t.relation_id=#{relationId},
+			</if>
+			<if test="categoryId != null  and categoryId !=''">
+				t.category_id=#{categoryId},
+			</if>
+			<if test="categoryCode != null  and categoryCode !=''">
+				t.category_code=#{categoryCode},
+			</if>
+			<if test="productId != null  and productId !=''">
+				t.product_id=#{productId},
+			</if>
+			<if test="productCode != null  and productCode !=''">
+				t.product_code=#{productCode},
+			</if>
+			<if test="mountType != null  and mountType !=''">
+				t.mount_type=#{mountType},
+			</if>
+			<if test="orderValue != null  and orderValue !=''">
+				t.order_value=#{orderValue},
+			</if>
+			<if test="optType != null  and optType !=''">
+				t.opt_type=#{optType},
+			</if>
+			<if test="description != null  and description !=''">
+				t.description=#{description},
+			</if>
+			<if test="operateUser != null  and operateUser !=''">
+				t.operate_user=#{operateUser},
+			</if>
+			<if test="operateTime != null  and operateTime !=''">
+				t.operate_time=#{operateTime},
+			</if>
+			<if test="logDate != null  and logDate !=''">
+				t.log_date=#{logDate}
+			</if>
+		</set>
+		where
+		t.id=#{id}
+	</update>
+
+	<delete id="delete" parameterType="MountProductLog">
+		delete from t_salecategory_product_relation_log where
+		id =#{id}
+	</delete>
+
+	<delete id="deleteByIds" parameterType="java.util.List">
+		delete from t_salecategory_product_relation_log where
+		id in
+		<foreach item="item" index="index" collection="list" open="("
+			separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+
+</mapper>

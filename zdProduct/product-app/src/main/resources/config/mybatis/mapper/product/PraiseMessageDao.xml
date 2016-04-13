@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.zhaidou.product.dao.impl.PraiseMessageDaoImpl">
+	
+	<resultMap type="PraiseMessageModel" id="praiseMessageModel">
+		<result property="id" column="id" javaType="java.lang.Long"/>
+		<result property="productId" column="product_id" javaType="java.lang.Long"/>
+		<result property="productCode" column="product_code" javaType="java.lang.String"/>
+		<result property="productName" column="product_name" javaType="java.lang.String"/>
+		<result property="praiseAccount" column="praise_account" javaType="java.lang.Integer"/>
+		<result property="sendGrade" column="send_grade" javaType="java.lang.Integer"/>
+		<result property="sendStatus" column="send_status" javaType="java.lang.Integer"/>
+		<result property="retryNum" column="retry_num" javaType="java.lang.Integer"/>
+		<result property="lastSendAccount" column="last_send_account" javaType="java.lang.Integer"/>
+		<result property="lastSendTime" column="last_send_time" javaType="java.lang.Long"/>
+		<result property="lastSendGrade" column="last_send_grade" javaType="java.lang.Integer"/>
+		<result property="createTime" column="create_time" javaType="java.lang.Long"/>
+		<result property="updateTime" column="update_time" javaType="java.lang.Long"/>
+	</resultMap>
+	
+	<select id="queryOne" parameterType="PraiseMessageModel"
+	resultMap="praiseMessageModel">
+		SELECT
+			product_id,praise_account
+		FROM  t_praise_message_job t
+		WHERE t.product_id = #{productId}
+	</select>
+	
+    <insert id="insert" useGeneratedKeys="true" keyProperty="productId" parameterType="PraiseMessageModel">
+		insert into  t_praise_message_job 
+		(
+	          			    
+		        product_id,
+		        product_code,
+		        product_name,
+		        praise_account,
+		        send_grade,
+		        send_status,
+		        retry_num,
+		        last_send_account,
+		        last_send_time,
+		        last_send_grade,
+				create_time,
+				update_time
+        )
+		values
+		(
+      			    
+    			    #{productId},
+    			    #{productCode},
+    			    #{productName},
+    				#{praiseAccount},
+    			    #{sendGrade},
+    			    #{sendStatus},
+    			    0,
+    			    #{lastSendAccount},
+    			    #{lastSendTime},
+    			    0,
+    			    #{createTime},
+    			    #{updateTime}
+        )
+	</insert>
+
+	<update id="update" parameterType="PraiseMessageModel">
+		update  t_praise_message_job t 
+		  <set>
+			         
+			         <if test="productCode != null  and productCode !=''">
+				          t.product_code=#{productCode},
+				    </if>
+			         <if test="productName != null  and productName !=''">
+				          t.product_name=#{productName},
+				    </if>
+			         <if test="praiseAccount != null  and praiseAccount !=''">
+				          t.praise_account=#{praiseAccount},
+				    </if>
+				     <if test="sendGrade != null  and sendGrade !=''">
+				          t.send_grade=#{sendGrade},
+				    </if>
+			         <if test="sendStatus != null">
+				          t.send_status=#{sendStatus},
+				    </if>
+			         <if test="retryNum != null  and retryNum !=''">
+				          t.retry_num=#{retryNum},
+				    </if>
+				    <if test="lastSendAccount !=null and lastSendAccount!='' ">
+				    	t.last_send_account=#{lastSendAccount},
+				    </if>
+				    <if test="lastSendTime !=null and lastSendTime!='' ">
+				    	t.last_send_time=#{lastSendTime},
+				    </if>
+				    <if test="lastSendGrade !=null and lastSendGrade!='' ">
+				    	t.last_send_grade=#{lastSendGrade},
+				    </if>
+				    <if test="updateTime !=null and updateTime!='' ">
+				    	t.update_time=#{updateTime},
+				    </if>
+				    
+				    <if test="productId != null  and productId !=''">
+				          t.product_id=#{productId}
+				    </if>
+		    </set>
+		where t.product_id = #{productId}
+	</update>  
+</mapper>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<workbook>
+    <worksheet name="Sheet1">
+        <section startRow="1" endRow="1"/>
+        <loop startRow="1" endRow="1" items="list" var="productStockPo" varType="com.teshehui.product.stock.po.model.ProductStockPO">
+            <section startRow="1" endRow="1">
+                <mapping cell="A">productStockPo.skuCode</mapping>
+                <mapping cell="B">productStockPo.skuId</mapping>
+                <mapping cell="C">productStockPo.productCode</mapping>
+                <mapping cell="D">productStockPo.productName</mapping>
+                <mapping cell="E">productStockPo.brandCode</mapping>
+                <mapping cell="F">productStockPo.brandName</mapping>
+                <mapping cell="G">productStockPo.categoryCode</mapping>
+                <mapping cell="H">productStockPo.categoryName</mapping>
+                <mapping cell="I">productStockPo.entityStock</mapping>
+            </section>
+            
+            <loopbreakcondition>
+                <rowcheck offset="0">
+                    <cellcheck offset="0"/>
+                </rowcheck>
+            </loopbreakcondition>
+        </loop>
+    </worksheet>
+</workbook>

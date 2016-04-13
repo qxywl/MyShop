@@ -1,0 +1,334 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ProductPriceListDaoImpl">
+	
+	<resultMap type="ProductPriceListModel" id="productPriceListModel">
+		   <result property="productPriceList" column="product_price_list_id" javaType="java.lang.Long" />
+		   <result property="productSkuCode" column="product_sku_code" javaType="java.lang.String" />
+		   <result property="costPrice" column="cost_price" javaType="java.lang.Double" />
+		   <result property="tshPrice" column="tsh_price" javaType="java.lang.Double" />
+		   <result property="tb" column="tb" javaType="java.lang.Long" />
+		   <result property="marketPrice" column="market_price" javaType="java.lang.Double" />
+		   <result property="reason" column="reason" javaType="java.lang.String" />
+		   <result property="status" column="status" javaType="java.lang.Integer" />
+		   <result property="createTime" column="create_time" javaType="java.lang.Long" />
+		   <result property="synTime" column="syn_time" javaType="java.lang.Long" />
+		   <result property="createBy" column="create_by" javaType="java.lang.Long" />
+		   <result property="createUserName" column="create_user_name" javaType="java.lang.String" />
+		   <result property="updateTime" column="update_time" javaType="java.lang.Long" />
+		   <result property="updateBy" column="update_by" javaType="java.lang.Long" />
+		   <result property="updateUserName" column="update_user_name" javaType="java.lang.String" />
+		   <result property="oldCostPrice" column="old_cost_price" javaType="java.lang.Double" />
+		   <result property="oldTshPrice" column="old_tsh_price" javaType="java.lang.Double" />
+		   <result property="oldTb" column="old_tb" javaType="java.lang.Long" />
+		   <result property="oldMarketPrice" column="old_market_price" javaType="java.lang.Double" />
+		   <result property="sourceType" column="source_type" javaType="java.lang.Integer" />
+		   <result property="timeStart" column="time_start" javaType="java.lang.Long" />
+	</resultMap>
+	
+	<resultMap type="ProductPriceModel" id="productPriceModel">
+		   <result property="productPriceId" column="product_price_id" javaType="java.lang.Long" />
+		   <result property="productSkuId" column="product_sku_id" javaType="java.lang.Long" />
+		   <result property="productId" column="product_id" javaType="java.lang.Long" />
+		   <result property="productSkuCode" column="product_sku_code" javaType="java.lang.String" />
+		   <result property="costPrice" column="cost_price" javaType="java.lang.Double" />
+		   <result property="tshPrice" column="tsh_price" javaType="java.lang.Double" />
+		   <result property="tb" column="tb" javaType="java.lang.Long" />
+		   <result property="marketPrice" column="market_price" javaType="java.lang.Double" />
+		   <result property="productPriceRate" column="product_price_rate" javaType="java.lang.Double" />
+	</resultMap>
+
+    <sql id="query">
+					and t.status=#{status}   and  product_price_list_id <![CDATA[ % #{total} = #{remainder} ]]>
+    </sql>
+
+
+   <select id="queryPriceOne" parameterType="ProductPriceModel"
+	resultMap="productPriceModel">
+	select
+	          product_price_id,
+	          product_sku_id,
+	          t.product_id,
+	          product_sku_code,
+	          cost_price,
+	          tsh_price,
+	          tb,
+	          market_price,
+              product_price_rate
+	from  t_product_price t, t_product_operate t2  
+	where  t.product_id=t2.product_id
+	and  t.product_sku_code=#{productSkuCode}  LIMIT 1
+	</select>
+    
+
+	<select id="queryOne" parameterType="ProductPriceListModel"
+	resultMap="productPriceListModel">
+	select
+	          product_price_list_id,
+	          product_sku_code,
+	          cost_price,
+	          tsh_price,
+	          tb,
+	          market_price,
+	          reason,
+	          status,
+	          create_time,
+	          create_by,
+	          create_user_name,
+	          update_time,
+	          update_by,
+	          update_user_name,
+	          old_cost_price,
+	          old_tsh_price,
+	          old_tb,
+	          source_type,
+	          old_market_price,
+	          time_start
+	from  t_product_price_list t
+	where t.product_price_list_id=#{productPriceList}
+	</select>
+	<select id="queryListPage" parameterType="ProductPriceListModel"
+		resultMap="productPriceListModel">
+		select 
+	          product_price_list_id,
+	    
+	          product_sku_code,
+	    
+	          cost_price,
+	    
+	          tsh_price,
+	    
+	          tb,
+	    
+	          market_price,
+	    
+	          reason,
+	    
+	          status,
+	    
+	          create_time,
+	    
+	          create_by,
+	    
+	          create_user_name,
+	    
+	          update_time,
+	    
+	          update_by,
+	    
+	          update_user_name,
+	    
+	          old_cost_price,
+	    
+	          old_tsh_price,
+	    
+	          old_tb,
+	          
+	          source_type,
+	    
+	          old_market_price,
+	          time_start
+	     from  t_product_price_list t
+		where 1=1   
+		<include refid="query"/>
+	</select>
+
+	<select id="countListPage" parameterType="ProductPriceListModel"
+		resultType="java.lang.Long">
+		select count(1) from  t_product_price_list t
+		where 1=1  
+		<include refid="query"/>
+	 </select>
+
+	<insert id="insert" parameterType="ProductPriceListModel">
+		<selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER">
+    		SELECT @@IDENTITY as id
+    	</selectKey>
+		insert into  t_product_price_list
+		(
+	          			    product_price_list_id,
+	          			    product_sku_code,
+	          			    cost_price,
+	          			    tsh_price,
+	          			    tb,
+	          			    market_price,
+	          				reason,
+	          			    status,
+	          			    create_time,
+	          			    create_by,
+	          			    create_user_name,
+	          			    update_user_name,
+	          			    old_cost_price,
+	          			    old_tsh_price,
+	          			    old_tb,
+	          			    source_type,
+	          				old_market_price,
+	          				time_start
+        )
+		values
+		(
+		          			    #{productPriceList},
+		          			    #{productSkuCode},
+		          			    #{costPrice},
+		          			    #{tshPrice},
+		          			    #{tb},
+		          			    #{marketPrice},
+		          				#{reason},
+		          			    #{status},
+		          			    #{createTime},
+		          			    #{createBy},
+		          			    #{createUserName},
+		          			    #{updateUserName},
+		          			    #{oldCostPrice},
+		          			    #{oldTshPrice},
+		          			    #{oldTb},
+		          			    #{sourceType},
+	          					#{oldMarketPrice},
+	          					#{timeStart}
+        )
+	</insert>
+
+	<update id="update" parameterType="ProductPriceListModel">
+		update  t_product_price_list t 
+		  <set>
+			         
+			         <if test="reason != null  and reason !=''">
+				          t.reason=#{reason},
+				    </if>
+			         <if test="status != null  and status !=''">
+				          t.status=#{status},
+				    </if>
+			         <if test="updateTime != null  and updateTime !=''">
+				          t.update_time=#{updateTime},
+				    </if>
+			         <if test="updateBy != null  and updateBy !=''">
+				          t.update_by=#{updateBy},
+				    </if>
+			         <if test="updateUserName != null  and updateUserName !=''">
+				          t.update_user_name=#{updateUserName},
+				    </if>
+				     <if test="oldCostPrice != null  and oldCostPrice !=''">
+				          t.old_cost_price=#{oldCostPrice},
+				    </if>
+			         <if test="oldTshPrice != null  and oldTshPrice !=''">
+				          t.old_tsh_price=#{oldTshPrice},
+				    </if>
+			         <if test="oldTb != null">
+				          t.old_tb=#{oldTb},
+				    </if>
+				     <if test="tshPrice != null  and tshPrice !=''">
+				          t.tsh_price=#{tshPrice},
+				    </if>
+			         <if test="tb != null">
+				          t.tb=#{tb},
+				    </if>
+				    
+				    <if test="synTime != null  and synTime !=''">
+				          t.syn_time=#{synTime},
+				    </if>
+			         <if test="oldMarketPrice != null  and oldMarketPrice !=''">
+				          t.old_market_price=#{oldMarketPrice},
+				    </if>
+				    <if test="timeStart != null  and timeStart !=''">
+				          t.time_start=#{timeStart}
+				    </if>
+		    </set>
+		where 
+		t.product_price_list_id=#{productPriceList}
+	</update>
+	
+	<update id="updateStatusList" parameterType="java.util.Map">
+		update  t_product_price_list t 
+			<set>
+				    <if test="synTime != null  and synTime !=''">
+				          t.syn_time=#{synTime},
+				    </if>
+				     <if test="status != null  and status !=''">
+				          t.status=#{status}
+				    </if>
+		    </set>
+		 where t.product_price_list_id
+		 in 
+		 <foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</update>
+	
+	<update id="updateOldStatusList" parameterType="java.util.List">
+		UPDATE t_product_price_list a,
+		 (
+			SELECT
+				product_price_list_id
+			FROM
+				t_product_price_list
+			WHERE
+				product_sku_code IN 
+					<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+						#{item}
+					</foreach>
+			AND `status` = 1
+		) b
+		SET `status` = 6,
+		 reason = '系统自动处理旧数据'
+		WHERE
+			a.product_price_list_id = b.product_price_list_id
+	</update>
+	
+	<update id="updateStatusPriceList" parameterType="java.util.List">
+		UPDATE t_product_price_list a,
+		 t_product_price b
+		SET a.old_cost_price = b.cost_price,
+		 a.old_tsh_price = b.tsh_price,
+		 a.old_market_price = b.market_price,
+		 a.old_tb = b.tb,
+		 a.`status`=1
+		WHERE a.product_sku_code=b.product_sku_code AND a.`status`=0 AND 
+		a.product_price_list_id in 
+			<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+	</update>
+	
+	<delete id="delete" parameterType="ProductPriceListModel">
+    	delete from  t_product_price_list  where 
+    	product_price_list_id =#{productPriceList}
+    </delete>
+    
+    <delete id="deleteByIds" parameterType="java.util.List">
+    	delete from t_product_price_list  where 
+    	product_price_list_id in
+    	<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+    </delete>
+	
+	<select id="getPriceListBySkuCode" parameterType="ProductPriceListModel"
+		resultMap="productPriceListModel">
+		select
+		product_price_list_id,
+		product_sku_code,
+		cost_price,
+		tsh_price,
+		tb,
+		market_price,
+		reason,
+		status,
+		create_time,
+		create_by,
+		create_user_name,
+		update_time,
+		update_by,
+		update_user_name,
+		old_cost_price,
+		old_tsh_price,
+		old_tb,
+		old_market_price,
+		time_start,
+		source_type
+		from t_product_price_list t
+		where t.product_sku_code=#{productSkuCode}
+	</select>
+	
+</mapper>

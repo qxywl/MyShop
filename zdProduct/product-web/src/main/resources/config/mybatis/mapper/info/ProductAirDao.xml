@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ProductAirDaoImpl">
+	
+	<resultMap type="ProductAirModel" id="productAirModel">
+		   <result property="productAirId" column="product_air_id" javaType="java.lang.Long" />
+		   <result property="productId" column="product_id" javaType="java.lang.Long" />
+		   <result property="column9" column="Column_9" javaType="java.lang.String" />
+		   <result property="column10" column="Column_10" javaType="java.lang.String" />
+		   <result property="column11" column="Column_11" javaType="java.lang.String" />
+		   <result property="column12" column="Column_12" javaType="java.lang.String" />
+		   <result property="column13" column="Column_13" javaType="java.lang.String" />
+	</resultMap>
+
+    <sql id="query">
+	        <if test="productAirId != null and productAirId !=''">
+					and t.product_air_id=#{productAirId}
+		    </if>
+	        <if test="productId != null and productId !=''">
+					and t.product_id=#{productId}
+		    </if>
+	        <if test="column9 != null and column9 !=''">
+		        	and t.Column_9 like CONCAT(CONCAT('%', #{column9}), '%') 
+		    </if>
+	        <if test="column10 != null and column10 !=''">
+		        	and t.Column_10 like CONCAT(CONCAT('%', #{column10}), '%') 
+		    </if>
+	        <if test="column11 != null and column11 !=''">
+		        	and t.Column_11 like CONCAT(CONCAT('%', #{column11}), '%') 
+		    </if>
+	        <if test="column12 != null and column12 !=''">
+		        	and t.Column_12 like CONCAT(CONCAT('%', #{column12}), '%') 
+		    </if>
+	        <if test="column13 != null and column13 !=''">
+		        	and t.Column_13 like CONCAT(CONCAT('%', #{column13}), '%') 
+		    </if>
+	    
+    </sql>
+
+
+	<select id="queryOne" parameterType="ProductAirModel"
+	resultMap="productAirModel">
+	select
+	          product_air_id,
+	          product_id,
+	          Column_10,
+	          Column_11,
+	          Column_12,
+	          Column_13
+	from  t_product_air t
+	where t.product_air_id=#{productAirId};
+	</select>
+	<select id="queryListPage" parameterType="ProductAirModel"
+		resultMap="productAirModel">
+		select 
+	          product_air_id,
+	    
+	          product_id,
+	    
+	          Column_10,
+	    
+	          Column_11,
+	    
+	          Column_12,
+	    
+	          Column_13
+	     from  t_product_air t
+		where 1=1
+		<include refid="query"/>
+	</select>
+
+	<select id="countListPage" parameterType="ProductAirModel"
+		resultType="java.lang.Long">
+		select count(1) from  t_product_air t
+		where 1=1
+		<include refid="query"/>
+	 </select>
+
+	<insert id="insert" parameterType="ProductAirModel">
+		<selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER">
+    		SELECT @@IDENTITY as id
+    	</selectKey>
+		insert into  t_product_air
+		(
+	          			    product_air_id,
+	          			    product_id,
+	          			    Column_10,
+	          			    Column_11,
+	          			    Column_12,
+	          			    Column_13
+        )
+		values
+		(
+		          			    #{ProductAir},
+		          			    #{productId},
+		          			    #{column10},
+		          			    #{column11},
+		          			    #{column12},
+		          			    #{column13}
+        )
+	</insert>
+
+	<update id="update" parameterType="ProductAirModel">
+		update  t_product_air t 
+		  <set>
+			         <if test="tProductAir != null  and tProductAir !=''">
+				          t.product_air_id=#{productAirId},
+				    </if>
+			         <if test="productId != null  and productId !=''">
+				          t.product_id=#{productId},
+				    </if>
+			         <if test="column10 != null  and column10 !=''">
+				          t.Column_10=#{column10},
+				    </if>
+			         <if test="column11 != null  and column11 !=''">
+				          t.Column_11=#{column11},
+				    </if>
+			         <if test="column12 != null  and column12 !=''">
+				          t.Column_12=#{column12},
+				    </if>
+			         <if test="column13 != null  and column13 !=''">
+				          t.Column_13=#{column13}
+				    </if>
+		    </set>
+		where 
+		t.product_air_id=#{productAirId};
+	</update>
+	
+	<delete id="delete" parameterType="ProductAirModel">
+    	delete from  t_product_air  where product_air_id=#{productAirId};
+    </delete>
+    
+    <delete id="deleteByIds" parameterType="java.util.List">
+    	delete from t_product_air  where product_air_id
+    	 in
+    	<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+    </delete>
+
+</mapper>

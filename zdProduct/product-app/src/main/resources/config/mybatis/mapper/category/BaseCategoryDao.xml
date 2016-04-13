@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="BaseCategoryDaoImpl">
+
+ 	<resultMap type="com.zhaidou.product.model.base.CategoryModel" id="CategoryPO_query_list">
+        <result property="id" column="category_id"/>
+        <result property="categoryName" column="category_name"/>
+        <result property="categoryCode" column="category_code"/>
+        <result property="parentId" column="parent_id"/>
+        <result property="parentCode" column="parent_code"/>
+        <result property="imageUrl" column="image_url"/>
+        <result property="showFlag" column="show_flag"/>
+        <result property="deleteFlag" column="delete_flag"/>
+        <result property="colorName" column="color_name"/>
+        <result property="sizeName" column="size_name"/>
+        <result property="createDate" column="create_time"/>
+        <result property="createUser" column="create_user"/>
+        <result property="updateUser" column="last_update_user"/>
+        <result property="updateDate" column="last_update_time"/>
+    </resultMap>
+
+	<select id="selectSonsByParentCode" parameterType="CategoryModel" resultMap="CategoryPO_query_list">
+	   SELECT
+           category_id,
+           category_name,
+		   category_code,
+		   parent_id ,
+		   parent_code ,
+		   image_url,
+		   show_flag,
+		   delete_flag,
+		    color_name,
+		   size_name,
+		   create_time,
+		   create_user,
+		   last_update_time,
+		   last_update_user 
+	    FROM t_base_category   
+	    WHERE  delete_flag = 0 
+	    <if test="categoryCode == null ">
+	    	and parent_code is null 
+	    </if>
+	    <if test="categoryCode != null ">
+	    	and left(parent_code,length(#{categoryCode})) = #{categoryCode} and length(category_code)=length(#{categoryCode})+2
+	    </if>
+	</select>
+    
+    <select id="selectOneByName" parameterType="CategoryModel" resultMap="CategoryPO_query_list">
+	   SELECT
+           category_id,
+           category_name,
+		   category_code,
+		   parent_id ,
+		   parent_code ,
+		   image_url,
+		   show_flag,
+		   delete_flag,
+		    color_name,
+		   size_name,
+		   create_time,
+		   create_user,
+		   last_update_time,
+		   last_update_user 
+	    FROM t_base_category   
+	    WHERE delete_flag = 0 and category_name = #{categoryName}
+	</select>
+   
+    <select id="selectOneByCode" parameterType="java.lang.String" resultMap="CategoryPO_query_list">
+	   SELECT
+           category_id,
+           category_name,
+		   category_code,
+		   parent_id ,
+		   parent_code ,
+		   image_url,
+		   show_flag,
+		   delete_flag,
+		    color_name,
+		   size_name,
+		   create_time,
+		   create_user,
+		   last_update_time,
+		   last_update_user 
+	    FROM t_base_category   
+	    WHERE delete_flag = 0 and category_code = #{categoryCode}
+	</select>
+	
+	
+	<select id="selectAllByLevel"  parameterType="java.util.Map" resultMap="CategoryPO_query_list">
+	   SELECT
+           category_id,
+           category_name,
+		   category_code,
+		   parent_id ,
+		   parent_code ,
+		   image_url,
+		   show_flag,
+		   delete_flag,
+		    color_name,
+		   size_name,
+		   create_time,
+		   create_user,
+		   last_update_time,
+		   last_update_user 
+	    FROM t_base_category   
+	    WHERE  delete_flag = 0 
+	    <if test="level != null ">
+	    	and length(category_code) =#{level}
+	    </if>
+	</select>
+	
+	
+	
+</mapper>

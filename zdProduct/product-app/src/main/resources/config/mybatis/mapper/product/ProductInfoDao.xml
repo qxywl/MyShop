@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.zhaidou.product.dao.impl.ProductInfoDaoImpl">
+	
+	  <resultMap type="ProductInfoModel" id="productInfoModel">
+		<result property="productInfoId" column="product_info_id" javaType="java.lang.Long"/>
+		<result property="productId" column="product_id" javaType="java.lang.Long"/>
+		<result property="pcProductInfo" column="pc_product_info" javaType="java.lang.String"/>
+		<result property="appProductInfo" column="app_product_info" javaType="java.lang.String"/>
+     </resultMap>
+	
+	
+	<sql id="field">
+	        t.product_info_id,
+			t.product_id,
+			t.pc_product_info,
+			t.app_product_info
+    </sql>
+    
+    <select id="queryOne" parameterType="ProductInfoModel"
+	resultMap="productInfoModel">
+		SELECT
+		      <include refid="field"/>
+		FROM  t_product_info t
+		WHERE 1=1  AND  t.product_info_id = #{productInfoId}
+	</select>
+	
+	
+    <select id="queryOneByProductId" parameterType="ProductInfoModel"
+	resultMap="productInfoModel">
+		SELECT
+		      <include refid="field"/>
+		FROM  t_product_info t
+		WHERE 1=1  AND  t.product_id = #{productId}
+	</select>
+	
+	<select id="queryByproductIdList" parameterType="ProductInfoModel"
+	 resultMap="productInfoModel">
+		SELECT
+		      <include refid="field"/>
+		FROM  t_product_info t
+		WHERE 1=1  
+		<choose>
+	     <when test="productIdList != null and productIdList != '' ">
+	        AND t.product_id 
+		    IN
+		    <foreach item="item" index="index" collection="productIdList" open="(" separator="," close=")">
+			          #{item}
+		    </foreach>
+	     </when>
+	     <otherwise>
+	        AND 1=2
+	     </otherwise>
+	    </choose>
+	</select>
+	
+	<sql id="query">
+	        <if test="id != null and id !=''">
+					and t.id=#{id}
+		    </if>
+    </sql>
+    
+    
+</mapper>

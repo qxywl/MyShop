@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<core-beans>
+	<service url="http://search-solr.zhaidou.com/">
+		<!-- 商品索引 -->
+		<core name="goods" class="com.zhaidou.product.solr.model.GoodsSolrModel">
+			<connectionTimeout>6000</connectionTimeout>
+			<maxRetries>5</maxRetries>
+			<maxTotalConnections>50</maxTotalConnections>
+			<defaultMaxConnectionsPerHost>25</defaultMaxConnectionsPerHost>
+			<soTimeout>20000</soTimeout>
+			<closeIdleConnections>20000</closeIdleConnections>
+		</core>
+	</service>
+</core-beans>

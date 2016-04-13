@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ProductMallDaoImpl">
+	
+	<resultMap type="ProductMallModel" id="productMallModel">
+		   <result property="productMallId" column="product_mall_id" javaType="java.lang.Long" />
+		   <result property="productId" column="product_id" javaType="java.lang.Long" />
+		   <result property="productWeight" column="product_weight" javaType="java.lang.Double" />
+		   <result property="productLong" column="product_long" javaType="java.lang.Double" />
+		   <result property="productWidth" column="product_width" javaType="java.lang.Double" />
+		   <result property="productHeight" column="product_height" javaType="java.lang.Double" />
+		   <result property="productDensity" column="product_density" javaType="java.lang.Double" />
+		   <result property="productProducer" column="product_producer" javaType="java.lang.String" />
+		   <result property="productAtrNumber" column="product_atr_number" javaType="java.lang.String" />
+	</resultMap>
+
+    <sql id="query">
+	        <if test="productMallId != null and productMallId !=''">
+					and t.product_mall_id=#{productMallId}
+		    </if>
+	        <if test="productId != null and productId !=''">
+					and t.product_id=#{productId}
+		    </if>
+		    <if test="productWeight != null and productWeight !=''">
+					and t.product_weight=#{productWeight}
+		    </if>
+		    <if test="productLong != null and productLong !=''">
+					and t.product_long=#{productLong}
+		    </if>
+		    <if test="productWidth != null and productWidth !=''">
+					and t.product_width=#{productWidth}
+		    </if>
+		    <if test="productHeight != null and productHeight !=''">
+					and t.product_height=#{productHeight}
+		    </if>
+		    <if test="productDensity != null and productDensity !=''">
+					and t.product_density=#{productDensity}
+		    </if>
+	        
+	        <if test="productProducer != null and productProducer !=''">
+		        	and t.product_producer like CONCAT(CONCAT('%', #{productProducer}), '%') 
+		    </if>
+    </sql>
+
+
+	<select id="queryOne" parameterType="ProductMallModel"
+	resultMap="productMallModel">
+	select
+	          product_mall_id,
+	          product_id,
+	          product_weight,
+	          product_long,
+	          product_width,
+	          product_height,
+	          product_density,
+	          product_producer,
+	          product_atr_number
+	from  t_product_mall t
+	where t.product_id=#{productId}
+	</select>
+	<select id="queryListPage" parameterType="ProductMallModel"
+		resultMap="productMallModel">
+		select 
+	          product_mall_id,
+	    
+	          product_id,
+	    
+	          product_weight,
+	          
+	          product_long,
+	          
+	          product_width,
+	          
+	          product_height,
+	          
+	          product_density,
+	          
+	          product_producer,
+	          product_atr_number
+	          
+	     from  t_product_mall t
+		where 1=1
+		<include refid="query"/>
+	</select>
+
+	<select id="countListPage" parameterType="ProductMallModel"
+		resultType="java.lang.Long">
+		select count(1) from  t_product_mall t
+		where 1=1
+		<include refid="query"/>
+	 </select>
+
+	<insert id="insert" parameterType="ProductMallModel">
+		<selectKey resultType="java.lang.Long" keyProperty="productMallId" order="AFTER">
+    		SELECT @@IDENTITY as productMallId
+    	</selectKey>
+		insert into  t_product_mall
+		(
+	          			    product_mall_id,
+	          			    product_id,
+	          				product_weight,
+				            product_long,
+				            product_width,
+				            product_height,
+				            product_density,
+				            product_producer,
+	          				product_atr_number
+        )
+		values
+		(
+		          			    #{productMallId},
+		          			    #{productId},
+		          				#{productWeight},
+				            	#{productLong},
+				            	#{productWidth},
+				            	#{productHeight},
+				            	#{productDensity},
+				            	#{productProducer},
+	          					#{productAtrNumber}
+        )
+	</insert>
+
+	<update id="update" parameterType="ProductMallModel">
+		update  t_product_mall t 
+		  <set>
+			         <if test="productWeight != null and productWeight !=''">
+						t.product_weight=#{productWeight},
+				    </if>
+				    <if test="productLong != null and productLong !=''">
+							t.product_long=#{productLong},
+				    </if>
+				    <if test="productWidth != null and productWidth !=''">
+							t.product_width=#{productWidth},
+				    </if>
+				    <if test="productHeight != null and productHeight !=''">
+							t.product_height=#{productHeight},
+				    </if>
+				    <if test="productDensity != null and productDensity !=''">
+							t.product_density=#{productDensity},
+				    </if>
+			        
+			        <if test="productProducer != null and productProducer !=''">
+				        	t.product_producer=#{productProducer},
+				    </if>
+				    <if test="productAtrNumber != null and productAtrNumber !=''">
+				        	t.product_atr_number=#{productAtrNumber},
+				    </if>
+				    <if test="productId != null  and productId !=''">
+				          t.product_id=#{productId}
+				    </if>
+				    </set>
+				where 
+				t.product_mall_id=#{productMallId}
+	</update>
+	
+	<update id="updateByProductId" parameterType="ProductMallModel">
+		update  t_product_mall t 
+		  <set>
+			         <if test="productWeight != null">
+						t.product_weight=#{productWeight},
+				    </if>
+				    <if test="productLong != null">
+							t.product_long=#{productLong},
+				    </if>
+				    <if test="productWidth != null">
+							t.product_width=#{productWidth},
+				    </if>
+				    <if test="productHeight != null">
+							t.product_height=#{productHeight},
+				    </if>
+				    <if test="productDensity != null">
+							t.product_density=#{productDensity},
+				    </if>
+			        
+			        <if test="productProducer != null">
+				        	t.product_producer=#{productProducer},
+				    </if>
+				    <if test="productAtrNumber != null and productAtrNumber !=''">
+				        	t.product_atr_number=#{productAtrNumber},
+				    </if>
+				    <if test="productId != null  and productId !=''">
+				          t.product_id=#{productId}
+				    </if>
+				    </set>
+				where 
+				t.product_id=#{productId}
+	</update>
+	
+	<delete id="delete" parameterType="ProductMallModel">
+    	delete from  t_product_mall  where product_mall_id=#{productMallId}
+    </delete>
+    
+    <delete id="deleteByIds" parameterType="java.util.List">
+    	delete from t_product_mall  where product_mall_id
+    	 in
+    	<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+    </delete>
+	
+	<select id="getProductMallListByProductId" parameterType="java.util.List" resultMap="productMallModel">
+	select product_mall_id,
+		product_id,
+		product_weight,
+		product_long,
+		product_width,
+		product_height,
+		product_density,
+		product_producer,
+		product_atr_number
+	from t_product_mall where product_id in 
+		<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</select>
+</mapper>

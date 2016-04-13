@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+            http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.1.xsd
+            http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd
+            http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.1.xsd"
+       default-lazy-init="true">
+       
+   	<bean id="baseNodeModeSchedule" class="com.zhaidou.jobCenter.schedule.BaseNodeModeSchedule">
+   		<property name="isRegisterCmd">
+            <value>0</value>
+        </property>
+   		<property name="settingByAuto">
+            <value>${server.setting.auto}</value>
+        </property>
+   		<property name="switchState">
+            <value>1</value>
+        </property>
+   		<property name="currentNode">
+            <value>${server.current.node}</value>
+        </property>
+   		<property name="totalNode">
+            <value>${server.total.node}</value>
+        </property>
+        <property name="jobListName">
+            <value>${server.job.name}</value>
+        </property>
+   	</bean>
+   	<bean id="serverNodeRegisterScheduleTask" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject">
+			<ref bean="serverNodeRegisterSchedule" />
+		</property>
+        <property name="targetMethod" value="perform" />
+        <property name="concurrent" value="false" />
+    </bean>
+    <bean id="serverNodeRegisterScheduleTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+		<property name="jobDetail">
+			<ref bean="serverNodeRegisterScheduleTask" />
+		</property>
+		<!-- 60*1000 一分钟 -->
+        <property name="startDelay">
+            <value>8000</value>
+        </property>
+        <property name="repeatInterval">
+            <value>${server.register.repeat.millisec}</value>
+        </property>
+	</bean>
+   <!-- schedule config -->
+   <bean id="serverNodeRegisterSchedule" class="com.zhaidou.jobCenter.schedule.ChainSchedule" parent="baseNodeModeSchedule">
+   		<property name="isRegisterCmd">
+            <value>1</value>
+        </property>
+   		<property name="scheduleName" value="ServerNodeRegisterSchedule" />
+   		<property name="chain" ref="serverNodeRegisterChain" />
+   </bean>
+	<bean id="taskExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+		<property name="corePoolSize" value="50" />
+		<property name="maxPoolSize" value="70" />
+		<property name="queueCapacity" value="100" />
+	</bean>
+	<bean id="serverNodeRegisterCmd" class="com.zhaidou.jobCenter.schedule.cmd.ServerNodeRegisterCmd">
+		<property name="commandName" value="ServerNodeRegisterCmd" />
+		<property name="disabledMin">
+            <value>${server.register.disabled.min}</value>
+        </property>
+	</bean>
+    <bean id="serverNodeRegisterChain" class="com.zhaidou.jobCenter.chain.Chain">
+		<property name="chainName" value="ServerNodeRegisterChain" />
+		<property name="commands">
+			<list>
+				<ref bean="serverNodeRegisterCmd" />
+			</list>
+		</property>
+	</bean>
+	<!-- joblist -->
+	 
+	<bean id="jobFactoryBean" lazy-init="false" autowire="no" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="triggers">
+			<list>
+
+
+			    <!-- jiedian -->
+				<ref bean="serverNodeRegisterScheduleTrigger" />
+
+				<!--推送商品到erp -->
+				<ref bean="autoProductInfoScheduleTrigger"/>
+
+				<!--erp toto 暂时不要开启此任务-->
+				<!-- 自动同步erp采购入库单 -->
+				<!--<ref bean="autoSyncPurchaseStockScheduleTrigger"/>-->
+
+				<!-- 自动同步采购库存到宅豆库存中 -->
+				<ref bean="autoSyncStockFromPurchaseScheduleTrigger" />
+
+				<!-- 自动同步erp采购退货单 -->
+				<!--<ref bean="autoSyncPurchaseRefundScheduleTrigger"/> -->
+
+				
+				<!-- refundGoods -->
+				<!-- 自动同步erp退款单 -->
+				<!-- <ref bean="autoSyncProductRefundGoodsScheduleTrigger"/> -->
+				<!-- 自动同步退货单到宅豆库存中 -->
+				<!-- <ref bean="autoSyncStockFromRefundGoodsScheduleTrigger"/> -->
+				
+				<!-- sale -->
+				<ref bean="autoOnImportSaleScheduleTrigger" />
+				<ref bean="autoOnCreateSaleScheduleTrigger" />
+				<ref bean="autoOnsaleScheduleTrigger" />
+				
+				<ref bean="autoViewOnSaleScheduleTrigger" />
+				<ref bean="autoMemcacheOnSaleScheduleTrigger" />
+				<ref bean="autoMqOnSaleScheduleTrigger" />
+				
+				<!-- info -->
+				<ref bean="autoImportProductInfoScheduleTrigger" />
+				<ref bean="autoCreateProductInfoScheduleTrigger" />
+
+				
+				<ref bean="autoViewProductInfoScheduleTrigger" />
+				<ref bean="autoMemcacheProductInfoScheduleTrigger" />
+				<ref bean="autoMqProductInfoScheduleTrigger" />
+				
+				<!-- price -->
+				<ref bean="autoImportPriceScheduleTrigger" />
+				<ref bean="autoCreatePriceScheduleTrigger" />
+				<ref bean="autoPriceScheduleTrigger" />
+				
+				<ref bean="autoMemcachePriceScheduleTrigger" />
+				<ref bean="autoMqPriceScheduleTrigger" />
+				
+				<ref bean="autoSupplierPriceScheduleTrigger" />
+				
+				<!-- brand cat  attr -->
+				<ref bean="autoBrandScheduleTrigger" />
+				<ref bean="autoAttrScheduleTrigger" />
+				<ref bean="autoCatScheduleTrigger" />
+				
+				<!-- stock -->
+				<ref bean="autoStockScheduleTrigger" />
+				
+				<!-- supplier -->
+				<ref bean="autoGetSupProductScheduleTrigger" />
+				<ref bean="autoProductAuditFailureScheduleTrigger" />
+				
+				<!-- 自动挂载规则解析Job -->
+				<ref bean="autoMountRuleCron" />
+				
+				<!-- 点赞发送短信 -->
+				<ref bean="autoImportPraiseMessageScheduleTrigger" />
+				<ref bean="autoPraiseMessageScheduleTrigger" />
+			</list>
+		</property>
+		<property name="quartzProperties">
+			<props>
+				<prop key="org.quartz.scheduler.instanceName">good</prop>
+				<prop key="org.quartz.scheduler.skipUpdateCheck">true</prop>
+			</props>
+		</property>
+		<property name="taskExecutor" ref="taskExecutor" />
+	</bean>
+</beans>

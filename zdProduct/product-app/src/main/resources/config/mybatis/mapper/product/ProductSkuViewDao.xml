@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.zhaidou.product.dao.impl.ProductSkuViewDaoImpl">
+	
+	<resultMap type="ProductSkuViewModel" id="productSkuViewModel">
+		<result property="productSkuId" column="product_sku_id" javaType="java.lang.Long"/>
+		<result property="productId" column="product_id" javaType="java.lang.Long"/>
+		<result property="productSkuCode" column="product_sku_code" javaType="java.lang.String"/>
+		<result property="attrColorName" column="attr_color_name" javaType="java.lang.String"/>
+		<result property="attrColorValue" column="attr_color_value" javaType="java.lang.String"/>
+		
+		<result property="attrSpecName" column="attr_spec_name" javaType="java.lang.String"/>
+		<result property="attrSpecValue" column="attr_spec_value" javaType="java.lang.String"/>
+		<result property="colorValueAlias" column="color_value_alias" javaType="java.lang.String"/>
+		<result property="specValueAlias" column="spec_value_alias" javaType="java.lang.String"/>
+		
+		<result property="mainSku" column="main_sku" javaType="java.lang.Long"/>
+		<result property="ifShow" column="if_show" javaType="java.lang.Long"/>
+		<result property="isAvailable" column="is_available" javaType="java.lang.Long"/>
+		
+		<result property="marketPrice" column="market_price" javaType="java.lang.Double"/>
+		<result property="costPrice" column="cost_price" javaType="java.lang.Double"/>
+		<result property="tshPrice" column="tsh_price" javaType="java.lang.Double"/>
+		<result property="tb" column="tb" javaType="java.lang.Long"/>
+	</resultMap>
+	
+	<sql id="field">
+	        t.product_sku_id,
+			t.product_id,
+			t.product_sku_code,
+			t.attr_color_name,
+			t.attr_color_value,
+			t.attr_spec_name,
+			t.attr_spec_value,
+			t.color_value_alias,
+			t.spec_value_alias,
+			t.main_sku,
+			t.if_show,
+			t.is_available,
+			t.market_price,
+			t.cost_price,
+			t.tsh_price,
+			t.tb
+    </sql>
+    
+    <select id="queryOne" parameterType="ProductSkuViewModel"
+	resultMap="productSkuViewModel">
+		select
+		      <include refid="field"/>
+		from  t_product_sku_view t
+		where 1=1
+		and t.tsh_price>0 
+	</select>
+
+	<select id="queryListPage" parameterType="ProductMallViewModel"
+		resultMap="productSkuViewModel">
+		SELECT
+			<include refid="field"/>
+		from t_product_sku_view t where 1=1 
+		and t.tsh_price>0 
+	</select>
+	
+	
+	<select id="selectListByProductId" parameterType="java.lang.Long" resultMap="productSkuViewModel">
+		SELECT
+			<include refid="field"/>
+		from t_product_sku_view t where   t.is_available=1
+		and t.product_id = #{productId}
+		
+	</select>
+	
+	
+	<!-- 通过sku code集合来获取 -->
+	<select id="selectListBySkuList" parameterType="java.util.Map" resultMap="productSkuViewModel">
+	     SELECT
+			<include refid="field"/>
+		 FROM T_PRODUCT_SKU_VIEW t WHERE  t.is_available=1
+		 and t.tsh_price>0
+	   <choose>
+	     <when test="skuList != null and skuList != '' ">
+	        AND t.product_sku_code 
+		    IN
+		    <foreach item="item" index="index" collection="skuList" open="(" separator="," close=")">
+			          #{item}
+		    </foreach>
+	     </when>
+	     <otherwise>
+	        AND 1=2
+	     </otherwise>
+	   </choose>
+	</select>
+	
+	
+	<!-- 通过sku id集合来获取 -->
+	<select id="selectListBySkuIdList" parameterType="java.util.Map" resultMap="productSkuViewModel">
+	     SELECT
+			<include refid="field"/>
+		 FROM T_PRODUCT_SKU_VIEW t WHERE t.is_available = 1
+		 and t.tsh_price>0  
+	   <choose>
+	     <when test="skuIdList != null and skuIdList != '' ">
+	        AND t.product_sku_id 
+		    IN
+		    <foreach item="item" index="index" collection="skuIdList" open="(" separator="," close=")">
+			          #{item}
+		    </foreach>
+	     </when>
+	     <otherwise>
+	        AND 1=2
+	     </otherwise>
+	   </choose>
+	</select>
+	
+	
+	<sql id="query">
+	        <if test="productSkuId != null and productSkuId !=''">
+					and t.product_sku_id=#{productSkuId}
+		    </if>
+	        <if test="productId != null and productId !=''">
+		        	and t.product_id = #{productId} 
+		    </if>
+	        <if test="productSkuCode != null and productSkuCode !=''">
+		        	and t.product_sku_code = #{productSkuCode} 
+		    </if>
+	        <if test="attrColorName != null and attrColorName !=''">
+		        	and t.attr_color_name = #{attrColorName}
+		    </if>
+	        <if test="attrColorValue != null and attrColorValue !=''">
+		        	and t.attr_color_value = #{attrColorValue}
+		    </if>
+	        <if test="attrSpecName != null and attrSpecName !=''">
+		        	and t.attr_spec_name = #{attrSpecName}
+		    </if>
+		    <if test="attrSpecValue != null and attrSpecValue !=''">
+		        	and t.attr_spec_value = #{attrSpecValue}
+		    </if>
+		    <if test="colorValueAlias != null and colorValueAlias !=''">
+		        	and t.color_value_alias = #{colorValueAlias}
+		    </if>
+		    <if test="specValueAlias != null and specValueAlias !=''">
+		        	and t.spec_value_alias = #{specValueAlias}
+		    </if>
+		    <if test="mainSku != null and mainSku !=''">
+		        	and t.main_sku = #{mainSku}
+		    </if>
+		     <if test="ifShow != null and ifShow !=''">
+		        	and t.if_show = #{ifShow}
+		    </if>
+		    <if test="isAvailable != null and isAvailable !=''">
+		        	and t.is_available = #{isAvailable}
+		    </if>
+	        <if test="marketPrice != null and marketPrice !=''">
+		        	and t.market_price = #{marketPrice}
+		    </if>
+		     <if test="costPrice != null and costPrice !=''">
+		        	and t.cost_price = #{costPrice}
+		    </if>
+		     <if test="tshPrice != null and tshPrice !=''">
+		        	and t.tsh_price = #{tshPrice}
+		    </if>
+		     <if test="tb != null and tb !=''">
+		        	and t.tb = #{tb}
+		    </if>
+    </sql>
+	
+	<select id="countListPage" parameterType="ProductMallViewModel"
+		resultType="java.lang.Long">
+		SELECT count(1) FROM  t_product_sku_view t
+		WHERE 1=1 
+		and t.tsh_price>0  
+		<include refid="query"/>
+	</select>
+	
+</mapper>

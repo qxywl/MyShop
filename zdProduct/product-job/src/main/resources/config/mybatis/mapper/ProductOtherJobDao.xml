@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ProductOtherJobDaoImpl">
+	
+	<resultMap type="ProductOtherJobModel" id="productOtherJobModel">
+		   <result property="productOtherId" column="product_other_id" javaType="java.lang.Long" />
+		   <result property="otherCode" column="other_code" javaType="java.lang.String" />
+		   <result property="type" column="type" javaType="java.lang.Long" />
+		   <result property="status" column="status" javaType="java.lang.Long" />
+		   <result property="reason" column="reason" javaType="java.lang.String" />
+		   <result property="operate" column="operate" javaType="java.lang.Long" />
+		   <result property="createBy" column="create_by" javaType="java.lang.Long" />
+		   <result property="createUserName" column="create_user_name" javaType="java.lang.String" />
+		   <result property="createTime" column="create_time" javaType="java.lang.Long" />
+	</resultMap>
+
+    <sql id="query">
+	        and  product_other_id <![CDATA[ % #{total} = #{remainder} ]]>
+			and t.type=#{type}
+    </sql>
+
+
+	<select id="queryOne" parameterType="ProductOtherJobModel"
+	resultMap="productOtherJobModel">
+	select
+	          product_other_id,
+	          other_code,
+	          type,
+	          status,
+	          reason,
+	          operate,
+	          create_by,
+	          create_user_name,
+	          create_time
+	from  t_product_other_job t
+	where t.product_other_id=#{productOtherId}
+	</select>
+	<select id="queryListPage" parameterType="ProductOtherJobModel"
+		resultMap="productOtherJobModel">
+		select 
+	          product_other_id,
+	    
+	          other_code,
+	    
+	          type,
+	    
+	          status,
+	    
+	          reason,
+	    
+	          operate,
+	    
+	          create_by,
+	    
+	          create_user_name,
+	    
+	          create_time
+	     from  t_product_other_job t
+		where 1=1
+		<include refid="query"/>
+	</select>
+
+	<select id="countListPage" parameterType="ProductOtherJobModel"
+		resultType="java.lang.Long">
+		select count(1) from  t_product_other_job t
+		where 1=1
+		<include refid="query"/>
+	 </select>
+
+	<insert id="insert" parameterType="ProductOtherJobModel">
+		<selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER">
+    		SELECT @@IDENTITY as id
+    	</selectKey>
+		insert into  t_product_other_job
+		(
+	          			    product_other_id,
+	          			    other_code,
+	          			    type,
+	          			    status,
+	          				reason,
+	          			    operate,
+	          			    create_by,
+	          			    create_user_name,
+	          			    create_time
+        )
+		values
+		(
+		          			    #{productOtherId},
+		          			    #{otherCode},
+		          			    #{type},
+		          			    #{status},
+		          				#{reason},
+		          			    #{operate},
+		          			    #{createBy},
+		          			    #{createUserName},
+	          		            #{createTime}
+        )
+	</insert>
+
+	<update id="update" parameterType="ProductOtherJobModel">
+		update  t_product_other_job t 
+		  <set>
+			         <if test="productOtherId != null  and productOtherId !=''">
+				          t.product_other_id=#{productOtherId},
+				    </if>
+			         <if test="otherCode != null  and otherCode !=''">
+				          t.other_code=#{otherCode},
+				    </if>
+			         <if test="type != null  and type !=''">
+				          t.type=#{type},
+				    </if>
+			         <if test="status != null  and status !=''">
+				          t.status=#{status},
+				    </if>
+			         <if test="reason != null  and reason !=''">
+				          t.reason=#{reason},
+				    </if>
+			         <if test="operate != null  and operate !=''">
+				          t.operate=#{operate},
+				    </if>
+			         <if test="createBy != null  and createBy !=''">
+				          t.create_by=#{createBy},
+				    </if>
+			         <if test="createUserName != null  and createUserName !=''">
+				          t.create_user_name=#{createUserName},
+				    </if>
+			         <if test="createTime != null  and createTime !=''">
+				          t.create_time=#{createTime}
+				    </if>
+		    </set>
+		where 
+		t.product_other_id=#{productOtherId}
+	</update>
+	
+	<delete id="delete" parameterType="ProductOtherJobModel">
+    	delete from  t_product_other_job  where 
+    	product_other_id =#{productOtherId}
+    </delete>
+    
+    <delete id="deleteByIds" parameterType="java.util.List">
+    	delete from t_product_other_job  where 
+    	product_other_id in
+    	<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+    </delete>
+
+</mapper>

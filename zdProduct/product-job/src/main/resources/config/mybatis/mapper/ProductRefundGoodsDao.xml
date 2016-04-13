@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- Always ensure to use the correct XML header as above! -->
+<mapper namespace="ProductRefundGoodsDaoImpl">
+
+<resultMap id="productRefundGoodsModel" type="ProductRefundGoodsModel">
+    <result property="id" column="id"/>
+    <result property="refundId" column="refund_id"/>
+    <result property="djbh" column="djbh"/>
+    <result property="ydjh" column="ydjh"/>
+    <result property="dddjbh" column="dddjbh"/>
+    <result property="sl" column="sl"/>
+    <result property="sjje" column="sjje"/>
+    <result property="cwr" column="cwr"/>
+    <result property="cwrq" column="cwrq"/>
+    <result property="hydm" column="hydm"/>
+    <result property="ckdm" column="ckdm"/>
+    <result property="ckmc" column="ckmc"/>
+    <result property="fhcbj" column="fhcbj"/>
+    <result property="spdm" column="spdm"/>
+    <result property="skudm" column="skudm"/>
+    <result property="status" column="status"/>
+    <result property="createTime" column="create_Time"/>
+    <result property="updateTime" column="update_time"/>
+</resultMap>
+
+<sql id="ProductRefundGoods_Query_List_Sharing">
+    <where>
+        <if test="id != null ">
+            and t_product_refund_goods.id = #{id}
+        </if>
+        <if test="refundId != null ">
+            and t_product_refund_goods.refund_id = #{refundId}
+        </if>
+        <if test="djbh != null and djbh !='' ">
+        	and t_product_refund_goods.djbh = #{djbh}
+        </if>
+        <if test="ydjh != null and ydjh !=''  ">
+            and t_product_refund_goods.ydjh = #{ydjh}
+        </if>
+        <if test="dddjbh != null and dddjbh !=''  ">
+            and t_product_refund_goods.dddjbh = #{dddjbh}
+        </if>
+        <if test="sl != null">
+            and t_product_refund_goods.sl = #{sl}
+        </if>
+        <if test="sjje != null ">
+            and t_product_refund_goods.sjje = #{sjje}
+        </if>
+        <if test="cwr != null and cwr !='' ">
+            and t_product_refund_goods.cwr = #{cwr}
+        </if>
+        <if test="cwrq != null">
+            and t_product_refund_goods.cwrq = #{cwrq}
+        </if>
+        <if test="hydm != null and hydm !='' ">
+            and t_product_refund_goods.hydm = #{hydm}
+        </if>
+        <if test="ckdm != null and ckdm !=''">
+            and t_product_refund_goods.ckdm = #{ckdm}
+        </if>
+        <if test="ckmc != null and ckmc !='' ">
+            and t_product_refund_goods.ckmc = #{ckmc}
+        </if>
+        <if test="fhcbj != null ">
+            and t_product_refund_goods.fhcbj = #{fhcbj}
+        </if>
+        <if test="spdm != null and spdm !=''  ">
+            and t_product_refund_goods.spdm = #{spdm}
+        </if>
+        <if test="skudm != null and skudm !=''  ">
+            and t_product_refund_goods.skudm = #{skudm}
+        </if>
+        <if test="status != null">
+            and t_product_refund_goods.status = #{status}
+        </if>
+        <if test="createTime != null ">
+            and t_product_refund_goods.create_Time = #{createTime}
+        </if>
+        <if test="updateTime != null ">
+            and t_product_refund_goods.update_time = #{updateTime}
+        </if>
+	</where>
+</sql>
+
+<sql id="ProductRefundGoods_column">
+        t_product_refund_goods.id,
+        t_product_refund_goods.refund_id,
+        t_product_refund_goods.djbh,
+        t_product_refund_goods.ydjh,
+        t_product_refund_goods.dddjbh,
+        t_product_refund_goods.sl,
+        t_product_refund_goods.sjje,
+        t_product_refund_goods.cwr,
+        t_product_refund_goods.cwrq,
+        t_product_refund_goods.hydm,
+        t_product_refund_goods.ckdm,
+        t_product_refund_goods.ckmc,
+        t_product_refund_goods.fhcbj,
+        t_product_refund_goods.spdm,
+        t_product_refund_goods.skudm,
+        t_product_refund_goods.status,
+        t_product_refund_goods.create_Time,
+        t_product_refund_goods.update_time
+</sql>
+
+<sql id="ProductRefundGoods_By_id">
+    WHERE t_product_refund_goods.id = #{id}
+</sql>
+
+ <insert id="insert" parameterType="ProductRefundGoodsModel" >
+    INSERT INTO t_product_refund_goods (
+    <include refid="ProductRefundGoods_column" />
+    ) VALUES (
+                        #{id},
+                        #{refundId},
+                        #{djbh},
+                        #{ydjh},
+                        #{dddjbh},
+                        #{sl},
+                        #{sjje},
+                        #{cwr},
+                        #{cwrq},
+                        #{hydm},
+                        #{ckdm},
+                        #{ckmc},
+                        #{fhcbj},
+                        #{spdm},
+                        #{skudm},
+                        #{status},
+                        now(),
+                        now()
+    )
+    <!--  需要返回自增id，取消此注释即可
+     <selectKey resultType="long" keyProperty="id" order="AFTER">
+         SELECT LAST_INSERT_ID()
+     </selectKey>
+     -->
+</insert>  
+
+<update id="update" parameterType="ProductRefundGoodsModel">
+    UPDATE t_product_refund_goods t_product_refund_goods
+    <set>
+        <if test="refundId != null ">
+           t_product_refund_goods.refund_id = #{refundId},
+        </if>
+        <if test="djbh != null and djbh !='' ">
+           t_product_refund_goods.djbh = #{djbh},
+        </if>
+        <if test="ydjh != null and ydjh !=''  ">
+           t_product_refund_goods.ydjh = #{ydjh},
+        </if>
+        <if test="dddjbh != null and dddjbh !=''  ">
+           t_product_refund_goods.dddjbh = #{dddjbh},
+        </if>
+        <if test="sl != null">
+           t_product_refund_goods.sl = #{sl},
+        </if>
+        <if test="sjje != null ">
+           t_product_refund_goods.sjje = #{sjje},
+        </if>
+        <if test="cwr != null and cwr !='' ">
+           t_product_refund_goods.cwr = #{cwr},
+        </if>
+        <if test="cwrq != null">
+           t_product_refund_goods.cwrq = #{cwrq},
+        </if>
+        <if test="hydm != null and hydm !='' ">
+           t_product_refund_goods.hydm = #{hydm},
+        </if>
+        <if test="ckdm != null and ckdm !=''">
+           t_product_refund_goods.ckdm = #{ckdm},
+        </if>
+        <if test="ckmc != null and ckmc !='' ">
+           t_product_refund_goods.ckmc = #{ckmc},
+        </if>
+        <if test="fhcbj != null ">
+           t_product_refund_goods.fhcbj = #{fhcbj},
+        </if>
+        <if test="spdm != null and spdm !=''  ">
+           t_product_refund_goods.spdm = #{spdm},
+        </if>
+        <if test="skudm != null and skudm !=''  ">
+           t_product_refund_goods.skudm = #{skudm},
+        </if>
+        <if test="status != null ">
+           t_product_refund_goods.status = #{status},
+        </if>
+        <if test="createTime != null ">
+           t_product_refund_goods.create_Time = #{createTime},
+        </if>
+        <if test="updateTime != null ">
+           t_product_refund_goods.update_time = #{updateTime},
+        </if>
+    </set>
+
+    <include refid="ProductRefundGoods_By_id" />
+</update> 
+
+<select id="queryListPage" resultMap="productRefundGoodsModel" parameterType="ProductRefundGoodsModel">
+    SELECT
+         <include refid="ProductRefundGoods_column" />  
+    FROM t_product_refund_goods t_product_refund_goods
+	<include refid="ProductRefundGoods_Query_List_Sharing" />
+
+</select>
+
+<select id="countListPage" resultType="java.lang.Long" parameterType="ProductRefundGoodsModel">
+    SELECT
+		COUNT(*)
+   	FROM t_product_refund_goods t_product_refund_goods
+	<include refid="ProductRefundGoods_Query_List_Sharing" />
+</select>
+
+<delete id="delete" parameterType="ProductRefundGoodsModel">
+    DELETE  FROM  t_product_refund_goods 
+    <include refid="ProductRefundGoods_By_id" />
+</delete>
+
+</mapper>

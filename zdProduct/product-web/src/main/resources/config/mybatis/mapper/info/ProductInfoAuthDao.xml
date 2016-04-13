@@ -1,0 +1,322 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ProductInfoAuthDaoImpl">
+	
+	<resultMap type="ProductInfoAuthModel" id="productInfoAuthModel">
+		   <result property="productInfoAuthId" column="product_info_auth_id" javaType="java.lang.Long" />
+		   <result property="productSkuId" column="product_sku_id" javaType="java.lang.Long" />
+		   <result property="productSkuCode" column="product_sku_code" javaType="java.lang.String" />
+		   <result property="productCode" column="product_code" javaType="java.lang.String" />
+		   <result property="type" column="type" javaType="java.lang.Long" />
+		   <result property="createTime" column="create_Time" javaType="java.lang.Long" />
+		   <result property="createBy" column="create_by" javaType="java.lang.Long" />
+		   <result property="createUserName" column="create_user_name" javaType="java.lang.String" />
+		   <result property="updateTime" column="update_time" javaType="java.lang.Long" />
+		   <result property="updateBy" column="update_by" javaType="java.lang.Long" />
+		   <result property="updateUserName" column="update_user_name" javaType="java.lang.String" />
+		   <result property="staus" column="staus" javaType="java.lang.Long" />
+		   <result property="reason" column="reason" javaType="java.lang.String" />
+		   <result property="oldValue" column="old_value" javaType="java.lang.String" />
+		   <result property="newValue" column="new_value" javaType="java.lang.String" />
+		   <result property="sourceType" column="source_type" javaType="java.lang.Integer" />
+		   <result property="productName" column="product_name" javaType="java.lang.String" />
+		   <result property="catName" column="cat_name" javaType="java.lang.String" />
+		   <result property="catCode" column="cat_code" javaType="java.lang.String" />
+		   <result property="brandName" column="brand_name" javaType="java.lang.String" />
+		   <result property="shopName" column="shop_name" javaType="java.lang.String" />
+	</resultMap>
+
+    <sql id="query">
+	        <if test="productInfoAuthId != null and productInfoAuthId !=''">
+					and t.product_info_auth_id=#{productInfoAuthId}
+		    </if>
+	        <if test="productSkuId != null and productSkuId !=''">
+					and t.product_sku_id=#{productSkuId}
+		    </if>
+		    <if test="productSkuCode != null and productSkuCode !=''">
+					and t.product_sku_code=#{productSkuCode}
+		    </if>
+	        <if test="productCode != null and productCode !=''">
+					and t.product_code like CONCAT(CONCAT('%', #{productCode}), '%')
+		    </if>
+	        <if test="type != null and type !=''">
+					and t.type=#{type}
+		    </if>
+	        <!-- <if test="createTime != null and createTime !='' and endTime != null and endTime !=''">
+					and t.create_time BETWEEN #{createTime} AND #{endTime}
+		    </if> -->
+		    <if test="createTime != null and createTime !=''">
+					and t.create_time<![CDATA[>=]]>#{createTime}
+		    </if>
+		    <if test="endTime1 != null and endTime1 !=''">
+					and t.create_time<![CDATA[<=]]>#{endTime1}
+		    </if>
+	        <if test="createBy != null and createBy !=''">
+					and t.create_by=#{createBy}
+		    </if>
+	        <if test="createUserName != null and createUserName !=''">
+		        	and t.create_user_name like CONCAT(CONCAT('%', #{createUserName}), '%')
+		    </if>
+		    <if test="updateTime != null and updateTime !=''">
+			        and t.update_time<![CDATA[>=]]>#{updateTime}
+		    </if>
+			<if test="endTime2 != null and endTime2 !=''">
+				    and t.update_time<![CDATA[<=]]>#{endTime2}
+			</if>
+		     <if test="updateBy != null and updateBy !=''">
+		        	and t.update_by=#{updateBy} 
+		    </if>
+		    <if test="updateUserName != null and updateUserName !=''">
+		        	and t.update_user_name like CONCAT(CONCAT('%', #{updateUserName}), '%')
+		    </if>
+	        <if test="staus != null and staus !=''">
+					and t.staus=#{staus}
+		    </if>
+		    <if test="staus == null or staus==''">
+					and t.staus>0
+		    </if>
+		    <if test="reason != null and reason !=''">
+		        	and t.reason like CONCAT(CONCAT('%', #{reason}), '%') 
+		    </if>
+		    <if test="newValue != null and newValue !=''">
+		        	and t.new_value like CONCAT(CONCAT('%', #{newValue}), '%') 
+		    </if>
+		    <if test="sourceType != null and sourceType!=''">
+					and t.source_type=#{sourceType}
+		    </if>
+             <if test="productName != null and productName!=''">
+					and a.product_name like CONCAT(CONCAT('%', #{productName}), '%') 
+		    </if>
+		     <if test="catName != null and catName!=''">
+					and a.cat_name like CONCAT(CONCAT('%', #{catName}), '%') 
+		    </if>
+		     <if test="brandName != null and brandName!=''">
+					and a.brand_name like CONCAT(CONCAT('%', #{brandName}), '%') 
+		    </if>
+		    <if test="shopName != null and shopName!=''">
+					and b.shop_name like CONCAT(CONCAT('%', #{shopName}), '%') 
+		    </if>
+    </sql>
+
+
+	<select id="queryOne" parameterType="ProductInfoAuthModel"
+	resultMap="productInfoAuthModel">
+	select
+	          product_info_auth_id,
+	          product_sku_id,
+	          product_sku_code,
+	          product_code,
+	          type,
+	          create_Time,
+	          create_by,
+	          create_user_name,
+	          update_time,
+	          update_by,
+	          update_user_name,
+	          reason,
+	          staus,
+	          old_value,
+	          new_value,
+	          source_type
+	from  t_product_info_auth t
+	where t.product_info_auth_id=#{productInfoAuthId}
+	</select>
+	<select id="queryListPage" parameterType="ProductInfoAuthModel"
+		resultMap="productInfoAuthModel">
+		select 
+	          t.product_info_auth_id,
+	    
+	          t.product_sku_id,
+	          
+	          t.product_sku_code,
+	    
+	          t.product_code,
+	          
+	          a.product_name,
+	          
+	          a.cat_name,
+	          
+	          a.cat_code,
+	          
+	          a.brand_name,
+	          
+	          b.shop_name,
+	          
+	          t.type,
+	    
+	          t.create_Time,
+	    
+	          t.create_by,
+	    
+	          t.create_user_name,
+	          
+	          t.update_time,
+	          
+	          t.update_by,
+	          
+	          t.update_user_name,
+	    	  
+	    	  t.reason,
+	    	  t.staus,
+	    	  case t.staus 
+	    	  when 0 then '待审核'
+	          when 1 then '待审核'
+	          when 2 then '审核通过'
+	          when 3 then '待同步'
+	          when 4 then '审核通过,同步成功'
+	          when 5 then '审核不通过,同步成功'
+	          when 6 then '系统处理'
+	          when 8 then '审核不通过'
+	          when 9 then '处理失败'
+	          end  statusName,
+	          
+	          t.old_value,
+	          t.new_value,
+	          t.source_type
+	     from  t_product_info_auth t,t_product_info_examine a,t_supplier b
+		where 1=1 and t.product_info_auth_id=a.product_info_auth_id and a.supplier_id=b.id
+		<include refid="query"/>
+		<if test="orderField!=null and orderField!='' and orderDirection!=null and orderDirection!=''">
+			order by ${orderField} ${orderDirection}
+		</if>
+	</select>
+	
+	<select id="getAllInfoAthByOne" resultMap="productInfoAuthModel">
+	select product_info_auth_id,
+	          product_sku_id,
+	          product_sku_code,
+	          product_code,
+	          type,
+	          create_Time,
+	          create_by,
+	          create_user_name,
+	          update_time,
+	          update_by,
+	          update_user_name,
+	          reason,
+	          staus,
+	          old_value,
+	          new_value,
+	          source_type
+	from  t_product_info_auth t
+	where t.staus=1 or t.staus=0
+	</select>
+	
+	<select id="countListPage" parameterType="ProductInfoAuthModel"
+		resultType="java.lang.Long">
+		select count(1)  from  t_product_info_auth t,t_product_info_examine a,t_supplier b
+		where 1=1 and t.product_info_auth_id=a.product_info_auth_id and a.supplier_id=b.id
+		<include refid="query"/>
+	 </select>
+
+	<insert id="insert" parameterType="ProductInfoAuthModel">
+		<selectKey resultType="java.lang.Long" keyProperty="productInfoAuthId" order="AFTER">
+    		SELECT @@IDENTITY as productInfoAuthId
+    	</selectKey>
+		insert into  t_product_info_auth
+		(
+	          			    product_sku_id,
+	          			    product_sku_code,
+	          			    product_code,
+	          			    type,
+	          			    create_Time,
+	          			    create_by,
+	          			    create_user_name,
+	          			    update_time,
+	          			    update_by,
+	          			    update_user_name,
+	          			    reason,
+	          			    staus,
+	          			    old_value,
+	          			    new_value,
+	          			    source_type
+        )
+		values
+		(
+		          			    #{productSkuId},
+		          			    #{productSkuCode},
+		          			    #{productCode},
+		          			    #{type},
+		          				#{createTime},
+		          			    #{createBy},
+		          			    #{createUserName},
+		          			    #{updateTime},
+		          			    #{updateBy},
+		          			    #{updateUserName},
+		          			    #{reason},
+		          			    #{staus},
+		          			    #{oldValue},
+		          			    #{newValue},
+		          			    #{sourceType}
+        )
+	</insert>
+
+	<update id="update" parameterType="ProductInfoAuthModel">
+		update  t_product_info_auth t 
+		  <set>
+			         <if test="productSkuId != null  and productSkuId !=''">
+				          t.product_sku_id=#{productSkuId},
+				    </if>
+				    <if test="productSkuCode != null  and productSkuCode !=''">
+				          t.product_sku_code=#{productSkuCode},
+				    </if>
+			         <if test="type != null  and type !=''">
+				          t.type=#{type},
+				    </if>
+			         <if test="createTime != null  and createTime !=''">
+				          t.create_Time=#{createTime},
+				    </if>
+			         <if test="createBy != null  and createBy !=''">
+				          t.create_by=#{createBy},
+				    </if>
+			         <if test="createUserName != null  and createUserName !=''">
+				          t.create_user_name=#{createUserName},
+				    </if>
+				    <if test="updateTime != null  and updateTime !=''">
+				          t.update_time=#{updateTime},
+				    </if>
+				    <if test="updateBy != null  and updateBy !=''">
+				          t.update_by=#{updateBy},
+				    </if>
+				    <if test="updateUserName != null  and updateUserName !=''">
+				          t.update_user_name=#{updateUserName},
+				    </if>
+				    <if test="reason != null">
+				          t.reason=#{reason},
+				    </if>
+			         <if test="staus != null  and staus !=''">
+				          t.staus=#{staus},
+				    </if>
+				     <if test="oldValue != null  and oldValue !=''">
+				          t.old_value=#{oldValue},
+				    </if>
+				    <if test="newValue != null  and newValue !=''">
+				          t.new_value=#{newValue},
+				    </if>
+				    <if test="sourceType != null  and sourceType !=''">
+				          t.source_type=#{sourceType},
+				    </if>
+				    <if test="productCode != null  and productCode !=''">
+				          t.product_code=#{productCode}
+				    </if>
+		    </set>
+		where 
+		t.product_info_auth_id=#{productInfoAuthId}
+	</update>
+	
+	<delete id="delete" parameterType="ProductInfoAuthModel">
+    	delete from  t_product_info_auth  where 
+    	product_info_auth_id =#{productInfoAuthId}
+    </delete>
+    
+    <delete id="deleteByIds" parameterType="java.util.List">
+    	delete from t_product_info_auth  where 
+    	product_info_auth_id in
+    	<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+    </delete>
+
+</mapper>

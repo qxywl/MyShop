@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ProductSalecategoryRelationDaoImpl">
+	
+	<resultMap type="ProductSalecategoryRelationModel" id="productSalecategoryRelationModel">
+		   <result property="id" column="id" javaType="java.lang.Long" />
+		   <result property="productCode" column="product_code" javaType="java.lang.String" />
+		   <result property="categoryCodes" column="category_codes" javaType="java.lang.String" />
+	</resultMap>
+
+    <sql id="query">
+	        <if test="id != null and id !=''">
+					and t.id=#{id}
+		    </if>
+	        <if test="productCode != null and productCode !=''">
+		        	and t.product_code like CONCAT(CONCAT('%', #{productCode}), '%') 
+		    </if>
+	        <if test="categoryCodes != null and categoryCodes !=''">
+		        	and t.category_codes like CONCAT(CONCAT('%', #{categoryCodes}), '%') 
+		    </if>
+	    
+    </sql>
+
+
+	<select id="queryOne" parameterType="ProductSalecategoryRelationModel"
+	resultMap="productSalecategoryRelationModel">
+	select
+	          id,
+	          product_code,
+	          category_codes
+	from  t_product_salecategory_relation t
+	where t.id=#{id}
+	</select>
+	
+	<select id="queryOneByProductCode" parameterType="ProductSalecategoryRelationModel"
+	resultMap="productSalecategoryRelationModel">
+	select
+	          id,
+	          product_code,
+	          category_codes
+	from  t_product_salecategory_relation t
+	where t.product_code=#{productCode}
+	</select>
+
+	<select id="queryListPage" parameterType="ProductSalecategoryRelationModel"
+		resultMap="productSalecategoryRelationModel">
+		select 
+	          id,
+	    
+	          product_code,
+	    
+	          category_codes
+	     from  t_product_salecategory_relation t
+		where 1=1
+		<include refid="query"/>
+	</select>
+
+	<select id="countListPage" parameterType="ProductSalecategoryRelationModel"
+		resultType="java.lang.Long">
+		select count(1) from  t_product_salecategory_relation t
+		where 1=1
+		<include refid="query"/>
+	 </select>
+
+	<insert id="insert" parameterType="ProductSalecategoryRelationModel">
+		<selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER">
+    		SELECT @@IDENTITY as id
+    	</selectKey>
+		insert into  t_product_salecategory_relation
+		(
+	          			    product_code,
+	          			category_codes
+        )
+		values
+		(
+		          			    #{productCode},
+	          				#{categoryCodes}
+        )
+	</insert>
+
+	<update id="update" parameterType="ProductSalecategoryRelationModel">
+		update  t_product_salecategory_relation t 
+		set
+			t.category_codes=#{categoryCodes}
+		where 
+		t.id=#{id}
+	</update>
+	
+	<!-- 把运营分类编号替换为空 -->
+	<update id="updateCategorys" parameterType="ProductSalecategoryRelationModel">
+		update  t_product_salecategory_relation t 
+		set  t.category_codes= REPLACE(t.category_codes,#{categoryCodes},'') 
+		where  t.product_code=#{productCode}
+	</update>
+	
+	<!-- 删除 运营分类编号字段为空的记录 -->
+	<delete id="deleteByCategorysIsEmpty">
+    	delete from  t_product_salecategory_relation 
+    	 where category_codes is NULL or category_codes='' 
+    </delete>
+    
+	
+	<delete id="delete" parameterType="ProductSalecategoryRelationModel">
+    	delete from  t_product_salecategory_relation  where 
+    	id =#{id}
+    </delete>
+    
+    <delete id="deleteByIds" parameterType="java.util.List">
+    	delete from t_product_salecategory_relation  where 
+    	id in
+    	<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+    </delete>
+
+</mapper>

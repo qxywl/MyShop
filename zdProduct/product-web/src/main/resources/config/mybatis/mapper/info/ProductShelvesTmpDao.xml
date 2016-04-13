@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ProductShelvesTmpDaoImpl">
+	
+	<resultMap type="ProductShelvesTmpModel" id="productShelvesTmpModel">
+		   <result property="productShelvesTmpId" column="product_shelves_tmp_id" javaType="java.lang.Integer" />
+		   <result property="productCode" column="product_code" javaType="java.lang.String" />
+		   <result property="productName" column="product_name" javaType="java.lang.String" />
+		   <result property="totalSkuCode" column="total_sku_code" javaType="java.lang.String" />
+		   <result property="passSkuCode" column="pass_sku_code" javaType="java.lang.String" />
+		   <result property="status" column="status" javaType="java.lang.Integer" />
+	</resultMap>
+	
+	<sql id="query">
+		<if test="productCode != null and productCode !=''">
+			and t.product_code like CONCAT(CONCAT('%', #{productCode}), '%')
+		</if>
+		<if test="productName != null and productName !=''">
+			and t.product_name like CONCAT(CONCAT('%', #{productName}), '%')
+		</if>
+	</sql>
+
+	<select id="queryOne" parameterType="ProductShelvesTmpModel"
+	resultMap="productShelvesTmpModel">
+	select
+	          product_shelves_tmp_id,
+	          product_code,
+	          product_name,
+	          total_sku_code,
+	          pass_sku_code,
+	          status
+	from  t_product_shelves_tmp t
+	where t.product_code=#{productCode};
+	</select>
+	<select id="queryListPage" parameterType="ProductShelvesTmpModel"
+		resultMap="productShelvesTmpModel">
+		select 
+	          product_shelves_tmp_id,
+	          product_code,
+	          product_name,
+	          total_sku_code,
+	          pass_sku_code,
+	          status
+	     from  t_product_shelves_tmp t
+		where status=2
+		<include refid="query" />
+	</select>
+
+	<select id="countListPage" parameterType="ProductShelvesTmpModel"
+		resultType="java.lang.Long">
+		select count(1) from  t_product_shelves_tmp t
+		where status=2
+		<include refid="query" />
+	 </select>
+
+	<insert id="insert" parameterType="ProductShelvesTmpModel">
+		<selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER">
+    		SELECT @@IDENTITY as id
+    	</selectKey>
+		insert into  t_product_shelves_tmp
+		(
+	          			    product_code,
+	          			    total_sku_code,
+	          			    pass_sku_code,
+	          			    product_name,
+	          			    status
+        )
+		values
+		(
+		          			    #{productCode},
+		          			    #{totalSkuCode},
+		          			    #{passSkuCode},
+		          			    #{productName},
+		          			    #{status}
+        )
+	</insert>
+
+	<update id="update" parameterType="ProductShelvesTmpModel">
+		update  t_product_shelves_tmp t 
+		  <set>
+			         <if test="totalSkuCode != null  and totalSkuCode !=''">
+				          t.total_sku_code=#{totalSkuCode},
+				    </if>
+			         <if test="passSkuCode != null  and passSkuCode !=''">
+				          t.pass_sku_code=#{passSkuCode},
+				    </if>
+				    <if test="productName != null  and productName !=''">
+				          t.product_name=#{productName},
+				    </if>
+				    <if test="status != null  and status !=''">
+				          t.status=#{status},
+				    </if>
+				    <if test="productCode != null  and productCode !=''">
+				          t.product_code=#{productCode},
+				    </if>
+		    </set>
+		where 
+		t.product_code=#{productCode};
+	</update>
+	
+	<delete id="delete" parameterType="ProductShelvesTmpModel">
+    	delete from  t_product_shelves_tmp  where product_code=#{productCode};
+    </delete>
+    
+    <delete id="deleteByIds" parameterType="java.util.List">
+    	delete from t_product_air  where product_air_id
+    	 in
+    	<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+    </delete>
+
+</mapper>

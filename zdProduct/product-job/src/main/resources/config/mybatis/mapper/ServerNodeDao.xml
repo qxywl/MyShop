@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ServerNodeDaoImpl">
+    <resultMap id="serverNodeResult" type="ServerNode">
+        <result property="id" column="ID" javaType="java.lang.Long" />
+        <result property="nodeNo" column="NODE_NO" javaType="java.lang.Integer" />
+        <result property="createTime" column="CREATE_TIME" javaType="java.sql.Timestamp" />
+        <result property="updateTime" column="UPDATE_TIME" javaType="java.sql.Timestamp" />
+    </resultMap>
+    
+    
+     <resultMap id="serverJobListResult" type="ServerJobList">
+        <result property="id" column="ID" javaType="java.lang.Long" />
+        <result property="name" column="name" javaType="java.lang.String" />
+        <result property="jobList" column="job_list" javaType="java.lang.String" />
+        <result property="updateTime" column="UPDATE_TIME" javaType="java.sql.Timestamp" />
+    </resultMap>
+    
+
+	<!-- 根据分页条件查询 -->
+    <select id="findByCondiction" resultMap="serverNodeResult" parameterType="ServerNodeCondiction"> 
+		        select t.* from t_server_node t
+				where 1=1
+				<if test="updateTimeStart != null">and t.UPDATE_TIME <![CDATA[>=]]> #{updateTimeStart}</if>
+        		<if test="updateTimeEnd != null">and t.UPDATE_TIME <![CDATA[<=]]> #{updateTimeEnd}</if>
+				order by t.ID limit   #{paging.endRow}, #{paging.startRow} 
+    </select>
+    
+    <select id="findCntByCondiction" resultType="java.lang.Long" parameterType="ServerNodeCondiction">
+        select count(0) from t_server_node t where 1=1
+        <if test="updateTimeStart != null">and t.UPDATE_TIME <![CDATA[>=]]> #{updateTimeStart}</if>
+        <if test="updateTimeEnd != null">and t.UPDATE_TIME <![CDATA[<=]]> #{updateTimeEnd}</if>
+    </select>
+    
+    <select id="findNextKey" resultType="java.lang.Long">
+        select seq_t_server_node.nextval from dual      
+    </select>
+    
+    <select id="findById" resultMap="serverNodeResult" parameterType="java.lang.Long">
+        select t.* from t_server_node t
+		where t.ID = #{id}        
+    </select>
+    
+    <update id="updateServerNode" parameterType="ServerNode">
+        update t_server_node t
+        set UPDATE_TIME = now()
+       	<if test="nodeNo != null">, t.NODE_NO=#{nodeNo}</if>
+        where t.ID = #{id}
+    </update>
+    
+    <insert id="insertServerNodeMaxNo" parameterType="ServerNode">
+    	<selectKey keyProperty="id" resultType="long">
+            select LAST_INSERT_ID()
+        </selectKey>
+    	insert into t_server_node(node_no,create_time,update_time)
+		select case when( max(s.node_no) is null) then 0 else max(s.node_no)+1 end,now(),now() 
+		from t_server_node s
+    </insert>
+    
+    <delete id="deleteAll">
+    	delete from t_server_node
+    </delete>
+
+
+    <select id="findByName" resultMap="serverJobListResult" parameterType="java.lang.String">
+        select t.* from t_server_info t
+		where t.name = #{name}        
+    </select>
+   
+</mapper>

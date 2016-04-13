@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ProductInfoJobDaoImpl">
+	
+	<resultMap type="ProductInfoJobModel" id="productInfoJobModel">
+		   <result property="productLogId" column="product_log_id" javaType="java.lang.Long" />
+		   <result property="productSkuId" column="product_sku_id" javaType="java.lang.Long" />
+		   <result property="productId" column="product_id" javaType="java.lang.Long" />
+		   <result property="productCode" column="product_code" javaType="java.lang.String" />
+		   <result property="type" column="type" javaType="java.lang.Long" />
+		   <result property="attrName" column="attr_name" javaType="java.lang.String" />
+		   <result property="newvalue" column="newvalue" javaType="java.lang.String" />
+		   <result property="createtime" column="createTime" javaType="java.lang.Long" />
+		   <result property="productInfoAuthId" column="product_info_auth_id" javaType="java.lang.Long" />
+		   <result property="status" column="status" javaType="java.lang.Integer" />
+		   <result property="sourceType" column="source_type" javaType="java.lang.Integer" />
+		   <result property="retryNum" column="retry_num" javaType="java.lang.Integer" />
+	</resultMap>
+
+    <sql id="query">
+	     and status=#{status} and  product_log_id <![CDATA[ % #{total} = #{remainder} ]]>
+    </sql>
+
+
+	<select id="queryOne" parameterType="ProductInfoJobModel"
+	resultMap="productInfoJobModel">
+	select
+	          product_log_id,
+	          product_sku_id,
+	          product_info_auth_id,
+	          product_id,
+	          product_code,
+	          type,
+	          attr_name,
+	          newvalue,
+	          status,
+	          source_type,
+	          retry_num,
+	          createTime
+	from  t_product_info_job t
+	where t.product_log_id=#{productLogId}
+	</select>
+	<select id="queryListPage" parameterType="ProductInfoJobModel"
+		resultMap="productInfoJobModel">
+		select 
+	          product_log_id,
+	          product_sku_id,
+	          product_id,
+	          product_info_auth_id,
+	          product_code,
+	          type,
+	          attr_name,
+	          newvalue,
+	          status,
+	          source_type,
+	          retry_num,
+	          createTime
+	     from  t_product_info_job t
+		where 1=1
+		<include refid="query"/>
+	</select>
+
+	<select id="countListPage" parameterType="ProductInfoJobModel"
+		resultType="java.lang.Long">
+		select count(1) from  t_product_info_job t
+		where 1=1
+		<include refid="query"/>
+	 </select>
+
+	<insert id="insert" parameterType="ProductInfoJobModel">
+		<selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER">
+    		SELECT @@IDENTITY as id
+    	</selectKey>
+		insert into  t_product_info_job
+		(
+	          			    product_log_id,
+	          			    product_sku_id,
+	          			    product_info_auth_id,
+	          				product_id,
+	          			    product_code,
+	          			    type,
+	          			    attr_name,
+	          			    newvalue,
+	          			    status,
+	          			    source_type,
+	          			    retry_num,
+	          				createTime
+        )
+		values
+		(
+		          			    #{productLogId},
+		          			    #{productSkuId},
+		          			    #{productInfoAuthId},
+		          				#{productId},
+		          			    #{productCode},
+		          			    #{type},
+		          			    #{attrName},
+		          			    #{newvalue},
+		          			    #{status},
+		          			    #{sourceType},
+		          			    0,
+	          				    #{createtime}
+        )
+	</insert>
+	
+	<insert id="addInfoJobList" parameterType="java.util.List">
+		insert into  t_product_info_job
+		(		
+	          			    product_log_id,
+	          			    product_sku_id,
+	          			    product_info_auth_id,
+	          				product_id,
+	          			    product_code,
+	          			    type,
+	          			    attr_name,
+	          			    newvalue,
+	          			    status,
+	          			    source_type,
+	          			    retry_num,
+	          				createTime
+        )
+		values
+		<foreach collection="list"  item="item" separator=",">
+                           (#{item.productLogId},
+		          			#{item.productSkuId},
+		          			#{item.productInfoAuthId},
+		          			#{item.productId},
+		          			#{item.productCode},
+		          			#{item.type},
+		          			#{item.attrName},
+		          			#{item.newvalue},
+		          			#{item.status},
+		          			#{item.sourceType},
+		          			0,
+	          				#{item.createtime})
+        </foreach>
+    </insert>
+
+	<update id="update" parameterType="ProductInfoJobModel">
+		update  t_product_info_job t 
+		  <set>
+				    <if test="status != null  and status !=''">
+				          t.status=#{status},
+				    </if>
+			         <if test="productSkuId != null  and productSkuId !=''">
+				          t.product_sku_id=#{productSkuId},
+				    </if>
+			         <if test="productId != null  and productId !=''">
+				          t.product_id=#{productId},
+				    </if>
+			         <if test="type != null  and type !=''">
+				          t.type=#{type},
+				    </if>
+			         <if test="attrName != null  and attrName !=''">
+				          t.attr_name=#{attrName},
+				    </if>
+			         <if test="newvalue != null  and newvalue !=''">
+				          t.newvalue=#{newvalue},
+				    </if>
+			         <if test="createtime != null  and createtime !=''">
+				          t.createTime=#{createtime},
+				    </if>
+				    <if test="sourceType != null  and sourceType !=''">
+				          t.source_type=#{sourceType},
+				    </if>
+				    <if test="retryNum != null  and retryNum !=''">
+				          t.retry_num=#{retryNum},
+				    </if>
+				    
+				    <if test="productCode != null  and productCode !=''">
+				          t.product_code=#{productCode}
+				    </if>
+		    </set>
+		where 
+		t.product_log_id=#{productLogId}
+	</update>
+	
+	<update id="updateStatusList" parameterType="java.util.Map">
+		update t_product_info_job t set t.status=#{status} where t.product_log_id in
+		<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</update>
+	
+	<delete id="delete" parameterType="ProductInfoJobModel">
+    	delete from  t_product_info_job  where 
+    	product_log_id =#{productLogId}
+    </delete>
+    
+    <delete id="deleteByIds" parameterType="java.util.List">
+    	delete from t_product_info_job  where 
+    	product_log_id in
+    	<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+    </delete>
+
+</mapper>

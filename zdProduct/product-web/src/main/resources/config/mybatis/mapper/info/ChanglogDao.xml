@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ChanglogDaoImpl">
+	
+	<resultMap type="ChanglogModel" id="changlogModel">
+		   <result property="id" column="id" javaType="java.lang.Long" />
+		   <result property="tableName" column="table_name" javaType="java.lang.String" />
+		   <result property="recordId" column="record_id" javaType="java.lang.Long" />
+		   <result property="recordCode" column="record_code" javaType="java.lang.String" />
+		   <result property="columnName" column="column_name" javaType="java.lang.String" />
+		   <result property="oldValue" column="old_value" javaType="java.lang.String" />
+		   <result property="newValue" column="new_value" javaType="java.lang.String" />
+		   <result property="createTime" column="create_time" javaType="java.util.Date" />
+		   <result property="createBy" column="create_by" javaType="java.lang.Long" />
+		   <result property="createUserName" column="create_user_name" javaType="java.lang.String" />
+		   <result property="updateTime" column="update_time" javaType="java.util.Date" />
+		   <result property="updateBy" column="update_by" javaType="java.lang.Long" />
+		   <result property="updateUserName" column="update_user_name" javaType="java.lang.String" />
+		   <result property="isDeleted" column="is_deleted" javaType="java.lang.Long" />
+	</resultMap>
+
+    <sql id="query">
+	        <if test="id != null and id !=''">
+					and t.id=#{id}
+		    </if>
+	        <if test="tableName != null and tableName !=''">
+		        	and t.table_name like CONCAT(CONCAT('%', #{tableName}), '%') 
+		    </if>
+	        <if test="recordId != null and recordId !=''">
+					and t.record_id=#{recordId}
+		    </if>
+	        <if test="recordCode != null and recordCode !=''">
+		        	and t.record_code like CONCAT(CONCAT('%', #{recordCode}), '%') 
+		    </if>
+	        <if test="columnName != null and columnName !=''">
+		        	and t.column_name like CONCAT(CONCAT('%', #{columnName}), '%') 
+		    </if>
+	        <if test="oldValue != null and oldValue !=''">
+		        	and t.old_value like CONCAT(CONCAT('%', #{oldValue}), '%') 
+		    </if>
+	        <if test="newValue != null and newValue !=''">
+		        	and t.new_value like CONCAT(CONCAT('%', #{newValue}), '%') 
+		    </if>
+	        <if test="createTime != null and createTime !=''">
+					and t.create_time=#{createTime}
+		    </if>
+	        <if test="createBy != null and createBy !=''">
+					and t.create_by=#{createBy}
+		    </if>
+	        <if test="createUserName != null and createUserName !=''">
+		        	and t.create_user_name like CONCAT(CONCAT('%', #{createUserName}), '%') 
+		    </if>
+	        <if test="updateTime != null and updateTime !=''">
+					and t.update_time=#{updateTime}
+		    </if>
+	        <if test="updateBy != null and updateBy !=''">
+					and t.update_by=#{updateBy}
+		    </if>
+	        <if test="updateUserName != null and updateUserName !=''">
+		        	and t.update_user_name like CONCAT(CONCAT('%', #{updateUserName}), '%') 
+		    </if>
+	        <if test="isDeleted != null and isDeleted !=''">
+					and t.is_deleted=#{isDeleted}
+		    </if>
+	    
+    </sql>
+
+
+	<select id="queryOne" parameterType="ChanglogModel"
+	resultMap="changlogModel">
+	select
+	          id,
+	          table_name,
+	          record_id,
+	          record_code,
+	          column_name,
+	          old_value,
+	          new_value,
+	          create_time,
+	          create_by,
+	          create_user_name,
+	          update_time,
+	          update_by,
+	          update_user_name,
+	          is_deleted
+	from  t_changlog t
+	where t.id=#{id}
+	</select>
+	<select id="queryListPage" parameterType="ChanglogModel"
+		resultMap="changlogModel">
+		select 
+	            id,
+	            table_name,
+	            record_id,
+	            record_code,
+	            column_name,
+	            old_value,
+	            new_value,
+	            create_time,
+	            create_by,
+	            create_user_name,
+	            update_time,
+	            update_by,
+	            update_user_name,
+	            is_deleted
+	    from  t_changlog t
+		where 1=1
+		<include refid="query"/>
+	</select>
+
+	<select id="countListPage" parameterType="ChanglogModel"
+		resultType="java.lang.Long">
+		select count(1) from  t_changlog t
+		where 1=1
+		<include refid="query"/>
+	 </select>
+
+	<insert id="insert" parameterType="ChanglogModel">
+		<selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER">
+    		SELECT @@IDENTITY as id
+    	</selectKey>
+		insert into  t_changlog
+		(		
+	          			    table_name,	          			
+	          			    record_id,	          			
+	          			    record_code,	          			
+	          			    column_name,	          			
+	          			    old_value,	          			
+	          			    new_value,	          			
+	          			    create_time,	          			
+	          			    create_by,	          			
+	          			    create_user_name,	          			
+	          			    update_time,	          			
+	          			    update_by,	          			
+	          			    update_user_name,	          			
+	          				is_deleted
+        )
+		values
+		(
+		          				#{tableName},		          			
+		          				#{recordId},		          			
+		          				#{recordCode},		          			
+		          				#{columnName},		          			
+		          				#{oldValue},		          			
+		          				#{newValue},		          			
+		          				now(),		          			
+		          				#{createBy},		          			
+		          				#{createUserName},		          			
+		          				now(),		          			
+		          				#{updateBy},		          			
+		          				#{updateUserName},		          			
+		          				0
+        )
+	</insert>
+
+	<update id="update" parameterType="ChanglogModel">
+		update  t_changlog t 
+		  <set>
+			         <if test="tableName != null  and tableName !=''">
+				          t.table_name=#{tableName},
+				    </if>
+			         <if test="recordId != null  and recordId !=''">
+				          t.record_id=#{recordId},
+				    </if>
+			         <if test="recordCode != null  and recordCode !=''">
+				          t.record_code=#{recordCode},
+				    </if>
+			         <if test="columnName != null  and columnName !=''">
+				          t.column_name=#{columnName},
+				    </if>
+			         <if test="oldValue != null  and oldValue !=''">
+				          t.old_value=#{oldValue},
+				    </if>
+			         <if test="newValue != null  and newValue !=''">
+				          t.new_value=#{newValue},
+				    </if>
+			         <if test="createTime != null  and createTime !=''">
+				          t.create_time=#{createTime},
+				    </if>
+			         <if test="createBy != null  and createBy !=''">
+				          t.create_by=#{createBy},
+				    </if>
+			         <if test="createUserName != null  and createUserName !=''">
+				          t.create_user_name=#{createUserName},
+				    </if>
+			         <if test="updateTime != null  and updateTime !=''">
+				          t.update_time=#{updateTime},
+				    </if>
+			         <if test="updateBy != null  and updateBy !=''">
+				          t.update_by=#{updateBy},
+				    </if>
+			         <if test="updateUserName != null  and updateUserName !=''">
+				          t.update_user_name=#{updateUserName},
+				    </if>
+			         <if test="isDeleted != null  and isDeleted !=''">
+				          t.is_deleted=#{isDeleted}
+				    </if>
+		    </set>
+		where 
+		t.id=#{id}
+	</update>
+	
+	<delete id="delete" parameterType="ChanglogModel">
+    	delete from  t_changlog  where 
+    	id =#{id}
+    </delete>
+    
+    <delete id="deleteByIds" parameterType="java.util.List">
+    	delete from t_changlog  where 
+    	id in
+    	<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+    </delete>
+
+</mapper>

@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ProductShelvesLogDaoImpl">
+
+	<resultMap type="ProductShelvesLogModel" id="productShelvesLogModel">
+		<result property="productShelvesLog" column="product_shelves_log_id"
+			javaType="java.lang.Long" />
+		<result property="productId" column="product_id" javaType="java.lang.Long" />
+		<result property="productName" column="product_name" javaType="java.lang.String" />
+		<result property="reason" column="reason" javaType="java.lang.String" />
+		<result property="productCode" column="product_code" javaType="java.lang.String" />
+		<result property="createBy" column="create_by" javaType="java.lang.Long" />
+		<result property="createUserName" column="create_user_name"
+			javaType="java.lang.String" />
+		<result property="createTime" column="create_time" javaType="java.lang.Long" />
+		<result property="status" column="status" javaType="java.lang.Integer" />
+		<result property="shelvesStatus" column="shelves_status"
+			javaType="java.lang.Integer" />
+		<result property="timeStart" column="time_start" javaType="java.lang.Long" />
+	</resultMap>
+
+	<sql id="query">
+		<if test="productShelvesLog != null and productShelvesLog !=''">
+			and t.product_shelves_log_id=#{productShelvesLog}
+		</if>
+		<if test="productId != null and productId !=''">
+			and t.product_id=#{productId}
+		</if>
+		<if test="productName != null and productName !=''">
+			and t.product_name like CONCAT(CONCAT('%', #{productName}), '%')
+		</if>
+		<if test="reason != null and reason !=''">
+			and t.reason like CONCAT(CONCAT('%', #{reason}), '%')
+		</if>
+		<if test="productCode != null and productCode !=''">
+			and t.product_code like CONCAT(CONCAT('%', #{productCode}), '%')
+		</if>
+		<if test="createBy != null and createBy !=''">
+			and t.create_by=#{createBy}
+		</if>
+		<if test="createUserName != null and createUserName !=''">
+			and t.create_user_name like CONCAT(CONCAT('%', #{createUserName}), '%')
+		</if>
+		<if test="createTime != null and createTime !=''">
+			and t.create_time=#{createTime}
+		</if>
+		<if test="status != null and status !=''">
+			and t.status=#{status}
+		</if>
+		<if test="shelvesStatus != null and shelvesStatus !=''">
+			and t.shelves_status=#{shelvesStatus}
+		</if>
+		<if test="timeStart != null  and timeStart !=''">
+			and t.time_start=#{timeStart}
+		</if>
+	</sql>
+
+
+	<select id="queryOne" parameterType="ProductShelvesLogModel"
+		resultMap="productShelvesLogModel">
+		select
+		product_shelves_log_id,
+		product_id,
+		product_name,
+		reason,
+		product_code,
+		create_by,
+		create_user_name,
+		create_time,
+		status,
+		shelves_status,
+		time_start
+		from t_product_shelves_log t
+		where t.product_shelves_log_id=#{productShelvesLog}
+	</select>
+	<select id="queryListPage" parameterType="ProductShelvesLogModel"
+		resultMap="productShelvesLogModel">
+		select
+		product_shelves_log_id,
+
+		product_id,
+
+		product_name,
+
+		reason,
+
+		product_code,
+
+		create_by,
+
+		create_user_name,
+
+		create_time,
+
+		status,
+
+		shelves_status,
+		time_start
+		from t_product_shelves_log t
+		where 1=1
+		<include refid="query" />
+	</select>
+
+	<select id="countListPage" parameterType="ProductShelvesLogModel"
+		resultType="java.lang.Long">
+		select count(1) from t_product_shelves_log t
+		where 1=1
+		<include refid="query" />
+	</select>
+
+	<insert id="insert" parameterType="ProductShelvesLogModel">
+		<selectKey resultType="java.lang.Long" keyProperty="id"
+			order="AFTER">
+			SELECT @@IDENTITY as id
+		</selectKey>
+		insert into t_product_shelves_log
+		(
+		product_shelves_log_id,
+		product_id,
+		product_name,
+		reason,
+		product_code,
+		create_by,
+		create_user_name,
+		create_time,
+		status,
+		shelves_status,
+		time_start
+		)
+		values
+		(
+		#{productShelvesLog},
+		#{productId},
+		#{productName},
+		#{reason},
+		#{productCode},
+		#{createBy},
+		#{createUserName},
+		#{createTime},
+		#{status},
+		#{shelvesStatus},
+		#{timeStart}
+		)
+	</insert>
+	
+	<insert id="addShelvesLogList" parameterType="java.util.List">
+		insert into  t_product_shelves_log
+		(		
+	          			    product_shelves_log_id,
+							product_id,
+							product_name,
+							reason,
+							product_code,
+							create_by,
+							create_user_name,
+							create_time,
+							status,
+							shelves_status,
+							time_start
+        )
+		values
+		<foreach collection="list"  item="item" separator=",">
+                           (#{item.productShelvesLog},
+							#{item.productId},
+							#{item.productName},
+							#{item.reason},
+							#{item.productCode},
+							#{item.createBy},
+							#{item.createUserName},
+							#{item.createTime},
+							#{item.status},
+							#{item.shelvesStatus},
+							#{item.timeStart})
+		</foreach>
+    </insert>
+	
+	<update id="update" parameterType="ProductShelvesLogModel">
+		update t_product_shelves_log t
+		<set>
+			<if test="productShelvesLog != null  and productShelvesLog !=''">
+				t.product_shelves_log_id=#{productShelvesLog},
+			</if>
+			<if test="productId != null  and productId !=''">
+				t.product_id=#{productId},
+			</if>
+			<if test="productName != null  and productName !=''">
+				t.product_name=#{productName},
+			</if>
+			<if test="reason != null  and reason !=''">
+				t.reason=#{reason},
+			</if>
+			<if test="productCode != null  and productCode !=''">
+				t.product_code=#{productCode},
+			</if>
+			<if test="createBy != null  and createBy !=''">
+				t.create_by=#{createBy},
+			</if>
+			<if test="createUserName != null  and createUserName !=''">
+				t.create_user_name=#{createUserName},
+			</if>
+			<if test="createTime != null  and createTime !=''">
+				t.create_time=#{createTime},
+			</if>
+			<if test="status != null  and status !=''">
+				t.status=#{status},
+			</if>
+			<if test="timeStart != null  and timeStart !=''">
+				t.time_start=#{timeStart},
+			</if>
+			<if test="shelvesStatus != null  and shelvesStatus !=''">
+				t.shelves_status=#{shelvesStatus}
+			</if>
+		</set>
+		where
+		t.product_shelves_log_id=#{productShelvesLog}
+	</update>
+
+	<delete id="delete" parameterType="ProductShelvesLogModel">
+		delete from t_product_shelves_log where
+		product_shelves_log_id =#{productShelvesLog}
+	</delete>
+
+	<delete id="deleteByIds" parameterType="java.util.List">
+		delete from t_product_shelves_log where
+		product_shelves_log_id in
+		<foreach item="item" index="index" collection="list" open="("
+			separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+
+</mapper>

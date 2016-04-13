@@ -1,0 +1,336 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ProductPriceListDaoImpl">
+
+	<resultMap type="ProductPriceListModel" id="productPriceListModel">
+		<result property="productPriceList" column="product_price_list_id" javaType="java.lang.Long" />
+		<result property="productSkuCode" column="product_sku_code" javaType="java.lang.String" />
+		<result property="costPrice" column="cost_price" javaType="java.lang.Double" />
+		<result property="tshPrice" column="tsh_price" javaType="java.lang.Double" />
+		<result property="tb" column="tb" javaType="java.lang.Long" />
+		<result property="marketPrice" column="market_price" javaType="java.lang.Double" />
+		<result property="reason" column="reason" javaType="java.lang.String" />
+		<result property="status" column="status" javaType="java.lang.Integer" />
+		<result property="createTime" column="create_time" javaType="java.lang.Long" />
+		<result property="createBy" column="create_by" javaType="java.lang.Long" />
+		<result property="createUserName" column="create_user_name" javaType="java.lang.String" />
+		<result property="updateTime" column="update_time" javaType="java.lang.Long" />
+		<result property="updateBy" column="update_by" javaType="java.lang.Long" />
+		<result property="updateUserName" column="update_user_name" javaType="java.lang.String" />
+		<result property="oldCostPrice" column="old_cost_price" javaType="java.lang.Double" />
+		<result property="oldTshPrice" column="old_tsh_price" javaType="java.lang.Double" />
+		<result property="oldTb" column="old_tb" javaType="java.lang.Long" />
+		<result property="oldMarketPrice" column="old_market_price" javaType="java.lang.Double" />
+		<result property="categoryCode" column="cat_code" javaType="java.lang.String" />
+		<result property="brandCode" column="brand_code" javaType="java.lang.String" />
+		<result property="supplierId" column="supplier_id" javaType="java.lang.Long" />
+		<result property="timeStart" column="time_start" javaType="java.lang.Long" />
+		<result property="sourceType" column="source_type" javaType="java.lang.Integer" />
+	</resultMap>
+
+	<sql id="query">
+		<if test="productPriceList != null and productPriceList !=''">
+			and t.product_price_list_id=#{productPriceList}
+		</if>
+		<if test="productSkuCode != null and productSkuCode !=''">
+			and t.product_sku_code like CONCAT(CONCAT('%', #{productSkuCode}), '%')
+		</if>
+		<if test="costPrice != null and costPrice !=''">
+			and t.cost_price=#{costPrice}
+		</if>
+		<if test="tshPrice != null and tshPrice !=''">
+			and t.tsh_price=#{tshPrice}
+		</if>
+		<if test="tb != null and tb !=''">
+			and t.tb=#{tb}
+		</if>
+		<if test="marketPrice != null and marketPrice !=''">
+			and t.market_price=#{marketPrice}
+		</if>
+		<if test="reason != null and reason !=''">
+			and t.reason like CONCAT(CONCAT('%', #{reason}), '%')
+		</if>
+		<if test="status != null and status !=''">
+			and t.status=#{status}
+		</if>
+		<!-- <if test="createTime != null and createTime !='' and endTime != null and endTime !=''">
+					and t.create_time BETWEEN #{createTime} AND #{endTime}
+		    </if> -->
+		<if test="createTime != null and createTime !=''">
+					and t.create_time<![CDATA[>=]]>#{createTime}
+		</if>
+		<if test="endTime1 != null and endTime1 !=''">
+					and t.create_time<![CDATA[<=]]>#{endTime1}
+		</if>
+		    
+		<if test="createBy != null and createBy !=''">
+			and t.create_by=#{createBy}
+		</if>
+		<if test="createUserName != null and createUserName !=''">
+			and t.create_user_name like CONCAT(CONCAT('%', #{createUserName}), '%')
+		</if>
+		<if test="updateTime != null and updateTime !=''">
+			and t.update_time<![CDATA[>=]]>#{updateTime}
+		</if>
+		<if test="endTime2 != null and endTime2 !=''">
+			and t.update_time<![CDATA[<=]]>#{endTime2}
+		</if>
+		<if test="updateBy != null and updateBy !=''">
+			and t.update_by=#{updateBy}
+		</if>
+		<if test="updateUserName != null and updateUserName !=''">
+			and t.update_user_name like CONCAT(CONCAT('%', #{updateUserName}), '%')
+		</if>
+		<if test="oldCostPrice != null and oldCostPrice !=''">
+			and t.old_cost_price=#{oldCostPrice}
+		</if>
+		<if test="oldTshPrice != null and oldTshPrice !=''">
+			and t.old_tsh_price=#{oldTshPrice}
+		</if>
+		<if test="oldTb != null and oldTb !=''">
+			and t.old_tb=#{oldTb}
+		</if>
+		<if test="oldMarketPrice != null and oldMarketPrice !=''">
+			and t.old_market_price=#{oldMarketPrice}
+		</if>
+		<if test="categoryCode != null and categoryCode !=''">
+			and left(a.cat_code,2) =#{categoryCode}
+		</if>
+		<if test="brandCode != null and brandCode !=''">
+			and a.brand_code=#{brandCode}
+		</if>
+		<if test="supplierId != null and supplierId !=''">
+			and a.supplier_id=#{supplierId}
+		</if>
+		<if test="sourceType != null  and sourceType !=''">
+			and a.source_type=#{sourceType}
+		</if>
+		<if test="productName != null and productName !=''">
+			and a.product_name like CONCAT(CONCAT('%', #{productName}), '%')
+		 </if>
+	     <if test="catName != null and catName !=''">
+			and a.cat_name like CONCAT(CONCAT('%', #{catName}), '%')
+		 </if>
+		 <if test="brandName != null and brandName !=''">
+			and a.brand_name like CONCAT(CONCAT('%', #{brandName}), '%')
+		 </if>
+		 <if test="shopName != null and shopName !=''">
+			and c.shop_name like CONCAT(CONCAT('%', #{shopName}), '%')
+		 </if>
+	</sql>
+
+
+	<select id="queryOne" parameterType="ProductPriceListModel"
+		resultMap="productPriceListModel">
+		select
+		product_price_list_id,
+		product_sku_code,
+		cost_price,
+		tsh_price,
+		tb,
+		market_price,
+		reason,
+		status,
+		create_time,
+		create_by,
+		create_user_name,
+		update_time,
+		update_by,
+		update_user_name,
+		old_cost_price,
+		old_tsh_price,
+		old_tb,
+		old_market_price,
+		time_start,
+		source_type
+		from t_product_price_list t
+		where t.product_price_list_id=#{productPriceList}
+	</select>
+	
+	<select id="getPriceListBySkuCode" parameterType="ProductPriceListModel"
+		resultMap="productPriceListModel">
+		select
+		product_price_list_id,
+		product_sku_code,
+		cost_price,
+		tsh_price,
+		tb,
+		market_price,
+		reason,
+		status,
+		create_time,
+		create_by,
+		create_user_name,
+		update_time,
+		update_by,
+		update_user_name,
+		old_cost_price,
+		old_tsh_price,
+		old_tb,
+		old_market_price,
+		time_start,
+		source_type
+		from t_product_price_list t
+		where t.product_sku_code=#{productSkuCode}
+	</select>
+	
+	<select id="queryListPage" parameterType="ProductPriceListModel"
+		resultMap="productPriceListModel">
+		SELECT
+		product_price_list_id,
+		product_sku_code,
+		t.cost_price cost_price,
+		t.tsh_price tsh_price,
+		t.tb tb,
+		t.market_price market_price,
+		t.reason reason,
+		t.status,
+		case t.status 
+	    	  when 0 then '待审核'
+	          when 1 then '待审核'
+	          when 2 then '审核通过'
+	          when 3 then '待同步'
+	          when 4 then '审核通过,同步成功'
+	          when 5 then '审核不通过,同步成功'
+	          when 6 then '系统处理'
+	          when 8 then '审核不通过'
+	          when 9 then '处理失败'
+	          end statusName,
+		t.create_time create_time,
+		t.create_by create_by,
+		t.create_user_name create_user_name,
+		t.update_time update_time,
+		t.update_by update_by,
+		t.update_user_name update_user_name,
+		t.source_type,
+		old_cost_price,
+		old_tsh_price,
+		old_tb,
+		old_market_price,
+		time_start,
+		a.brand_code brand_code,
+		a.cat_code cat_code,
+		a.supplier_id supplier_id,
+		b.product_price_rate as priceRate,
+		a.product_name as productName,
+		a.cat_name as catName,
+		a.cat_code as catCode,
+		a.brand_name as brandName,
+		c.shop_name as shopName
+		FROM
+		t_product_price_list t,t_product a,t_product_operate b,t_supplier c
+		WHERE
+		left(t.product_sku_code,12)=a.product_code and a.product_id=b.product_id and
+		1 = 1
+		AND t.STATUS > 0 and a.supplier_id=c.id
+		<include refid="query" />
+		
+	</select>
+
+	<select id="countListPage" parameterType="ProductPriceListModel"
+		resultType="java.lang.Long">
+		select count(1) from
+		t_product_price_list t,t_product a,t_product_operate b,t_supplier c 
+		WHERE
+		left(t.product_sku_code,12)=a.product_code and t.status>0 and a.product_id=b.product_id and a.supplier_id=c.id
+		<include refid="query" />
+	</select>
+
+	<insert id="insert" parameterType="ProductPriceListModel">
+		<selectKey resultType="java.lang.Long" keyProperty="id"
+			order="AFTER">
+			SELECT @@IDENTITY as id
+		</selectKey>
+		insert into t_product_price_list
+		(
+		product_price_list_id,
+		product_sku_code,
+		cost_price,
+		tsh_price,
+		tb,
+		market_price,
+		reason,
+		status,
+		create_time,
+		create_by,
+		create_user_name,
+		time_start,
+		source_type
+		)
+		values
+		(
+		#{productPriceList},
+		#{productSkuCode},
+		#{costPrice},
+		#{tshPrice},
+		#{tb},
+		#{marketPrice},
+		#{reason},
+		#{status},
+		#{createTime},
+		#{createBy},
+		#{createUserName},
+		#{timeStart},
+		#{sourceType}
+		)
+	</insert>
+
+	<update id="update" parameterType="ProductPriceListModel">
+		update t_product_price_list t
+		<set>
+			<if test="costPrice != null  and costPrice !=''">
+				t.cost_price=#{costPrice},
+			</if>
+			<if test="marketPrice != null  and marketPrice !=''">
+				t.market_price=#{marketPrice},
+			</if>
+			<if test="tshPrice != null  and tshPrice !=''">
+				t.tsh_price=#{tshPrice},
+			</if>
+			<if test="tb != null  and tb !=''">
+				t.tb=#{tb},
+			</if>
+			<if test="reason != null  and reason !=''">
+				t.reason=#{reason},
+			</if>
+			<if test="status != null  and status !=''">
+				t.status=#{status},
+			</if>
+			<if test="sourceType != null  and sourceType !=''">
+				t.source_type=#{sourceType},
+			</if>
+			<if test="updateTime != null  and updateTime !=''">
+				t.update_time=#{updateTime},
+			</if>
+			<if test="updateBy != null  and updateBy !=''">
+				t.update_by=#{updateBy},
+			</if>
+
+			<if test="timeStart != null  and timeStart !=''">
+				t.time_start=#{timeStart},
+			</if>
+			<if test="updateUserName != null  and updateUserName !=''">
+				t.update_user_name=#{updateUserName}
+			</if>
+		</set>
+		where
+		t.product_price_list_id=#{productPriceList}
+	</update>
+
+	<delete id="delete" parameterType="ProductPriceListModel">
+		delete from t_product_price_list where
+		product_price_list_id =#{productPriceList}
+	</delete>
+
+	<delete id="deleteByIds" parameterType="java.util.List">
+		delete from t_product_price_list where
+		product_price_list_id in
+		<foreach item="item" index="index" collection="list" open="("
+			separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+
+</mapper>

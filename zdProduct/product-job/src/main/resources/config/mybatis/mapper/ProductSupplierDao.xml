@@ -1,0 +1,506 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="ProductSupplierDaoImpl">
+	
+	<resultMap type="ProductModel" id="productModel">
+		   <result property="productId" column="product_id" javaType="java.lang.Long" />
+		   <result property="productName" column="product_name" javaType="java.lang.String" />
+		   <result property="productCode" column="product_code" javaType="java.lang.String" />
+		   <result property="productDesc" column="product_desc" javaType="java.lang.String" />
+		   <result property="productShelves" column="product_shelves" javaType="java.lang.Long" />
+		   <result property="createTime" column="create_time" javaType="java.lang.Long" />
+		   <result property="createBy" column="create_by" javaType="java.lang.Long" />
+		   <result property="createUserName" column="create_user_name" javaType="java.lang.String" />
+		   <result property="updateTime" column="update_time" javaType="java.lang.Long" />
+		   <result property="updateBy" column="update_by" javaType="java.lang.Long" />
+		   <result property="updateUserName" column="update_user_name" javaType="java.lang.String" />
+		   <result property="firstShelves" column="first_shelves" javaType="java.lang.Long" />
+		   <result property="firstShelvesName" column="first_shelves_name" javaType="java.lang.String" />
+		   <result property="firstShelvesTime" column="first_shelves_time" javaType="java.lang.Long" />
+		   <result property="lastShelves" column="last_shelves" javaType="java.lang.Long" />
+		   <result property="lastShelvesName" column="last_shelves_name" javaType="java.lang.String" />
+		   <result property="lastShelvesTime" column="last_shelves_time" javaType="java.lang.Long" />
+		   <result property="downShelves" column="down_shelves" javaType="java.lang.Long" />
+		   <result property="downShelvesName" column="down_shelves_name" javaType="java.lang.String" />
+		   <result property="downShelvesTime" column="down_shelves_time" javaType="java.lang.Long" />
+		   <result property="costPrice" column="cost_price" javaType="java.lang.Double" />
+		   <result property="tshPrice" column="tsh_price" javaType="java.lang.Double" /> 
+		   <result property="tb" column="tb" javaType="java.lang.Long" />
+		   <result property="marketPrice" column="market_price" javaType="java.lang.Double" />
+		   <result property="brandCode" column="brand_code" javaType="java.lang.String" />
+		   <result property="brandName" column="brand_name" javaType="java.lang.String" />
+		   <result property="catCode" column="cat_code" javaType="java.lang.String" />
+		   <result property="catName" column="cat_name" javaType="java.lang.String" />
+		   <result property="type" column="type" javaType="java.lang.String" />
+		   <result property="staus" column="staus" javaType="java.lang.Long" />
+		   <result property="mainPic" column="main_pic" javaType="java.lang.String" />
+		   <result property="supplierId" column="supplier_id" javaType="java.lang.Long" />
+		   <result property="shopId" column="shop_id" javaType="java.lang.Long" />
+		   <result property="integrity" column="integrity" javaType="java.lang.Integer" />
+		   <result property="integrityDesc" column="integrity_desc" javaType="java.lang.String" />
+		   <result property="reason" column="reason" javaType="java.lang.String" />
+	</resultMap>
+
+    <sql id="query">
+	        <if test="productId != null and productId !=''">
+					and t.product_id=#{productId}
+		    </if>
+	        <if test="productName != null and productName !=''">
+		        	and t.product_name like CONCAT(CONCAT('%', #{productName}), '%') 
+		    </if>
+	        <if test="productCode != null and productCode !=''">
+		        	and t.product_code like CONCAT(CONCAT('%', #{productCode}), '%') 
+		    </if>
+	        <if test="productDesc != null and productDesc !=''">
+		        	and t.product_desc like CONCAT(CONCAT('%', #{productDesc}), '%') 
+		    </if>
+	        <if test="productShelves != null and productShelves !=''">
+					and t.product_shelves=#{productShelves}
+		    </if>
+	        <if test="createTime != null and createTime !='' and endTime != null and endTime !=''">
+					and t.create_time BETWEEN #{createTime} AND #{endTime}
+		    </if>
+	        <if test="createBy != null and createBy !=''">
+					and t.create_by=#{createBy}
+		    </if>
+		    <if test="createUserName != null and createUserName !=''">
+					and t.create_user_name=#{createUserName}
+		    </if>
+	        <if test="updateTime != null and updateTime !=''">
+					and t.update_time=#{updateTime}
+		    </if>
+	        <if test="updateBy != null and updateBy !=''">
+					and t.update_by=#{updateBy}
+		    </if>
+		     <if test="updateUserName != null and updateUserName !=''">
+					and t.update_user_name=#{updateUserName}
+		    </if>
+	        <if test="firstShelves != null and firstShelves !=''">
+					and t.first_shelves=#{firstShelves}
+		    </if>
+		    <if test="firstShelvesName != null and firstShelvesName !=''">
+					and t.first_shelves_name=#{firstShelvesName}
+		    </if>
+	        <if test="firstShelvesTime != null and firstShelvesTime !=''">
+					and t.first_shelves_time=#{firstShelvesTime}
+		    </if>
+	        <if test="lastShelves != null and lastShelves !=''">
+					and t.last_shelves=#{lastShelves}
+		    </if>
+		    <if test="lastShelvesName != null and lastShelvesName !=''">
+					and t.last_shelves_name=#{lastShelvesName}
+		    </if>
+	        <if test="lastShelvesTime != null and lastShelvesTime !=''">
+					and t.last_shelves_time=#{lastShelvesTime}
+		    </if>
+	        <if test="downShelves != null and downShelves !=''">
+					and t.down_shelves=#{downShelves}
+		    </if>
+		    <if test="downShelvesName != null and downShelvesName !=''">
+					and t.down_shelves_name=#{downShelvesName}
+		    </if>
+	        <if test="downShelvesTime != null and downShelvesTime !=''">
+					and t.down_shelves_time=#{downShelvesTime}
+		    </if>
+		    <if test="costPrice != null and costPrice != ''">
+						and tsh_price &gt; #{costPrice}
+					</if>
+	        <if test="tb != null and tb !=''">
+					and t.tb=#{tb}
+		    </if>
+		    <if test="tshPrice != null and tshPrice != ''">
+						and tsh_price &lt; #{tshPrice}
+					</if>
+	        <if test="marketPrice != null and marketPrice !=''">
+					and t.market_price=#{marketPrice}
+		    </if>
+	        <if test="brandCode != null and brandCode !=''">
+		        	and t.brand_code like CONCAT(CONCAT('%', #{brandCode}), '%') 
+		    </if>
+	        <if test="brandName != null and brandName !=''">
+		        	and t.brand_name like CONCAT(CONCAT('%', #{brandName}), '%') 
+		    </if>
+	        <if test="catCode != null and catCode !=''">
+		        	and t.cat_code like CONCAT(CONCAT(#{catCode}), '%') 
+		    </if>
+	        <if test="catName != null and catName !=''">
+		        	and t.cat_name like CONCAT(CONCAT('%', #{catName}), '%') 
+		    </if>
+	        <if test="type != null and type !=''">
+					and t.type=#{type}
+		    </if>
+	        <if test="staus != null">
+					and t.staus=#{staus}
+		    </if>
+		    <if test="supplierId != null and supplierId !=''">
+					and t.supplier_id=#{supplierId}
+		    </if>
+	        <if test="mainPic != null and mainPic !=''">
+		        	and t.main_pic like CONCAT(CONCAT('%', #{mainPic}), '%') 
+		    </if>
+		    <if test="shopId != null and shopId !=''">
+					and t.shop_id=#{shopId}
+		    </if>
+	    	<if test="integrity != null and integrity !=''">
+					and t.integrity=#{integrity}
+		    </if>
+		    <if test="integrityDesc != null and integrityDesc !=''">
+		        	and t.integrity_desc like CONCAT(CONCAT('%', #{integrityDesc}), '%') 
+		    </if>
+    </sql>
+
+
+	<select id="queryOne" parameterType="ProductModel"
+	resultMap="productModel">
+	select
+	          product_id,
+	          product_name,
+	          product_code,
+	          product_desc,
+	          product_shelves,
+	          create_time,
+	          create_by,
+	          create_user_name,
+	          update_time,
+	          update_by,
+	          update_user_name,
+	          first_shelves,
+	          first_shelves_name,
+	          first_shelves_time,
+	          last_shelves,
+	          last_shelves_name,
+	          last_shelves_time,
+	          down_shelves,
+	          down_shelves_name,
+	          down_shelves_time,
+	          cost_price,
+	          tsh_price,
+	          tb,
+	          market_price,
+	          brand_code,
+	          brand_name,
+	          cat_code,
+	          cat_name,
+	          type,
+	          staus,
+	          supplier_id,
+	          shop_id,
+	          main_pic,
+	          integrity,
+	          integrity_desc,
+	          reason
+	from  t_product t
+	where 1=1
+		<if test="productId!=null and productId!=''">
+			and t.product_id=#{productId}
+		</if>
+		<if test="productCode!=null and productCode!=''">
+			and t.product_code=#{productCode}
+		</if>
+	
+	</select>
+	<select id="queryListPage" parameterType="ProductModel"
+		resultMap="productModel">
+		select 
+	          product_id,
+	          product_name,
+	          product_code,
+	          product_desc,
+	          product_shelves,
+	          create_time,
+	          create_by,
+	          create_user_name,
+	          update_time,
+	          update_by,
+	          update_user_name,
+	          first_shelves,
+	          first_shelves_name,
+	          first_shelves_time,
+	          last_shelves,
+	          last_shelves_name,
+	          last_shelves_time,
+	          down_shelves,
+	          down_shelves_name,
+	          down_shelves_time,
+	          cost_price,
+	          tsh_price,
+	          tb,
+	          market_price,
+	          brand_code,
+	          brand_name,
+	          cat_code,
+	          cat_name,
+	          type,
+	          staus,
+	          supplier_id,
+	          shop_id,
+	          main_pic,
+	          integrity,
+	          integrity_desc,
+	          reason
+	     from  t_product t
+		where 1=1
+		<include refid="query"/>
+		
+	</select>
+
+	<select id="countListPage" parameterType="ProductModel"
+		resultType="java.lang.Long">
+		select count(1) from  t_product t
+		where 1=1
+		<include refid="query"/>
+	 </select>
+
+	<insert id="insert" parameterType="ProductModel" useGeneratedKeys="true" keyProperty="product_id" >
+		<selectKey resultType="java.lang.Long" keyProperty="productId" order="AFTER">
+    		SELECT @@IDENTITY as productId
+    	</selectKey>
+    	
+		insert into  t_product
+		(
+	          			    product_id,
+	          			    product_name,
+	          			    product_code,
+	          			    product_desc,
+	          			    product_shelves,
+	          			    create_time,
+	          				create_by,
+	          				create_user_name,
+					        update_time,
+					        update_by,
+					        update_user_name,
+	          			    first_shelves,
+	          			    first_shelves_name,
+	          			    first_shelves_time,
+	          			    last_shelves,
+	          			    last_shelves_name,
+	          			    last_shelves_time,
+	          			    down_shelves,
+	          			    down_shelves_name,
+	          			    down_shelves_time,
+	          			    cost_price,
+	          			    tsh_price,
+	          			    tb,
+	          			    market_price,
+	          			    brand_code,
+	          			    brand_name,
+	          			    cat_code,
+	          			    cat_name,
+	          			    type,
+	          			    staus,
+	          			    supplier_id,
+	          			    shop_id,
+	          				main_pic,
+	          				integrity,
+	          				integrity_desc,
+	          				reason
+        )
+		values
+		(
+		          			    #{productId},
+		          			    #{productName},
+		          			    #{productCode},
+		          			    #{productDesc},
+		          			    #{productShelves},
+		          			    #{createTime},
+		          				#{createBy},
+		          				#{createUserName},
+		          				#{updateTime},
+		          				#{updateBy},
+		          				#{updateUserName},
+		          			    #{firstShelves},
+		          			    #{firstShelvesName},
+		          			    #{firstShelvesTime},
+		          			    #{lastShelves},
+		          			    #{lastShelvesName},
+		          			    #{lastShelvesTime},
+		          			    #{downShelves},
+		          			    #{downShelvesName},
+		          			    #{downShelvesTime},
+		          			    #{costPrice},
+		          			    #{tshPrice},
+		          			    #{tb},
+		          			    #{marketPrice},
+		          			    #{brandCode},
+		          			    #{brandName},
+		          			    #{catCode},
+		          			    #{catName},
+		          			    #{type},
+		          			    #{staus},
+		          			    #{supplierId},
+		          			    #{shopId},
+	          					#{mainPic},
+	          					#{integrity},
+	          					#{integrityDesc},
+	          					#{reason}
+        )
+	</insert>
+
+	<update id="update" parameterType="ProductModel">
+		update  t_product t 
+		  <set>
+			         <if test="productId != null  and productId !=''">
+				          t.product_id=#{productId},
+				    </if>
+			         <if test="productName != null  and productName !=''">
+				          t.product_name=#{productName},
+				    </if>
+			         <if test="productCode != null  and productCode !=''">
+				          t.product_code=#{productCode},
+				    </if>
+			         <if test="productDesc != null  and productDesc !=''">
+				          t.product_desc=#{productDesc},
+				    </if>
+			         <if test="productShelves != null  and productShelves !=''">
+				          t.product_shelves=#{productShelves},
+				    </if>
+			         <if test="createTime != null  and createTime !=''">
+				          t.create_time=#{createTime},
+				    </if>
+			         <if test="createBy != null  and createBy !=''">
+				          t.create_by=#{createBy},
+				    </if>
+				     <if test="createUserName != null  and createUserName !=''">
+				          t.create_user_name=#{createUserName},
+				    </if>
+			         <if test="updateTime != null  and updateTime !=''">
+				          t.update_time=#{updateTime},
+				    </if>
+			         <if test="updateBy != null  and updateBy !=''">
+				          t.update_by=#{updateBy},
+				    </if>
+				     <if test="updateUserName != null  and updateUserName !=''">
+				          t.update_user_name=#{updateUserName},
+				    </if>
+			         <if test="firstShelves != null  and firstShelves !=''">
+				          t.first_shelves=#{firstShelves},
+				    </if>
+				    <if test="firstShelvesName != null  and firstShelvesName !=''">
+				          t.first_shelves_name=#{firstShelvesName},
+				    </if>
+			         <if test="firstShelvesTime != null  and firstShelvesTime !=''">
+				          t.first_shelves_time=#{firstShelvesTime},
+				    </if>
+			         <if test="lastShelves != null  and lastShelves !=''">
+				          t.last_shelves=#{lastShelves},
+				    </if>
+				    <if test="lastShelvesName != null  and lastShelvesName !=''">
+				          t.last_shelves_name=#{lastShelvesName},
+				    </if>
+			         <if test="lastShelvesTime != null  and lastShelvesTime !=''">
+				          t.last_shelves_time=#{lastShelvesTime},
+				    </if>
+			         <if test="downShelves != null  and downShelves !=''">
+				          t.down_shelves=#{downShelves},
+				    </if>
+				    <if test="downShelvesName != null  and downShelvesName !=''">
+				          t.down_shelves_name=#{downShelvesName},
+				    </if>
+			         <if test="downShelvesTime != null  and downShelvesTime !=''">
+				          t.down_shelves_time=#{downShelvesTime},
+				    </if>
+			         <if test="costPrice != null  and costPrice !=''">
+				          t.cost_price=#{costPrice},
+				    </if>
+			         <if test="tshPrice != null  and tshPrice !=''">
+				          t.tsh_price=#{tshPrice},
+				    </if>
+			         <if test="tb != null  and tb !=''">
+				          t.tb=#{tb},
+				    </if>
+			         <if test="marketPrice != null  and marketPrice !=''">
+				          t.market_price=#{marketPrice},
+				    </if>
+			         <if test="brandCode != null  and brandCode !=''">
+				          t.brand_code=#{brandCode},
+				    </if>
+			         <if test="brandName != null  and brandName !=''">
+				          t.brand_name=#{brandName},
+				    </if>
+			         <if test="catCode != null  and catCode !=''">
+				          t.cat_code=#{catCode},
+				    </if>
+			         <if test="catName != null  and catName !=''">
+				          t.cat_name=#{catName},
+				    </if>
+			         <if test="type != null  and type !=''">
+				          t.type=#{type},
+				    </if>
+			         <if test="staus != null">
+				          t.staus=#{staus},
+				    </if>
+				    <if test="supplierId != null  and supplierId !=''">
+				          t.supplier_id=#{supplierId},
+				    </if>
+				    <if test="shopId != null  and shopId !=''">
+				          t.shop_id=#{shopId},
+				    </if>
+			         <if test="mainPic != null  and mainPic !=''">
+				          t.main_pic=#{mainPic},
+				    </if>
+				    <if test="integrity != null  and integrity !=''">
+				          t.integrity=#{integrity},
+				    </if>
+				    <if test="integrityDesc != null  and integrityDesc !=''">
+				          t.integrity_desc=#{integrityDesc}
+				    </if>
+				    <if test="reason != null  and reason !=''">
+				          t.reason=#{reason}
+				    </if>
+		    </set>
+		where t.product_id=#{productId}
+	</update>
+	
+	<update id="updateSupplierProductByProductCode" parameterType="ProductModel">
+		update  t_product t 
+		  <set>
+				    <if test="reason != null">
+				          t.reason=#{reason},
+				    </if>
+				    <if test="staus != null">
+				          t.staus=#{staus}
+				    </if>
+		    </set>
+		where t.product_code=#{productCode}
+	</update>
+	
+	<delete id="delete" parameterType="ProductModel">
+    	delete from  t_product  where product_id=#{productId};
+    </delete>
+    
+    <delete id="deleteByIds" parameterType="java.util.List">
+    	delete from t_product  where product_id
+    	 in
+    	<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+    </delete>
+
+	<select id="queryListByProductCode" parameterType="java.util.List"
+		resultMap="productModel">
+		select 
+	          product_id,
+	          product_code
+	    from  t_product t
+		where 
+			t.product_code in
+			(
+			<foreach collection="list" item="item" index="index" separator=",">
+				"${item}"
+			</foreach>
+			)
+	</select>
+	
+	<select id="getProductByBrandCode" resultType="productModel" parameterType="ProductModel">
+		select count(product_id) from t_product where 1=1 
+		<if test="brandCode!=null and brandCode!=''">
+			and brand_code=#{brandCode}
+		</if>
+		
+	</select>
+	
+	<select id="getProductByProductCode" resultType="productModel" parameterType="ProductModel">
+	    select  t.product_shelves,o.product_auto_up staus  from t_product t , t_product_operate o  where t.product_id=o.product_id   and t.product_code=#{productCode}  
+	</select>
+</mapper>

@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ReportDaoImpl">
+	
+	<resultMap type="ReportModel" id="reportModel">
+		   <result property="reportId" column="report_id" javaType="java.lang.Integer" />
+		   <result property="reportName" column="report_name" javaType="java.lang.String" />
+		   <result property="reportShowName" column="report_show_name" javaType="java.lang.String" />
+		   <result property="reportShowEnName" column="report_show_en_name" javaType="java.lang.String" />
+		   <result property="reportSql" column="report_sql" javaType="java.lang.String" />
+		   <result property="reportCountSql" column="report_count_sql" javaType="java.lang.String" />
+		   <result property="x" column="x" javaType="java.lang.String" />
+		   <result property="y" column="y" javaType="java.lang.String" />
+		   <result property="xScall" column="x_scall" javaType="java.lang.String" />
+	</resultMap>
+
+    <sql id="query">
+	        <if test="reportId != null and reportId !=''">
+					and t.report_id=#{reportId}
+		    </if>
+	        <if test="reportName != null and reportName !=''">
+					and t.report_name like CONCAT(CONCAT('%', #{reportName}), '%') 
+		    </if>
+	        <if test="reportShowName != null and reportShowName !=''">
+		        	and t.report_show_name like CONCAT(CONCAT('%', #{reportShowName}), '%') 
+		    </if>
+		    <if test="reportSql != null and reportSql !=''">
+		        	and t.report_sql like CONCAT(CONCAT('%', #{reportSql}), '%') 
+		    </if>
+    </sql>
+
+
+	<select id="queryOne" parameterType="ReportModel"
+	resultMap="reportModel">
+	select
+	          report_id,
+	          report_name,
+	          report_show_name,
+	          report_show_en_name,
+	          report_sql,
+	          report_count_sql,
+	          x,
+	          y,
+	          x_scall
+	from  t_report t
+	where t.report_id=#{reportId};
+	</select>
+	<select id="queryListPage" parameterType="ReportModel"
+		resultMap="reportModel">
+		select 
+	          report_id,
+	          report_name,
+	          report_show_name,
+	          report_show_en_name,
+	          report_sql,
+	          report_count_sql,
+	          x,
+	          y,
+	          x_scall
+	     from  t_report t
+		where 1=1
+		<include refid="query"/>
+	</select>
+
+	<select id="countListPage" parameterType="ReportModel"
+		resultType="java.lang.Long">
+		select count(1) from  t_report t
+		where 1=1
+		<include refid="query"/>
+	 </select>
+
+	<insert id="insert" parameterType="ReportModel">
+		<selectKey resultType="java.lang.Integer" keyProperty="reportId" order="AFTER">
+    		SELECT @@IDENTITY as reportId
+    	</selectKey>
+		insert into  t_report
+		(
+	          			  report_id,
+				          report_name,
+				          report_show_name,
+	          			  report_show_en_name,
+				          report_sql,
+				          report_count_sql,
+				          x,
+				          y,
+				          x_scall
+        )
+		values
+		(
+		          			    #{reportId},
+		          			    #{reportName},
+		          			    #{reportShowName},
+	          					#{reportShowEnName},
+		          			    #{reportSql},
+		          			    #{reportCountSql},
+		          			    #{x},
+		          			    #{y},
+		          			    #{xScall}
+        )
+	</insert>
+
+	<update id="update" parameterType="ReportModel">
+		update  t_report t 
+		  <set>
+			         <if test="reportName != null  and reportName !=''">
+				          t.report_name=#{reportName},
+				    </if>
+			         <if test="reportShowName != null  and reportShowName !=''">
+				          t.report_show_name=#{reportShowName},
+				    </if>
+				     <if test="reportShowEnName != null  and reportShowEnName !=''">
+				          t.report_show_en_name=#{reportShowEnName},
+				    </if>
+			         <if test="reportSql != null  and reportSql !=''">
+				          t.report_sql=#{reportSql},
+				    </if>
+				     <if test="reportCountSql != null  and reportCountSql !=''">
+				          t.report_count_sql=#{reportCountSql},
+				    </if>
+				    <if test="reportId != null  and reportId !=''">
+				          t.report_id=#{reportId}
+				    </if>
+		    </set>
+		where 
+		t.report_id=#{reportId};
+	</update>
+	
+	<delete id="delete" parameterType="ReportModel">
+    	delete from  t_report  where report_id=#{reportId};
+    </delete>
+    
+    <delete id="deleteByIds" parameterType="java.util.List">
+    	delete from t_report  where report_id
+    	 in
+    	<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+    </delete>
+     
+    <select id="getReportSql" parameterType="ReportModel" resultType="java.util.HashMap">
+		${reportSql}
+    </select>
+    <select id="getReportSqlCount" parameterType="ReportModel"  resultType="java.lang.Long">
+		${reportCountSql}
+    </select>
+</mapper>

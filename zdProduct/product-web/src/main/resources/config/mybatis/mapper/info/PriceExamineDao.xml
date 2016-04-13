@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.zhaidou.product.info.dao.impl.PriceExamineDaoImpl">
+	 
+	<insert id="insert" parameterType="PriceExamineModel">
+		insert into t_product_price_list
+			(t_product_price_list_id,t_product_price_id,t_product_sku_id,costprice,tshtprice,tb,marketprice,staus) 
+   	 	values
+   	 	    (#{productPriceListId},#{productPriceId},#{productSkuId},#{costPrice},#{tshPrice},#{tb},#{marketPrice},#{staus});
+	</insert>
+ 	
+ 	<delete id="delete" parameterType="PriceExamineModel" >
+ 		delete from t_product_price_list where t_product_price_list_id=#{productPriceListId};
+ 	</delete>
+ 	
+ 	<update id="update" parameterType="PriceExamineModel">
+ 		update t_product_price_list set 
+ 				t_product_price_list_id=#{productPriceListId},
+ 				t_product_price_id=#{productPriceId},
+ 				t_product_sku_id=#{productSkuId},
+ 				costprice=#{costPrice},
+ 				tshtprice=#{tshPrice},
+ 				tb=#{tb},
+ 				marketprice=#{marketPrice},
+ 				staus=#{staus}
+ 		where t_product_price_list_id=#{productPriceListId};
+ 	</update>
+ 	
+ 	<select id="queryOne" parameterType="PriceExamineModel" resultType="PriceExamineModel">
+ 		select 	t_product_price_list_id as productPriceListId,
+   				t_product_price_id as productPriceId,
+  	 			t_product_sku_id as productSkuId,
+   				costprice as costPrice,
+   				tshtprice as tshPrice,
+   				tb,
+   				marketprice as marketPrice,
+   				staus
+   		from t_product_price_list where t_product_price_list_id=#{productPriceListId};
+ 	</select>
+</mapper>

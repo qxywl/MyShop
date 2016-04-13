@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ProductStockLogDaoImpl">
+	
+	<resultMap type="ProductStockLogModel" id="productStockLogModel">
+		   <result property="productLogId" column="product_log_id" javaType="java.lang.Long" />
+		   <result property="productSkuId" column="product_sku_id" javaType="java.lang.Long" />
+		   <result property="productId" column="product_id" javaType="java.lang.Long" />
+		   <result property="productCode" column="product_code" javaType="java.lang.String" />
+		   <result property="productName" column="product_name" javaType="java.lang.String" />
+		   <result property="type" column="type" javaType="java.lang.Long" />
+		   <result property="attrName" column="attr_name" javaType="java.lang.String" />
+		   <result property="oldvalue" column="oldvalue" javaType="java.lang.String" />
+		   <result property="newvalue" column="newvalue" javaType="java.lang.String" />
+		   <result property="createtime" column="createTime" javaType="java.lang.Long" />
+		   <result property="createby" column="createby" javaType="java.lang.Long" />
+		   <result property="userName" column="user_name" javaType="java.lang.String" />
+	</resultMap>
+
+    <sql id="query">
+	        <if test="productLogId != null and productLogId !=''">
+					and t.product_log_id=#{productLogId}
+		    </if>
+	        <if test="productSkuId != null and productSkuId !=''">
+					and t.product_sku_id=#{productSkuId}
+		    </if>
+	        <if test="productId != null and productId !=''">
+					and t.product_id=#{productId}
+		    </if>
+	        <if test="productCode != null and productCode !=''">
+		        	and t.product_code like CONCAT(CONCAT('%', #{productCode}), '%') 
+		    </if>
+	        <if test="productName != null and productName !=''">
+		        	and t.product_name like CONCAT(CONCAT('%', #{productName}), '%') 
+		    </if>
+	        <if test="type != null and type !=''">
+					and t.type=#{type}
+		    </if>
+	        <if test="attrName != null and attrName !=''">
+		        	and t.attr_name like CONCAT(CONCAT('%', #{attrName}), '%') 
+		    </if>
+	        <if test="oldvalue != null and oldvalue !=''">
+		        	and t.oldvalue like CONCAT(CONCAT('%', #{oldvalue}), '%') 
+		    </if>
+	        <if test="newvalue != null and newvalue !=''">
+		        	and t.newvalue like CONCAT(CONCAT('%', #{newvalue}), '%') 
+		    </if>
+	        <if test="createtime != null and createtime !=''">
+					and t.createTime=#{createtime}
+		    </if>
+	        <if test="createby != null and createby !=''">
+					and t.createby=#{createby}
+		    </if>
+	        <if test="userName != null and userName !=''">
+		        	and t.user_name like CONCAT(CONCAT('%', #{userName}), '%') 
+		    </if>
+	    
+    </sql>
+
+
+	<select id="queryOne" parameterType="ProductStockLogModel"
+	resultMap="productStockLogModel">
+	select
+	          product_log_id,
+	          product_sku_id,
+	          product_id,
+	          product_code,
+	          product_name,
+	          type,
+	          attr_name,
+	          oldvalue,
+	          newvalue,
+	          createTime,
+	          createby,
+	          user_name
+	from  t_product_stock_log t
+	where t.product_log_id=#{productLogId}
+	</select>
+	<select id="queryListPage" parameterType="ProductStockLogModel"
+		resultMap="productStockLogModel">
+		select 
+	          product_log_id,
+	    
+	          product_sku_id,
+	    
+	          product_id,
+	    
+	          product_code,
+	    
+	          product_name,
+	    
+	          type,
+	    
+	          attr_name,
+	    
+	          oldvalue,
+	    
+	          newvalue,
+	    
+	          createTime,
+	    
+	          createby,
+	    
+	          user_name
+	     from  t_product_stock_log t
+		where 1=1
+		<include refid="query"/>
+	</select>
+
+	<select id="countListPage" parameterType="ProductStockLogModel"
+		resultType="java.lang.Long">
+		select count(1) from  t_product_stock_log t
+		where 1=1
+		<include refid="query"/>
+	 </select>
+
+	<insert id="insert" parameterType="ProductStockLogModel">
+		<selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER">
+    		SELECT @@IDENTITY as id
+    	</selectKey>
+		insert into  t_product_stock_log
+		(
+	          			    product_log_id,
+	          			    product_sku_id,
+	          				product_id
+	          			    product_code,
+	          			    product_name,
+	          			    type,
+	          			    attr_name,
+	          			    oldvalue,
+	          			    newvalue,
+	          			    createTime,
+	          			    createby,
+	          			user_name
+        )
+		values
+		(
+		          			    #{productLogId},
+		          			    #{productSkuId},
+		          				#{productId}
+		          			    #{productCode},
+		          			    #{productName},
+		          			    #{type},
+		          			    #{attrName},
+		          			    #{oldvalue},
+		          			    #{newvalue},
+		          			    #{createtime},
+		          			    #{createby},
+	          				#{userName}
+        )
+	</insert>
+
+	<update id="update" parameterType="ProductStockLogModel">
+		update  t_product_stock_log t 
+		  <set>
+			         <if test="productLogId != null  and productLogId !=''">
+				          t.product_log_id=#{productLogId},
+				    </if>
+			         <if test="productSkuId != null  and productSkuId !=''">
+				          t.product_sku_id=#{productSkuId},
+				    </if>
+			         <if test="productId != null  and productId !=''">
+				          t.product_id=#{productId},
+				    </if>
+			         <if test="productCode != null  and productCode !=''">
+				          t.product_code=#{productCode},
+				    </if>
+			         <if test="productName != null  and productName !=''">
+				          t.product_name=#{productName},
+				    </if>
+			         <if test="type != null  and type !=''">
+				          t.type=#{type},
+				    </if>
+			         <if test="attrName != null  and attrName !=''">
+				          t.attr_name=#{attrName},
+				    </if>
+			         <if test="oldvalue != null  and oldvalue !=''">
+				          t.oldvalue=#{oldvalue},
+				    </if>
+			         <if test="newvalue != null  and newvalue !=''">
+				          t.newvalue=#{newvalue},
+				    </if>
+			         <if test="createtime != null  and createtime !=''">
+				          t.createTime=#{createtime},
+				    </if>
+			         <if test="createby != null  and createby !=''">
+				          t.createby=#{createby},
+				    </if>
+			         <if test="userName != null  and userName !=''">
+				          t.user_name=#{userName}
+				    </if>
+		    </set>
+		where 
+		t.product_log_id=#{productLogId}
+	</update>
+	
+	<delete id="delete" parameterType="ProductStockLogModel">
+    	delete from  t_product_stock_log  where 
+    	product_log_id =#{productLogId}
+    </delete>
+    
+    <delete id="deleteByIds" parameterType="java.util.List">
+    	delete from t_product_stock_log  where 
+    	product_log_id in
+    	<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+    </delete>
+
+</mapper>

@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.zhaidou.product.dao.impl.ProductCountDaoImpl">
+	
+	<resultMap type="ProductCountModel" id="productCountModel">
+		<result property="productId" column="product_id" javaType="java.lang.Long"/>
+		<result property="views" column="views" javaType="java.lang.Long"/>
+		<result property="collects" column="collects" javaType="java.lang.Long"/>
+		<result property="carts" column="carts" javaType="java.lang.Long"/>
+		<result property="orders" column="orders" javaType="java.lang.Long"/>
+		<result property="sales" column="sales" javaType="java.lang.Long"/>
+		<result property="comments" column="comments" javaType="java.lang.Long"/>
+		<result property="applaudCount" column="applaudCount" javaType="java.lang.Long"/>
+		<result property="favor_count" column="favorCount" javaType="java.lang.Long"/>
+	</resultMap>
+	
+	<sql id="field">
+	        t.product_id,
+			t.views,
+			t.collects,
+			t.carts,
+			t.orders,
+			t.sales,
+			t.comments,
+			t.applaudCount,
+			t.favor_count
+    </sql>
+    
+    
+    <insert id="insert" useGeneratedKeys="true" keyProperty="productId" parameterType="ProductCountModel">
+		insert into  t_product_count 
+		(
+	          			    
+		        product_id,
+				views,
+				collects,
+				carts,
+				orders,
+				sales,
+				comments,
+				applaudCount,
+				favor_count
+        )
+		values
+		(
+      			    
+    			    #{productId},
+    			    #{views},
+    			    #{collects},
+    				#{carts},
+    			    #{orders},
+    			    #{sales},
+    			    #{comments},
+    			    #{applaudCount},
+    			    #{favorCount}
+        )
+	</insert>
+
+	<update id="update" parameterType="ProductCountModel">
+		update  t_product_count t 
+		  <set>
+			         <if test="views != null  and views !=''">
+				          t.views=#{views},
+				    </if>
+			         <if test="collects != null  and collects !=''">
+				          t.collects=#{collects},
+				    </if>
+			         <if test="carts != null  and carts !=''">
+				          t.carts=#{carts},
+				    </if>
+			         <if test="orders != null  and orders !=''">
+				          t.orders=#{orders},
+				    </if>
+				     <if test="sales!= null  and sales !=''">
+				          t.sales=#{sales},
+				    </if>
+				    
+			         <if test="comments != null  and comments !=''">
+				          t.comments=#{comments},
+				    </if>
+			         <if test="applaudCount != null  and applaudCount !=''">
+				          t.applaudCount=#{applaudCount},
+				    </if>
+				    <if test="favorCount !=null and favorCount!='' ">
+				    	t.favor_count=#{favorCount}
+				    </if>
+		    </set>
+		where t.product_id = #{productId}
+	</update>  
+    
+    
+    <update id="updateByProductCode" parameterType="ProductCountModel">
+		update  t_product_count t 
+		  <set>
+			         <if test="views != null  and views !=''">
+				          t.views=#{views},
+				    </if>
+			         <if test="collects != null  and collects !=''">
+				          t.collects=#{collects},
+				    </if>
+			         <if test="carts != null  and carts !=''">
+				          t.carts=#{carts},
+				    </if>
+			         <if test="orders != null  and orders !=''">
+				          t.orders=#{orders},
+				    </if>
+			         <if test="comments != null  and comments !=''">
+				          t.comments=#{comments},
+				    </if>
+			         <if test="applaudCount != null  and applaudCount !=''">
+				          t.applaudCount=#{applaudCount},
+				    </if>
+				    <if test="favorCount !=null and favorCount!='' ">
+				    	t.favor_count=#{favorCount}
+				    </if>
+		    </set>
+		where t.product_id = #{productId}
+	</update>  
+    
+    <select id="queryOne" parameterType="ProductCountModel"
+	resultMap="productCountModel">
+		SELECT
+		      <include refid="field"/>
+		FROM  t_product_count t
+		WHERE 1=1  AND  t.product_id = #{productId}
+	</select>
+	
+	<select id="queryByproductIdList" parameterType="ProductCountModel"
+	resultMap="productCountModel">
+		SELECT
+		      <include refid="field"/>
+		FROM  t_product_count t
+		WHERE 1=1  
+		<choose>
+	     <when test="productIdList != null and productIdList != '' ">
+	        AND t.product_id 
+		    IN
+		    <foreach item="item" index="index" collection="productIdList" open="(" separator="," close=")">
+			          #{item}
+		    </foreach>
+	     </when>
+	     <otherwise>
+	        AND 1=2
+	     </otherwise>
+	    </choose>
+	</select>
+	
+	
+	
+	<sql id="query">
+	        <if test="productId != null and productId !=''">
+					and t.product_id=#{productId}
+		    </if>
+	        <if test="views != null and views !=''">
+		        	and t.views = #{views} 
+		    </if>
+	        <if test="collects != null and collects !=''">
+		        	and t.collects = #{collects} 
+		    </if>
+	        <if test="carts != null and carts !=''">
+		        	and t.carts = #{carts}
+		    </if>
+	        <if test="orders != null and orders !=''">
+		        	and t.orders = #{orders}
+		    </if>
+	        <if test="sales != null and sales !=''">
+		        	and t.sales = #{sales}
+		    </if>
+		    <if test="comments != null and comments !=''">
+		        	and t.comments = #{comments}
+		    </if>
+		    <if test="applaudCount != null and applaudCount !=''">
+		        	and t.applaudCount = #{applaudCount}
+		    </if>
+		    <if test="favorCount != null and favorCount !=''">
+		        	and t.favor_count = #{favorCount}
+		    </if>
+    </sql>
+</mapper>

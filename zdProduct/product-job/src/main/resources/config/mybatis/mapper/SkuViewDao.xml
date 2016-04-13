@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="SkuViewDaoImpl">
+    
+    <delete id="deleteSkuViewBySkuCode" parameterType="java.util.List">
+    	 DELETE FROM t_product_sku_view  where product_sku_code
+	     in  
+	     <foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+			#{item}
+		 </foreach>;
+    </delete>
+   
+   <insert id="addSkuViewList" parameterType="java.util.List">
+   		INSERT INTO t_product_sku_view (
+			product_sku_id,
+			product_id,
+			product_sku_code,
+			attr_color_name,
+			attr_color_value,
+			attr_spec_name,
+			attr_spec_value,
+			main_sku,
+			cost_price,
+			tsh_price,
+			tb,
+			market_price,
+			if_show,
+			color_value_alias,
+			spec_value_alias,
+			is_available
+		) SELECT
+			t.product_sku_id,
+			t.product_id,
+			t.product_sku_code,
+			attr_color_name,
+			attr_color_value,
+			attr_spec_name,
+			attr_spec_value,
+			main_sku,
+			cost_price,
+			tsh_price,
+			tb,
+			market_price,
+			if_show,
+			t.color_value_alias,
+			t.spec_value_alias,
+			t.is_available
+		FROM
+			t_product_sku t,
+			t_product_price a
+		WHERE
+			t.product_sku_id = a.product_sku_id
+		AND t.product_sku_code in 
+		<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+			#{item}
+		</foreach>;
+   </insert>
+</mapper>

@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ProductAttributeDaoImpl">
+	
+	<resultMap type="ProductAttributeModel" id="productAttributeModel">
+		   <result property="id" column="product_attribute_id" javaType="java.lang.Long" />
+		   <result property="product_id" column="product_id" javaType="java.lang.Long" />
+		   <result property="attribute_name" column="product_attribute_name" javaType="java.lang.String" />
+		   <result property="attribute_value" column="product_attribute_value" javaType="java.lang.String" />
+		   <result property="attribute_level" column="type" javaType="java.lang.Integer" />
+	</resultMap>
+
+    <sql id="query">
+	        <if test="productAttributeId != null and productAttributeId !=''">
+					and t.product_attribute_id=#{productAttributeId}
+		    </if>
+	        <if test="productId != null and productId !=''">
+					and t.product_id=#{productId}
+		    </if>
+	        <if test="productAttributeName != null and productAttributeName !=''">
+		        	and t.product_attribute_name like CONCAT(CONCAT('%', #{productAttributeName}), '%') 
+		    </if>
+	        <if test="productAttributeCode != null and productAttributeCode !=''">
+		        	and t.product_attribute_code like CONCAT(CONCAT('%', #{productAttributeCode}), '%') 
+		    </if>
+	        <if test="productAttributeValue != null and productAttributeValue !=''">
+		        	and t.product_attribute_value like CONCAT(CONCAT('%', #{productAttributeValue}), '%') 
+		    </if>
+	        <if test="type != null and type !=''">
+		        	and t.type like CONCAT(CONCAT('%', #{type}), '%') 
+		    </if>
+		    <if test="isRequired != null and isRequired !=''">
+					and t.is_required=#{isRequired}
+		    </if>
+	    
+    </sql>
+
+
+	<select id="queryOne" parameterType="ProductAttributeModel"
+	resultMap="productAttributeModel">
+	select
+	          product_attribute_id,
+	          product_id,
+	          product_attribute_name,
+	          product_attribute_value,
+	          type 
+	from  t_product_attribute t
+	where  product_attribute_value is not null  and  product_attribute_value != ''
+			<if test="productAttributeId != null and productAttributeId !=''">
+		        	and t.product_attribute_id=#{productAttributeId};
+		    </if>
+	
+	</select>
+	<select id="queryListPage" parameterType="ProductAttributeModel"
+		resultMap="productAttributeModel">
+		select 
+	          product_attribute_id,
+	          product_id,
+	          product_attribute_name,
+	          product_attribute_value,
+	          type 
+	     from  t_product_attribute t
+		where product_attribute_value is not null  and  product_attribute_value != ''
+		<include refid="query"/>
+	</select>
+
+	<select id="countListPage" parameterType="ProductAttributeModel"
+		resultType="java.lang.Long">
+		select count(1) from  t_product_attribute t
+		where product_attribute_value is not null  and  product_attribute_value != ''
+		<include refid="query"/>
+	 </select>
+
+	<insert id="insert" parameterType="ProductAttributeModel">
+		<selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER">
+    		SELECT @@IDENTITY as id
+    	</selectKey>
+		insert into  t_product_attribute
+		(
+	          			    product_attribute_id,
+	          			    product_id,
+	          				product_attribute_name,
+	          			    product_attribute_code,
+	          			    product_attribute_value,
+	          				type,
+	          				is_required
+        )
+		values
+		(
+		          			    #{productAttributeId},
+		          			    #{productId},
+		          				#{productAttributeName},
+		          			    #{productAttributeCode},
+		          			    #{productAttributeValue},
+	          					#{type},
+	          					#{isRequired}
+        )
+	</insert>
+
+	<update id="update" parameterType="ProductAttributeModel">
+		update  t_product_attribute t 
+		  <set>
+			         <if test="productAttributeId != null  and productAttributeId !=''">
+				          t.product_attribute_id=#{productAttributeId},
+				    </if>
+			         <if test="productId != null  and productId !=''">
+				          t.product_id=#{productId},
+				    </if>
+			         <if test="productAttributeName != null  and productAttributeName !=''">
+				          t.product_attribute_name=#{productAttributeName},
+				    </if>
+			         <if test="productAttributeCode != null  and productAttributeCode !=''">
+				          t.product_attribute_code=#{productAttributeCode},
+				    </if>
+			         <if test="productAttributeValue != null  and productAttributeValue !=''">
+				          t.product_attribute_value=#{productAttributeValue},
+				    </if>
+			         <if test="type != null  and type !=''">
+				          t.type=#{type},
+				    </if>
+				    <if test="isRequired != null  and isRequired !=''">
+				          t.is_required=#{isRequired}
+				    </if>
+		    </set>
+		where
+		t.product_attribute_id=#{productAttributeId};
+	</update>
+	
+	<delete id="delete" parameterType="ProductAttributeModel">
+    	delete from  t_product_attribute  where product_id=#{productId};
+    </delete>
+    
+    <delete id="deleteByIds" parameterType="java.util.List">
+    	delete from t_product_attribute  where product_attribute_id
+    	 in
+    	<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+    </delete>
+
+	<select id="getAttributeByProductId" parameterType="java.lang.Long" resultMap="productAttributeModel">
+		select 
+	          product_attribute_id,
+	    
+	          product_id,
+	    
+	          product_attribute_name,
+	    
+	          product_attribute_code,
+	    
+	          product_attribute_value,
+	    
+	          type,
+	          is_required
+	     from  t_product_attribute
+	     where  product_attribute_value is not null  and  product_attribute_value != ''  and  product_id=#{productId}
+	</select>
+	
+	<select id="getAttributeListByProductId" parameterType="java.util.List" resultMap="productAttributeModel">
+		select 
+	          product_attribute_id,
+	    
+	          product_id,
+	    
+	          product_attribute_name,
+	    
+	          product_attribute_code,
+	    
+	          product_attribute_value,
+	    
+	          type,
+	          is_required
+	     from  t_product_attribute
+	     where  product_attribute_value is not null  and  product_attribute_value != ''  and  product_id in
+    	<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</select>
+</mapper>

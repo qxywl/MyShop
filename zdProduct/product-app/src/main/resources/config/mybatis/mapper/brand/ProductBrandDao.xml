@@ -1,0 +1,391 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.zhaidou.product.dao.impl.ProductBrandDaoImpl">
+	
+	<resultMap type="ProductBrandModel" id="productBrandModel">
+		   <result property="brandId" column="brand_id" javaType="java.lang.Long" />
+		   <result property="brandCode" column="brand_code" javaType="java.lang.String" />
+		   <result property="brandName" column="brand_name" javaType="java.lang.String" />
+		   <result property="brandEname" column="brand_ename" javaType="java.lang.String" />
+		   <result property="brandInfo" column="brand_info" javaType="java.lang.String" />
+		   <result property="brandStory" column="brand_story" javaType="java.lang.String" />
+		   <result property="brandCountry" column="brand_country" javaType="java.lang.String" />
+		   <result property="brandLogo" column="brand_logo" javaType="java.lang.String" />
+		   <result property="brandStatus" column="brand_status" javaType="java.lang.Integer" />
+		   <result property="flagshipStoreCode" column="flagship_store_code" javaType="java.lang.String" />
+		   <result property="storeCertificationType" column="store_certification_type" javaType="java.lang.Integer" />
+		   <result property="updateTime" column="update_time" javaType="java.lang.Long" />
+		   <result property="updateUser" column="update_user" javaType="java.lang.String" />
+		   <result property="createTime" column="create_time" javaType="java.lang.Long" />
+		   <result property="creator" column="creator" javaType="java.lang.String" />
+	</resultMap>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="brandId" parameterType="ProductBrandModel">
+		<!-- <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER">
+    		SELECT @@IDENTITY as id
+    	</selectKey> -->
+		insert into  t_product_brand
+		(
+	          			    
+	          			    brand_code,
+	          			    brand_name,
+	          			    brand_ename,
+	          				brand_info,
+	          			    brand_story,
+	          			    brand_country,
+	          			    brand_logo,
+	          			    brand_status,
+	          			    flagship_store_code,
+	          			    store_certification_type,
+	          			    update_user,
+	          			    update_time,
+	          			    create_time,
+	          			    creator
+        )
+		values
+		(
+		          			    
+		          			    #{brandCode},
+		          			    #{brandName},
+		          			    #{brandEname},
+		          				#{brandInfo},
+		          			    #{brandStory},
+		          			    #{brandCountry},
+		          			    #{brandLogo},
+		          			    #{brandStatus},
+		          			    #{flagshipStoreCode},
+		          			    #{storeCertificationType},
+		          			    #{updateUser},
+		          			    #{updateTime},
+		          			    #{createTime},
+	          				    #{creator}
+        )
+	</insert>
+
+	<update id="update" parameterType="ProductBrandModel">
+		update  t_product_brand t 
+		  <set>
+			        <if test="brandCode != null  and brandCode !=''">
+				          t.brand_code=#{brandCode},
+				    </if>
+			         <if test="brandName != null  and brandName !=''">
+				          t.brand_name=#{brandName},
+				    </if>
+			         <if test="brandEname != null  and brandEname !=''">
+				          t.brand_ename=#{brandEname},
+				    </if>
+			         <if test="brandInfo != null  and brandInfo !=''">
+				          t.brand_info=#{brandInfo},
+				    </if>
+			         <if test="brandStory != null  and brandStory !=''">
+				          t.brand_story=#{brandStory},
+				    </if>
+			         <if test="brandCountry != null  and brandCountry !=''">
+				          t.brand_country=#{brandCountry},
+				    </if>
+			         <if test="brandLogo != null  and brandLogo !=''">
+				          t.brand_logo=#{brandLogo},
+				    </if>
+			         <if test="brandStatus != null  and brandStatus !=''">
+				          t.brand_status=#{brandStatus},
+				    </if>
+			         <if test="flagshipStoreCode != null  and flagshipStoreCode !=''">
+				          t.flagship_store_code=#{flagshipStoreCode},
+				    </if>
+			         <if test="storeCertificationType != null  and storeCertificationType !=''">
+				          t.store_certification_type=#{storeCertificationType},
+				    </if>
+			        <if test="updateTime != null  and updateTime !=''">
+				          t.update_time=#{updateTime},
+				    </if>
+			         <if test="updateUser != null  and updateUser !=''">
+				          t.update_user=#{updateUser},
+				    </if>
+			        <if test="creator != null  and creator !=''">
+				          t.creator=#{creator}
+				    </if>
+		    </set>
+		where 
+		t.brand_id = #{brandId}
+	</update>
+	
+	<delete id="delete" parameterType="java.lang.Long">
+    	delete from  t_product_brand  where brand_id = #{brandId}
+    </delete>
+    
+    <delete id="deleteByIds" parameterType="java.util.List">
+    	delete from t_product_brand  where 
+    	 in
+    	<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+    </delete>
+
+    <sql id="query">
+	        <if test="brandId != null and brandId !=''">
+					and t.brand_id=#{brandId}
+		    </if>
+	        <if test="brandCode != null and brandCode !=''">
+		        	and t.brand_code = #{brandCode} 
+		    </if>
+	        <if test="brandName != null and brandName !=''">
+		        	and t.brand_name = #{brandName} 
+		    </if>
+	        <if test="brandEname != null and brandEname !=''">
+		        	and t.brand_ename = #{brandEname}
+		    </if>
+	        <if test="brandInfo != null and brandInfo !=''">
+		        	and t.brand_info = #{brandInfo}
+		    </if>
+	        <if test="brandStory != null and brandStory !=''">
+		        	and t.brand_story = #{brandStory}
+		    </if>
+	        <if test="brandCountry != null and brandCountry !=''">
+		        	and t.brand_country l = #{brandCountry}
+		    </if>
+	        <if test="brandLogo != null and brandLogo !=''">
+		        	and t.brand_logo = #{brandLogo}
+		    </if>
+	        <if test="brandStatus != null and brandStatus !=''">
+					and t.brand_status = #{brandStatus}
+		    </if>
+	        <if test="flagshipStoreCode != null and flagshipStoreCode !=''">
+		        	and t.flagship_store_code = #{flagshipStoreCode}
+		    </if>
+	        <if test="storeCertificationType != null and storeCertificationType !=''">
+					and t.store_certification_type=#{storeCertificationType}
+		    </if>
+	        <if test="updateTime != null and updateTime !=''">
+					and t.update_time=#{updateTime}
+		    </if>
+	        <if test="updateUser != null and updateUser !=''">
+		        	and t.update_user= #{updateUser}
+		    </if>
+	        <if test="createTime != null and createTime !=''">
+					and t.create_time=#{createTime}
+		    </if>
+	        <if test="creator != null and creator !=''">
+		        	and t.creator= #{creator}
+		    </if>
+		    
+		    <if test="statusList != null and statusList !=''">
+		            and t.brand_status 
+		            in
+		        <foreach item="item" index="index" collection="statusList" open="(" separator="," close=")">
+			          #{item}
+		        </foreach>
+		    </if>
+		   
+    </sql>
+
+	<select id="queryOne" parameterType="java.lang.Long"
+	resultMap="productBrandModel">
+	select
+	          brand_id,
+	          brand_code,
+	          brand_name,
+	          brand_ename,
+	          brand_info,
+	          brand_story,
+	          brand_country,
+	          brand_logo,
+	          brand_status,
+	          flagship_store_code,
+	          store_certification_type,
+	          update_time,
+	          update_user,
+	          create_time,
+	          creator
+	from  t_product_brand t
+	where t.brand_id = #{brandId} 
+	</select>
+	
+	<select id="queryOneByCode" parameterType="java.lang.Long"
+	resultMap="productBrandModel">
+	select
+	          brand_id,
+	          brand_code,
+	          brand_name,
+	          brand_ename,
+	          brand_info,
+	          brand_story,
+	          brand_country,
+	          brand_logo,
+	          brand_status,
+	          flagship_store_code,
+	          store_certification_type,
+	          update_time,
+	          update_user,
+	          create_time,
+	          creator
+	from  t_product_brand t
+	where t.brand_code = #{brandCode} 
+	</select>
+	
+	<select id="queryEnableOneByCode" parameterType="java.lang.Long"
+	resultMap="productBrandModel">
+	select
+	          brand_id,
+	          brand_code,
+	          brand_name,
+	          brand_ename,
+	          brand_info,
+	          brand_story,
+	          brand_country,
+	          brand_logo,
+	          brand_status,
+	          flagship_store_code,
+	          store_certification_type,
+	          update_time,
+	          update_user,
+	          create_time,
+	          creator
+	FROM  t_product_brand t
+	WHERE brand_status = 1
+	AND   t.brand_code = #{brandCode} 
+	</select>
+	
+	
+	<select id="queryOneByName" parameterType="java.lang.String"
+	resultMap="productBrandModel">
+	select
+	          brand_id,
+	          brand_code,
+	          brand_name,
+	          brand_ename,
+	          brand_info,
+	          brand_story,
+	          brand_country,
+	          brand_logo,
+	          brand_status,
+	          flagship_store_code,
+	          store_certification_type,
+	          update_time,
+	          update_user,
+	          create_time,
+	          creator
+	from  t_product_brand t
+	where t.brand_name = #{brandName} 
+	</select>
+	
+	<select id="queryEnableOneByName" parameterType="java.lang.String"
+	resultMap="productBrandModel">
+	select
+	          brand_id,
+	          brand_code,
+	          brand_name,
+	          brand_ename,
+	          brand_info,
+	          brand_story,
+	          brand_country,
+	          brand_logo,
+	          brand_status,
+	          flagship_store_code,
+	          store_certification_type,
+	          update_time,
+	          update_user,
+	          create_time,
+	          creator
+	from  t_product_brand t
+	WHERE  brand_status = 1
+	AND t.brand_name = #{brandName}  
+	</select>
+	
+	<select id="queryAllList" parameterType="ProductBrandModel"
+	 resultMap="productBrandModel">
+	 select
+	          brand_id,
+	          brand_code,
+	          brand_name,
+	          brand_ename,
+	          brand_info,
+	          brand_story,
+	          brand_country,
+	          brand_logo,
+	          brand_status,
+	          flagship_store_code,
+	          store_certification_type,
+	          update_time,
+	          update_user,
+	          create_time,
+	          creator
+	 from  t_product_brand t
+	  where 1 = 1 
+	  <include refid="query"/>
+	</select>
+	
+	
+	<select id="queryEnableAllList" parameterType="ProductBrandModel"
+	 resultMap="productBrandModel">
+	 select
+	          brand_id,
+	          brand_code,
+	          brand_name,
+	          brand_ename,
+	          brand_info,
+	          brand_story,
+	          brand_country,
+	          brand_logo,
+	          brand_status,
+	          flagship_store_code,
+	          store_certification_type,
+	          update_time,
+	          update_user,
+	          create_time,
+	          creator
+	 from  t_product_brand t
+	  where t.brand_status = 1 
+	</select>
+	
+	
+	<select id="queryListPage" parameterType="ProductBrandModel"
+		resultMap="productBrandModel">
+		select 
+	          brand_id,
+	    
+	          brand_code,
+	    
+	          brand_name,
+	    
+	          brand_ename,
+	    
+	          brand_info,
+	    
+	          brand_story,
+	    
+	          brand_country,
+	    
+	          brand_logo,
+	    
+	          brand_status,
+	    
+	          flagship_store_code,
+	    
+	          store_certification_type,
+	    
+	          update_time,
+	    
+	          update_user
+	    
+	     from  t_product_brand t
+		 where 1=1
+		 <include refid="query"/>
+	</select>
+
+	<select id="countListPage" parameterType="ProductBrandModel"
+		resultType="java.lang.Long">
+		select count(1) from  t_product_brand t
+		where 1=1
+		<include refid="query"/>
+	</select>
+	
+	
+	<select id="getMaxBrandId" resultType="java.lang.Long">
+		select max(t.brand_id) from  t_product_brand t
+	</select>
+
+
+
+</mapper>

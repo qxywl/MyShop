@@ -1,0 +1,101 @@
+<!-- 
+<form id="pagerForm" method="post" action="${path}/report/list">
+	<input type="hidden" name="pageNum" value="${page.pageNum}"/>
+	<input type="hidden" name="numPerPage" value="${page.numPerPage}"/>
+	<input type="hidden" name="orderField" value="${page.orderField}"/>
+	<input type="hidden" name="orderDirection" value="${page.orderDirection}"/>
+	<input type="hidden" name="reportId" value="${reportId}" />
+	<#if hiddenValue??>${hiddenValue }</#if>
+</form>
+<form method="post" action="${path}/report/list" onsubmit="return navTabSearch(this)">
+    <div class="pageHeader">
+        <div class="searchBar">
+         <table width="100%">
+         	<input type="hidden" name="reportId" value="${reportId}" />
+			${searchValue }
+			</table>
+        </div>
+    </div>
+</form>
+
+<div class="pageContent">
+
+    <div class="panelBar">
+        <ul class="toolBar">
+        	<li><a class="icon" href="${path}/report/export" id="exportExamine" target="dwzExport"  targetType="dialog" onclick="setPage1(this);" title="要导出这些记录吗?(最多导出10000条记录)"><span>导出EXCEL</span></a></li>
+        </ul>
+    </div>
+    
+    <table class="table" layoutH="180" width="100%">
+        <thead>
+        	<tr>
+            	<#list titleName as name>
+            		<#if name_index=0>
+            			<th width="22"><input type="checkbox" group="ids" class="checkboxCtrl"></th> 
+					<#else>	<th width="100">${name}</th>
+					</#if> 
+				</#list>	
+            </tr>
+        </thead>
+        <tbody>
+			 
+			<#list list as item>
+					<tr>
+                      <#list titleEnName as enName>
+					        	<#list item?keys as key>
+								<#if key=enName>
+									<#if enName_index=0>
+										<td><input name="ids" value="${item[key]}" type="checkbox" class="checkboxCtrl"></td>
+									<#else> <td width="100">${item[key]}</td>
+									</#if>
+								</#if> 
+							</#list>
+                     </#list>
+							
+					</tr>
+				</#list>
+        </tbody>
+    </table>
+    
+	<#if pageNumShown??>    	
+    <#else><#assign pageNumShown=10>
+	</#if>
+<div class="panelBar">
+    <div class="pages">
+        <span>每页显示</span>
+        <select name="numPerPage" onchange="navTabPageBreak({numPerPage:this.value})">
+            <#list 10..500 as num>
+                    <#if page.numPerPage=num_index >
+                        <option value="${num_index}" selected="selected">${num_index}</option>
+                    <#elseif num_index%10=0>
+                        <option value="${num_index}">${num_index}</option>
+                   </#if>
+                    </#list>
+        </select>
+        <span>总条数: ${page.totalCount}</span>
+    </div>
+    <div <#if rel??>rel="${rel}"</#if>class="pagination" targetType="navTab" totalCount="${page.totalCount}" numPerPage="${page.numPerPage}" pageNumShown="${pageNumShown}" currentPage="${page.pageNum}"></div>
+</div>
+</div>
+
+<script>
+	function setPage1(element){
+		
+			var str = prompt("请根据总条数设置导出第几页,输入规则：1、输入大于最大页数,则导出最后一页  2、输入不是有效数字或空,则导出第一页(每页最多10000条)：","");
+			if(str!=null && str!=""){
+				 var re = /^\d+(\.\d+)?$/;
+				if(!re.test(str)){
+					
+					str="1";
+				} 
+				var sta = encodeURIComponent(str);
+				var src = "${path}/report/export?page="+sta;
+				$("#exportExamine").attr("href",src);
+			}else{
+				var src = "${path}/report/export?page=1";
+				$("#exportExamine").attr("href",src);
+			}
+		
+	}
+</script>
+ -->

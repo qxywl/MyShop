@@ -1,0 +1,342 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ProductInfoLogDaoImpl">
+	
+	<resultMap type="ProductInfoLogModel" id="productInfoLogModel">
+		   <result property="productLogId" column="product_log_id" javaType="java.lang.Long" />
+		   <result property="productSkuId" column="product_sku_id" javaType="java.lang.Long" />
+		   <result property="productId" column="product_id" javaType="java.lang.Long" />
+		   <result property="productCode" column="product_code" javaType="java.lang.String" />
+		   <result property="productName" column="product_name" javaType="java.lang.String" />
+		   <result property="type" column="type" javaType="java.lang.Long" />
+		   <result property="newValue" column="new_value" javaType="java.lang.String" />
+		   <result property="createTime" column="create_time" javaType="java.lang.Long" />
+		   <result property="createBy" column="create_by" javaType="java.lang.Long" />
+		   <result property="createUserName" column="create_user_name" javaType="java.lang.String" />
+		   
+		   <result property="oldValue" column="old_value" javaType="java.lang.String" />
+		   <result property="reason" column="reason" javaType="java.lang.String" />
+			<result property="status" column="status" javaType="java.lang.Integer" />
+			<result property="sourceType" column="source_type" javaType="java.lang.Integer" />
+			<result property="updateBy" column="update_by" javaType="java.lang.Long" />
+			<result property="updateTime" column="update_time" javaType="java.lang.Long" />
+			<result property="updateUserName" column="update_user_name" javaType="java.lang.String" />
+	</resultMap>
+
+    <sql id="query">
+	        <if test="productLogId != null and productLogId !=''">
+					and t.product_log_id=#{productLogId}
+		    </if>
+	        <if test="productSkuId != null and productSkuId !=''">
+					and t.product_sku_id=#{productSkuId}
+		    </if>
+	        <if test="productId != null and productId !=''">
+					and t.product_id=#{productId}
+		    </if>
+	        <if test="productCode != null and productCode !=''">
+		        	and t.product_code like CONCAT(CONCAT('%', #{productCode}), '%') 
+		    </if>
+	        <if test="productName != null and productName !=''">
+		        	and t.product_name like CONCAT(CONCAT('%', #{productName}), '%') 
+		    </if>
+	        <if test="type != null and type !=''">
+					and t.type=#{type}
+		    </if>
+	        <if test="newValue != null and newValue !=''">
+		        	and t.new_value like CONCAT(CONCAT('%', #{newValue}), '%') 
+		    </if>
+	        <if test="createTime != null and createTime !='' and endTime != null and endTime !=''">
+					and t.create_time BETWEEN #{createTime} AND #{endTime}
+		    </if>
+	        <if test="createBy != null and createBy !=''">
+					and t.create_by=#{createBy}
+		    </if>
+	        <if test="createUserName != null and createUserName !=''">
+		        	and t.create_user_name like CONCAT(CONCAT('%', #{createUserName}), '%') 
+		    </if>
+		    <if test="updateBy != null and updateBy !=''">
+				and t.update_by=#{updateBy}
+			</if>
+			<if test="updateUserName != null and updateUserName !=''">
+				and t.update_user_name like CONCAT(CONCAT('%', #{updateUserName}), '%')
+			</if>
+			<if test="updateTime != null and updateTime !=''">
+				and t.update_time=#{updateTime}
+			</if>
+			<if test="status != null and status !=''">
+				and t.status=#{status}
+			</if>
+	    
+    </sql>
+
+
+	<select id="queryOne" parameterType="ProductInfoLogModel"
+	resultMap="productInfoLogModel">
+	select
+	          product_log_id,
+	          product_sku_id,
+	          product_id,
+	          product_code,
+	          product_name,
+	          type,
+	          new_value,
+	          create_time,
+	          create_by,
+	          create_user_name,
+	          source_type,
+				update_by,
+				update_user_name,
+				update_time,
+				status,
+				reason,
+				old_value
+	from  t_product_info_log t
+	where t.product_log_id=#{productLogId}
+	</select>
+	<select id="queryListPage" parameterType="ProductInfoLogModel"
+		resultMap="productInfoLogModel">
+		select 
+	          product_log_id,
+	    
+	          product_sku_id,
+	    
+	          product_id,
+	    
+	          product_code,
+	    
+	          product_name,
+	    
+	          type,
+	    
+	          new_value,
+	    
+	          create_time,
+	    
+	          create_by,
+	    
+	          create_user_name,
+	          source_type,
+				update_by,
+				update_user_name,
+				update_time,
+				status,
+				reason,
+				old_value
+	     from  t_product_info_log t
+		where 1=1
+		<include refid="query"/>
+	</select>
+
+	<select id="countListPage" parameterType="ProductInfoLogModel"
+		resultType="java.lang.Long">
+		select count(1) from  t_product_info_log t
+		where 1=1
+		<include refid="query"/>
+	 </select>
+
+	<insert id="insert" parameterType="ProductInfoLogModel">
+		<selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER">
+    		SELECT @@IDENTITY as id
+    	</selectKey>
+		insert into  t_product_info_log
+		(
+	          			    product_log_id,
+	          			    product_sku_id,
+	          				product_id,
+	          			    product_code,
+	          			    product_name,
+	          			    type,
+	          			    new_value,
+	          			    create_time,
+	          			    create_by,
+	          				create_user_name,
+				          source_type,
+							update_by,
+							update_user_name,
+							update_time,
+							status,
+							reason,
+							old_value
+        )
+		values
+		(
+		          			    #{productLogId},
+		          			    #{productSkuId},
+		          				#{productId},
+		          			    #{productCode},
+		          			    #{productName},
+		          			    #{type},
+		          			    #{newValue},
+		          			    #{createTime},
+		          			    #{createBy},
+	          					#{createUserName},
+					            #{sourceType},
+								#{updateBy},
+								#{updateUserName},
+								#{updateTime},
+								#{status},
+								#{reason},
+								#{oldValue}
+        )
+	</insert>
+	
+	<insert id="addInfoLogList" parameterType="java.util.List">
+		insert into  t_product_info_log
+		(		
+	          			    product_log_id,
+	          			    product_sku_id,
+	          				product_id,
+	          			    product_code,
+	          			    product_name,
+	          			    type,
+	          			    new_value,
+	          			    create_time,
+	          			    create_by,
+	          				create_user_name,
+				          source_type,
+							update_by,
+							update_user_name,
+							update_time,
+							status,
+							reason,
+							old_value
+        )
+		values
+		<foreach collection="list"  item="item" separator=",">
+                        (#{item.productLogId},
+		          			    #{item.productSkuId},
+		          				#{item.productId},
+		          			    #{item.productCode},
+		          			    #{item.productName},
+		          			    #{item.type},
+		          			    #{item.newValue},
+		          			    #{item.createTime},
+		          			    #{item.createBy},
+	          					#{item.createUserName},
+					            #{item.sourceType},
+								#{item.updateBy},
+								#{item.updateUserName},
+								#{item.updateTime},
+								#{item.status},
+								#{item.reason},
+								#{item.oldValue})
+        </foreach>
+		
+	
+		<!-- INSERT INTO t_product_info_log 
+			(product_code,
+			type,
+			new_value,
+			create_time,
+			create_by,
+			create_user_name,
+			source_type,
+			update_by,
+			update_user_name,
+			update_time,
+			status,
+			reason,
+			old_value )
+			SELECT
+				product_code,
+				type,
+				new_value,
+				create_time,
+				create_by,
+				create_user_name,
+				source_type,
+				update_by,
+				update_user_name,
+				update_time,
+				CASE
+			WHEN staus >= 0
+			OR staus IS NULL THEN
+				4
+			END status,
+			reason,
+			old_value
+		FROM
+			t_product_info_auth t
+		WHERE
+			t.product_info_auth_id IN 
+			<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+				#{item}
+			</foreach> -->
+	</insert>
+	
+	<update id="update" parameterType="ProductInfoLogModel">
+		update  t_product_info_log t 
+		  <set>
+			         <if test="productLogId != null  and productLogId !=''">
+				          t.product_log_id=#{productLogId},
+				    </if>
+			         <if test="productSkuId != null  and productSkuId !=''">
+				          t.product_sku_id=#{productSkuId},
+				    </if>
+			         <if test="productId != null  and productId !=''">
+				          t.product_id=#{productId},
+				    </if>
+			         <if test="productName != null  and productName !=''">
+				          t.product_name=#{productName},
+				    </if>
+			         <if test="type != null  and type !=''">
+				          t.type=#{type},
+				    </if>
+			         <if test="newValue != null  and newValue !=''">
+				          t.new_value=#{newValue},
+				    </if>
+			         <if test="createTime != null  and createTime !=''">
+				          t.create_time=#{createTime},
+				    </if>
+			         <if test="createBy != null  and createBy !=''">
+				          t.create_by=#{createBy},
+				    </if>
+			         <if test="createUserName != null  and createUserName !=''">
+				          t.create_user_name=#{createUserName}
+				    </if>
+				    <if test="updateBy != null  and updateBy !=''">
+						t.update_by=#{updateBy},
+					</if>
+					<if test="updateUserName != null  and updateUserName !=''">
+						t.update_user_name=#{updateUserName},
+					</if>
+					<if test="updateTime != null  and updateTime !=''">
+						t.update_time=#{updateTime},
+					</if>
+					<if test="status != null  and status !=''">
+						t.status=#{status},
+					</if>
+					<if test="sourceType != null  and sourceType !=''">
+						t.source_type=#{sourceType},
+					</if>
+					<if test="oldValue != null  and oldValue !=''">
+						t.old_value=#{oldValue},
+					</if>
+					<if test="reason != null">
+						t.reason=#{reason},
+					</if>
+				    
+				     <if test="productCode != null  and productCode !=''">
+				          t.product_code=#{productCode}
+				    </if>
+		    </set>
+		where 
+		t.product_log_id=#{productLogId}
+	</update>
+	
+	<delete id="delete" parameterType="ProductInfoLogModel">
+    	delete from  t_product_info_log  where 
+    	product_log_id =#{productLogId}
+    </delete>
+    
+    <delete id="deleteByIds" parameterType="java.util.List">
+    	delete from t_product_info_log  where 
+    	product_log_id in
+    	<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+    </delete>
+
+</mapper>

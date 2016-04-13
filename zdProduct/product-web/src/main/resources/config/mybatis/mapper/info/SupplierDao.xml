@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="SupplierDaoImpl">
+	
+	<resultMap type="SupplierModel" id="supplierModel">
+		   <result property="id" column="id" javaType="java.lang.Long" />
+		   <result property="supplierCode" column="supplier_code" javaType="java.lang.Integer"/>
+		   <result property="userId" column="userid" javaType="java.lang.Integer" />
+		   <result property="shopName" column="shop_name" javaType="java.lang.String" />
+		   <result property="userName" column="username" javaType="java.lang.String" />
+		   <result property="name" column="name" javaType="java.lang.String" />
+		   <result property="status" column="status" javaType="java.lang.Integer" />
+		   <result property="contactsPhone" column="contacts_phone" javaType="java.lang.String" />
+		   <result property="contactsEmail" column="contacts_email" javaType="java.lang.String" />
+		   <result property="createTime" column="create_time" javaType="java.lang.Long" />
+		   <result property="updateTime" column="update_time" javaType="java.lang.Long" />
+	</resultMap>
+
+	 <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="SupplierModel">
+		<!-- <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER">
+    		SELECT @@IDENTITY as id
+    	</selectKey> -->
+		insert into  t_supplier
+		(
+	          			    supplier_code,
+	          			    name,
+	          			    create_time,
+	          			    update_time,
+	          			    status
+        )
+		values
+		(					
+							#{supplierCode},
+	          			    #{name},
+	          			    #{createTime},
+	          			    #{updateTime},
+          				    #{status}
+        )
+	</insert>
+
+    <sql id="query">
+        <if test="name != null and name !=''">
+            and t.name like CONCAT(CONCAT('%', #{name}), '%')
+        </if>
+        <if test="supplierCode != null and supplierCode !=''">
+            and t.supplier_code = #{supplierCode}
+        </if>
+    </sql>
+
+	<select id="queryOne" parameterType="SupplierModel"
+	resultMap="supplierModel">
+	select
+	          id,shop_id,shop_name,supplier_code,username,name,status,create_time
+	from  t_supplier t
+	where t.id=#{id};
+	</select>
+	
+	<select id="queryListPage" parameterType="SupplierModel"
+		resultMap="supplierModel">
+		select 
+	          id,
+	          
+	          supplier_code,
+	    
+	          userid,
+	    
+	          shop_name,
+	    
+	          username,
+	    
+	          name,
+	    
+	          status,
+	    
+	          contacts_phone,
+	    
+	          contacts_email,
+	    
+	          create_time
+	    
+	     from  t_supplier t
+		 where 1=1
+		 <include refid="query"/>
+	</select>
+
+	<select id="querySupplierByCode" parameterType="java.lang.Integer" resultMap="supplierModel">
+		select 
+			id,
+			
+			supplier_code
+		from t_supplier t
+		where t.supplier_code = #{supplierCode} and t.status = 1 
+	</select>
+
+    <select id="countListPage" parameterType="SupplierModel"
+            resultType="java.lang.Long">
+        select count(1) from  t_supplier t
+        <include refid="query"/>
+    </select>
+	
+</mapper>

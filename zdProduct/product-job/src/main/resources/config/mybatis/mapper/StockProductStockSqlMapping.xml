@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- Always ensure to use the correct XML header as above! -->
+<mapper namespace="StockProductStockDaoImpl">
+
+<resultMap id="productStock_result" type="stockProductStock">
+    <result property="stockId" column="stock_id"/>
+    <result property="stockCode" column="stock_code"/>
+    <result property="skuId" column="sku_id"/>
+    <result property="skuCode" column="sku_code"/>
+    <result property="productId" column="product_id"/>
+    <result property="productCode" column="product_code"/>
+    <result property="productName" column="product_name"/>
+    <result property="productEname" column="product_ename"/>
+    <result property="brandId" column="brand_id"/>
+    <result property="brandCode" column="brand_code"/>
+    <result property="brandName" column="brand_name"/>
+    <result property="categoryId" column="category_id"/>
+    <result property="categoryCode" column="category_code"/>
+    <result property="categoryName" column="category_name"/>
+    <result property="virtualStock" column="virtual_stock"/>
+    <result property="manualStock" column="manual_stock"/>
+    <result property="entityStock" column="entity_stock"/>
+    <result property="stockType" column="stock_type"/>
+    <result property="stockPercent" column="stock_percent"/>
+</resultMap>
+
+<sql id="ProductStock_Query_List_Sharing">
+    <where>
+        <if test="stockId != null ">
+            and t_product_stock.stock_id = #{stockId}
+        </if>
+        <if test="stockCode != null ">
+            and t_product_stock.stock_code = #{stockCode}
+        </if>
+        <if test="skuId != null ">
+            and t_product_stock.sku_id = #{skuId}
+        </if>
+        <if test="skuCode != null ">
+            and t_product_stock.sku_code = #{skuCode}
+        </if>
+        <if test="productId != null ">
+            and t_product_stock.product_id = #{productId}
+        </if>
+        <if test="productCode != null ">
+            and t_product_stock.product_code = #{productCode}
+        </if>
+        <if test="productName != null ">
+            and t_product_stock.product_name = #{productName}
+        </if>
+        <if test="productEname != null ">
+            and t_product_stock.product_ename = #{productEname}
+        </if>
+        <if test="brandId != null ">
+            and t_product_stock.brand_id = #{brandId}
+        </if>
+        <if test="brandCode != null ">
+            and t_product_stock.brand_code = #{brandCode}
+        </if>
+        <if test="brandName != null ">
+            and t_product_stock.brand_name = #{brandName}
+        </if>
+        <if test="categoryId != null ">
+            and t_product_stock.category_id = #{categoryId}
+        </if>
+        <if test="categoryCode != null ">
+            and t_product_stock.category_code = #{categoryCode}
+        </if>
+        <if test="categoryName != null ">
+            and t_product_stock.category_name = #{categoryName}
+        </if>
+        <if test="virtualStock != null ">
+            and t_product_stock.virtual_stock = #{virtualStock}
+        </if>
+        <if test="manualStock != null ">
+            and t_product_stock.manual_stock = #{manualStock}
+        </if>
+        <if test="entityStock != null ">
+            and t_product_stock.entity_stock = #{entityStock}
+        </if>
+        <if test="stockType != null ">
+            and t_product_stock.stock_type = #{stockType}
+        </if>
+        <if test="stockPercent != null ">
+            and t_product_stock.stock_percent = #{stockPercent}
+        </if>
+	</where>
+</sql>
+
+
+
+<sql id="ProductStock_column">
+        t_product_stock.stock_id,
+        t_product_stock.stock_code,
+        t_product_stock.sku_id,
+        t_product_stock.sku_code,
+        t_product_stock.product_id,
+        t_product_stock.product_code,
+        t_product_stock.product_name,
+        t_product_stock.product_ename,
+        t_product_stock.brand_id,
+        t_product_stock.brand_code,
+        t_product_stock.brand_name,
+        t_product_stock.category_id,
+        t_product_stock.category_code,
+        t_product_stock.category_name,
+        t_product_stock.virtual_stock,
+        t_product_stock.manual_stock,
+        t_product_stock.entity_stock,
+        t_product_stock.stock_type,
+        t_product_stock.stock_percent
+</sql>
+
+<sql id="ProductStock_By_stockId">
+    WHERE t_product_stock.stock_id = #{stockId}
+</sql>
+
+ <insert id="insert" parameterType="stockProductStock" >
+    INSERT INTO t_product_stock (
+    <include refid="ProductStock_column" />
+    ) VALUES (
+                        #{stockId},
+                        #{stockCode},
+                        #{skuId},
+                        #{skuCode},
+                        #{productId},
+                        #{productCode},
+                        #{productName},
+                        #{productEname},
+                        #{brandId},
+                        #{brandCode},
+                        #{brandName},
+                        #{categoryId},
+                        #{categoryCode},
+                        #{categoryName},
+                        #{virtualStock},
+                        #{manualStock},
+                        #{entityStock},
+                        #{stockType},
+                        #{stockPercent}
+    )
+    <!--  需要返回自增id，取消此注释即可
+     <selectKey resultType="long" keyProperty="stockId" order="AFTER">
+         SELECT LAST_INSERT_ID()
+     </selectKey>
+     -->
+</insert>  
+
+<update id="update" parameterType="stockProductStock">
+    UPDATE t_product_stock t_product_stock
+    <set>
+        <if test="stockCode != null ">
+             t_product_stock.stock_code = #{stockCode},
+        </if>
+        <if test="skuId != null ">
+             t_product_stock.sku_id = #{skuId},
+        </if>
+        <if test="skuCode != null ">
+             t_product_stock.sku_code = #{skuCode},
+        </if>
+        <if test="productId != null ">
+             t_product_stock.product_id = #{productId},
+        </if>
+        <if test="productCode != null ">
+             t_product_stock.product_code = #{productCode},
+        </if>
+        <if test="productName != null ">
+             t_product_stock.product_name = #{productName},
+        </if>
+        <if test="productEname != null ">
+             t_product_stock.product_ename = #{productEname},
+        </if>
+        <if test="brandId != null ">
+             t_product_stock.brand_id = #{brandId},
+        </if>
+        <if test="brandCode != null ">
+             t_product_stock.brand_code = #{brandCode},
+        </if>
+        <if test="brandName != null ">
+             t_product_stock.brand_name = #{brandName},
+        </if>
+        <if test="categoryId != null ">
+             t_product_stock.category_id = #{categoryId},
+        </if>
+        <if test="categoryCode != null ">
+             t_product_stock.category_code = #{categoryCode},
+        </if>
+        <if test="categoryName != null ">
+             t_product_stock.category_name = #{categoryName},
+        </if>
+        <if test="virtualStock != null ">
+             t_product_stock.virtual_stock = #{virtualStock},
+        </if>
+        <if test="manualStock != null ">
+             t_product_stock.manual_stock = #{manualStock},
+        </if>
+        <if test="entityStock != null ">
+             t_product_stock.entity_stock = #{entityStock},
+        </if>
+        <if test="stockType != null ">
+             t_product_stock.stock_type = #{stockType},
+        </if>
+        <if test="stockPercent != null ">
+             t_product_stock.stock_percent = #{stockPercent},
+        </if>
+     </set>
+
+    <include refid="ProductStock_By_stockId" />
+</update> 
+
+<!--<select id="find" resultMap="productStock_result" parameterType="java.util.HashMap">-->
+    <!--SELECT-->
+     	<!--<include refid="ProductStock_column" />      -->
+    <!--FROM t_product_stock t_product_stock-->
+   <!--<include refid="ProductStock_Query_List_Sharing" />-->
+<!--</select>-->
+
+<select id="queryOne"
+        resultMap="productStock_result" parameterType="Long">
+    SELECT
+     	<include refid="ProductStock_column" />      
+    FROM t_product_stock t_product_stock
+    <include refid="ProductStock_By_stockId" />
+</select>
+
+<select id="queryListPage" resultMap="productStock_result" parameterType="java.util.HashMap">
+    SELECT
+         <include refid="ProductStock_column" />  
+    FROM t_product_stock t_product_stock
+	<include refid="ProductStock_Query_List_Sharing" />
+</select>
+
+<select id="countListPage" resultType="java.lang.Integer" parameterType="java.util.HashMap">
+    SELECT
+		COUNT(*)
+   	FROM t_product_stock t_product_stock
+	<include refid="ProductStock_Query_List_Sharing" />
+</select>
+
+<delete id="delete" parameterType="stockProductStock">
+    DELETE  FROM  t_product_stock 
+    <include refid="ProductStock_By_stockId" />
+</delete>
+
+<select id="queryBySkuCodes" parameterType="java.util.HashMap"
+        resultMap="productStock_result">
+    SELECT
+    <include refid="ProductStock_column"/>
+    FROM  t_product_stock t_product_stock
+
+    WHERE 1 = 1
+    <choose>
+        <when test="skuCodes != null and skuCodes != '' ">
+            AND t_product_stock.sku_code IN
+            <foreach item="item" index="index" collection="skuCodes" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </when>
+        <otherwise>
+            AND 1=2
+        </otherwise>
+    </choose>
+</select>
+
+</mapper>

@@ -1,0 +1,387 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ProductPriceLogDaoImpl">
+
+	<resultMap type="ProductPriceLogModel" id="productPriceLogModel">
+		<result property="productPriceLog" column="product_price_log_id"
+			javaType="java.lang.Long" />
+		<result property="productPriceId" column="product_price_id"
+			javaType="java.lang.Long" />
+		<result property="productSkuCode" column="product_sku_code"
+			javaType="java.lang.String" />
+		<result property="productSkuId" column="product_sku_id"
+			javaType="java.lang.Long" />
+		<result property="costPrice" column="cost_price" javaType="java.lang.Double" />
+		<result property="tshPrice" column="tsh_price" javaType="java.lang.Double" />
+		<result property="tb" column="tb" javaType="java.lang.Long" />
+		<result property="marketPrice" column="market_price" javaType="java.lang.Double" />
+		<result property="createBy" column="create_by" javaType="java.lang.Long" />
+		<result property="createUserName" column="create_user_name"
+			javaType="java.lang.String" />
+		<result property="createTime" column="create_time" javaType="java.lang.Long" />
+		<result property="reason" column="reason" javaType="java.lang.String" />
+		<result property="oldCostPrice" column="old_cost_price"
+			javaType="java.lang.Double" />
+		<result property="oldTshPrice" column="old_tsh_price" javaType="java.lang.Double" />
+		<result property="oldTb" column="old_tb" javaType="java.lang.Long" />
+		<result property="oldMarketPrice" column="old_market_price"
+			javaType="java.lang.Double" />
+		<result property="timeStart" column="time_start" javaType="java.lang.Long" />
+		
+		<result property="status" column="status" javaType="java.lang.Integer" />
+		<result property="sourceType" column="source_type" javaType="java.lang.Integer" />
+		<result property="updateBy" column="update_by" javaType="java.lang.Long" />
+		<result property="updateTime" column="update_time" javaType="java.lang.Long" />
+		<result property="updateUserName" column="update_user_name" javaType="java.lang.String" />
+	</resultMap>
+
+	<sql id="query">
+		<if test="productPriceLog != null and productPriceLog !=''">
+			and t.product_price_log_id=#{productPriceLog}
+		</if>
+		<if test="productPriceId != null and productPriceId !=''">
+			and t.product_price_id=#{productPriceId}
+		</if>
+		<if test="productSkuCode != null and productSkuCode !=''">
+			and t.product_sku_code like CONCAT(CONCAT('%', #{productSkuCode}), '%')
+		</if>
+		<if test="productSkuId != null and productSkuId !=''">
+			and t.product_sku_id=#{productSkuId}
+		</if>
+		<if test="costPrice != null and costPrice !=''">
+			and t.cost_price=#{costPrice}
+		</if>
+		<if test="tshPrice != null and tshPrice !=''">
+			and t.tsh_price=#{tshPrice}
+		</if>
+		<if test="tb != null and tb !=''">
+			and t.tb=#{tb}
+		</if>
+		<if test="marketPrice != null and marketPrice !=''">
+			and t.market_price=#{marketPrice}
+		</if>
+		<if test="createBy != null and createBy !=''">
+			and t.create_by=#{createBy}
+		</if>
+		<if test="createUserName != null and createUserName !=''">
+			and t.create_user_name like CONCAT(CONCAT('%', #{createUserName}), '%')
+		</if>
+		<if test="createTime != null and createTime !=''">
+			and t.create_time=#{createTime}
+		</if>
+		<if test="updateBy != null and updateBy !=''">
+			and t.update_by=#{updateBy}
+		</if>
+		<if test="updateUserName != null and updateUserName !=''">
+			and t.update_user_name like CONCAT(CONCAT('%', #{updateUserName}), '%')
+		</if>
+		<if test="updateTime != null and updateTime !=''">
+			and t.update_time=#{updateTime}
+		</if>
+		<if test="status != null and status !=''">
+			and t.status=#{status}
+		</if>
+		<if test="reason != null and reason !=''">
+			and t.reason like CONCAT(CONCAT('%', #{reason}), '%')
+		</if>
+		<if test="oldCostPrice != null and oldCostPrice !=''">
+			and t.old_cost_price=#{oldCostPrice}
+		</if>
+		<if test="oldTshPrice != null and oldTshPrice !=''">
+			and t.old_tsh_price=#{oldTshPrice}
+		</if>
+		<if test="oldTb != null and oldTb !=''">
+			and t.old_tb=#{oldTb}
+		</if>
+		<if test="oldMarketPrice != null and oldMarketPrice !=''">
+			and t.old_market_price=#{oldMarketPrice}
+		</if>
+		<if test="oldMarketPrice != null and oldMarketPrice !=''">
+			and t.old_market_price=#{oldMarketPrice}
+		</if>
+		<if test="timeStart != null  and timeStart !=''">
+			and t.time_start=#{timeStart}
+		</if>
+	</sql>
+
+
+	<select id="queryOne" parameterType="ProductPriceLogModel"
+		resultMap="productPriceLogModel">
+		select
+		product_price_log_id,
+		product_price_id,
+		product_sku_code,
+		product_sku_id,
+		cost_price,
+		tsh_price,
+		tb,
+		market_price,
+		create_by,
+		create_user_name,
+		create_time,
+		reason,
+		old_cost_price,
+		old_tsh_price,
+		old_tb,
+		old_market_price,
+		source_type,
+		update_by,
+		update_user_name,
+		update_time,
+		status,
+		time_start
+		from t_product_price_log t
+		where t.product_price_log_id=#{productPriceLog}
+	</select>
+	<select id="queryListPage" parameterType="ProductPriceLogModel"
+		resultMap="productPriceLogModel">
+		select
+		product_price_log_id,
+
+		product_price_id,
+
+		product_sku_code,
+
+		product_sku_id,
+
+		cost_price,
+
+		tsh_price,
+
+		tb,
+
+		market_price,
+
+		create_by,
+
+		create_user_name,
+
+		create_time,
+
+		reason,
+
+		old_cost_price,
+
+		old_tsh_price,
+
+		old_tb,
+
+		old_market_price,
+		
+		source_type,
+		update_by,
+		update_user_name,
+		update_time,
+		status,
+		time_start
+		from t_product_price_log t
+		where 1=1
+		<include refid="query" />
+	</select>
+
+	<select id="countListPage" parameterType="ProductPriceLogModel"
+		resultType="java.lang.Long">
+		select count(1) from t_product_price_log t
+		where 1=1
+		<include refid="query" />
+	</select>
+
+	<insert id="insert" parameterType="ProductPriceLogModel">
+		<selectKey resultType="java.lang.Long" keyProperty="id"
+			order="AFTER">
+			SELECT @@IDENTITY as id
+		</selectKey>
+		insert into t_product_price_log
+		(
+		product_price_log_id,
+		product_price_id,
+		product_sku_code,
+		product_sku_id,
+		cost_price,
+		tsh_price,
+		tb,
+		market_price,
+		create_by,
+		create_user_name,
+		create_time,
+		reason,
+		old_cost_price,
+		old_tsh_price,
+		old_tb,
+		old_market_price,
+		source_type,
+		update_by,
+		update_user_name,
+		update_time,
+		status,
+		time_start
+		)
+		values
+		(
+		#{productPriceLog},
+		#{productPriceId},
+		#{productSkuCode},
+		#{productSkuId},
+		#{costPrice},
+		#{tshPrice},
+		#{tb},
+		#{marketPrice},
+		#{createBy},
+		#{createUserName},
+		#{createTime},
+		#{reason},
+		#{oldCostPrice},
+		#{oldTshPrice},
+		#{oldTb},
+		#{oldMarketPrice},
+		#{sourceType},
+		#{updateBy},
+		#{updateUserName},
+		#{updateTime},
+		#{status},
+		#{timeStart}
+		)
+	</insert>
+
+	<insert id="addPriceLogList" parameterType="java.util.List">
+		insert into  t_product_price_log
+		(		
+	          			    product_price_log_id,
+							product_price_id,
+							product_sku_code,
+							product_sku_id,
+							cost_price,
+							tsh_price,
+							tb,
+							market_price,
+							create_by,
+							create_user_name,
+							create_time,
+							reason,
+							old_cost_price,
+							old_tsh_price,
+							old_tb,
+							old_market_price,
+							source_type,
+							update_by,
+							update_user_name,
+							update_time,
+							status,
+							time_start
+        )
+		values
+		<foreach collection="list"  item="item" separator=",">
+                           (#{item.productPriceLog},
+							#{item.productPriceId},
+							#{item.productSkuCode},
+							#{item.productSkuId},
+							#{item.costPrice},
+							#{item.tshPrice},
+							#{item.tb},
+							#{item.marketPrice},
+							#{item.createBy},
+							#{item.createUserName},
+							#{item.createTime},
+							#{item.reason},
+							#{item.oldCostPrice},
+							#{item.oldTshPrice},
+							#{item.oldTb},
+							#{item.oldMarketPrice},
+							#{item.sourceType},
+							#{item.updateBy},
+							#{item.updateUserName},
+							#{item.updateTime},
+							#{item.status},
+							#{item.timeStart})
+        </foreach>
+    </insert>
+
+	<update id="update" parameterType="ProductPriceLogModel">
+		update t_product_price_log t
+		<set>
+			<if test="productPriceId != null  and productPriceId !=''">
+				t.product_price_id=#{productPriceId},
+			</if>
+			<if test="productSkuId != null  and productSkuId !=''">
+				t.product_sku_id=#{productSkuId},
+			</if>
+			<if test="costPrice != null  and costPrice !=''">
+				t.cost_price=#{costPrice},
+			</if>
+			<if test="tshPrice != null  and tshPrice !=''">
+				t.tsh_price=#{tshPrice},
+			</if>
+			<if test="tb != null  and tb !=''">
+				t.tb=#{tb},
+			</if>
+			<if test="marketPrice != null  and marketPrice !=''">
+				t.market_price=#{marketPrice},
+			</if>
+			<if test="createBy != null  and createBy !=''">
+				t.create_by=#{createBy},
+			</if>
+			<if test="createUserName != null  and createUserName !=''">
+				t.create_user_name=#{createUserName},
+			</if>
+			<if test="createTime != null  and createTime !=''">
+				t.create_time=#{createTime},
+			</if>
+			<if test="reason != null  and reason !=''">
+				t.reason=#{reason},
+			</if>
+			<if test="oldCostPrice != null  and oldCostPrice !=''">
+				t.old_cost_price=#{oldCostPrice},
+			</if>
+			<if test="oldTshPrice != null  and oldTshPrice !=''">
+				t.old_tsh_price=#{oldTshPrice},
+			</if>
+			<if test="oldTb != null  and oldTb !=''">
+				t.old_tb=#{oldTb},
+			</if>
+			<if test="timeStart != null  and timeStart !=''">
+				t.time_start=#{timeStart},
+			</if>
+			<if test="oldMarketPrice != null  and oldMarketPrice !=''">
+				t.old_market_price=#{oldMarketPrice},
+			</if>
+			<if test="updateBy != null  and updateBy !=''">
+				t.update_by=#{updateBy},
+			</if>
+			<if test="updateUserName != null  and updateUserName !=''">
+				t.update_user_name=#{updateUserName},
+			</if>
+			<if test="updateTime != null  and updateTime !=''">
+				t.update_time=#{updateTime},
+			</if>
+			<if test="status != null  and status !=''">
+				t.status=#{status},
+			</if>
+			<if test="sourceType != null  and sourceType !=''">
+				t.source_type=#{sourceType},
+			</if>
+			
+			<if test="productSkuCode != null  and productSkuCode !=''">
+				t.product_sku_code=#{productSkuCode}
+			</if>
+		</set>
+		where
+		t.product_price_log_id=#{productPriceLog}
+	</update>
+
+	<delete id="delete" parameterType="ProductPriceLogModel">
+		delete from t_product_price_log where
+		product_price_log_id =#{productPriceLog}
+	</delete>
+
+	<delete id="deleteByIds" parameterType="java.util.List">
+		delete from t_product_price_log where
+		product_price_log_id in
+		<foreach item="item" index="index" collection="list" open="("
+			separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+
+</mapper>

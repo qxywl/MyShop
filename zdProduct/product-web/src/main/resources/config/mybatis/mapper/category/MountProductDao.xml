@@ -1,0 +1,432 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="MountProductDaoImpl">
+
+	<resultMap type="MountProduct" id="mountProduct">
+		<id property="relationId" column="relation_id" javaType="java.lang.Long" />
+		<result property="productId" column="product_id" javaType="java.lang.Long" />
+		<result property="productCode" column="product_code" javaType="java.lang.String" />
+		<result property="categoryId" column="category_id" javaType="java.lang.Long" />
+		<result property="categoryCode" column="category_code"
+			javaType="java.lang.String" />
+		<result property="orderValue" column="order_value" javaType="java.lang.Long" />
+		<result property="mountType" column="mount_type" javaType="java.lang.Integer" />
+		<result property="optType" column="opt_type" javaType="java.lang.Integer" />
+		<result property="mountTime" column="mount_time" javaType="java.sql.Timestamp" />
+		<result property="mountUser" column="mount_user" javaType="java.lang.String" />
+		<result property="lastUpdateTime" column="last_update_time"
+			javaType="java.sql.Timestamp" />
+		<result property="lastUpdateUser" column="last_update_user"
+			javaType="java.lang.String" />
+	</resultMap>
+
+	<sql id="base_column_list">
+		relation_id,
+		product_id,
+		product_code,
+		category_id,
+		category_code,
+		order_value,
+		mount_type,
+		opt_type,
+		mount_time,
+		mount_user,
+		last_update_time,
+		last_update_user
+	</sql>
+
+	<sql id="query">
+		<if test="relationId != null and relationId !=''">
+			and t.relation_id=#{relationId}
+		</if>
+		<if test="productId != null and productId !=''">
+			and t.product_id=#{productId}
+		</if>
+		<if test="productCode != null and productCode !=''">
+			and t.product_code like CONCAT(CONCAT('%', #{productCode}), '%')
+		</if>
+		<if test="categoryId != null and categoryId !=''">
+			and t.category_id=#{categoryId}
+		</if>
+		<if test="categoryCode != null and categoryCode !=''">
+			and t.category_code like CONCAT(CONCAT('%', #{categoryCode}), '%')
+		</if>
+		<if test="orderValue != null and orderValue !=''">
+			and t.order_value=#{orderValue}
+		</if>
+		<if test="mountType != null and mountType !=''">
+			and t.mount_type like CONCAT(CONCAT('%', #{mountType}), '%')
+		</if>
+		<if test="optType != null and optType !=''">
+			and t.opt_type like CONCAT(CONCAT('%', #{optType}), '%')
+		</if>
+		<if test="mountTime != null and mountTime !=''">
+			and t.mount_time=#{mountTime}
+		</if>
+		<if test="mountUser != null and mountUser !=''">
+			and t.mount_user like CONCAT(CONCAT('%', #{mountUser}), '%')
+		</if>
+		<if test="lastUpdateTime != null and lastUpdateTime !=''">
+			and t.last_update_time=#{lastUpdateTime}
+		</if>
+		<if test="lastUpdateUser != null and lastUpdateUser !=''">
+			and t.last_update_user like CONCAT(CONCAT('%', #{lastUpdateUser}), '%')
+		</if>
+
+	</sql>
+
+
+	<select id="queryOne" parameterType="MountProduct" resultMap="mountProduct">
+		select
+		relation_id,
+		product_id,
+		product_code,
+		category_id,
+		category_code,
+		order_value,
+		mount_type,
+		opt_type,
+		mount_time,
+		mount_user,
+		last_update_time,
+		last_update_user
+		from t_salecategory_product_relation t
+		where t.relation_id=#{relationId}
+	</select>
+
+	<select id="queryOneByProductAndCategoryCode" parameterType="MountProduct"
+		resultMap="mountProduct">
+		select
+		relation_id,
+		product_id,
+		product_code,
+		category_id,
+		category_code,
+		order_value,
+		mount_type,
+		opt_type,
+		mount_time,
+		mount_user,
+		last_update_time,
+		last_update_user
+		from t_salecategory_product_relation t
+		where t.product_code=#{productCode}
+		and t.category_code=#{categoryCode}
+	</select>
+
+	<select id="queryListPage" parameterType="MountProduct"
+		resultMap="mountProduct">
+		select
+			<include refid="base_column_list" />
+		from 
+			t_salecategory_product_relation t
+		where 1=1
+			<include refid="query" />
+	</select>
+
+	<select id="queryListByCategoryCode" parameterType="MountProduct"
+		resultMap="mountProduct">
+		select
+			<include refid="base_column_list" />
+		from
+			t_salecategory_product_relation t
+		where t.category_code = #{categoryCode}
+	</select>
+
+	<!-- start================================一对多，根据运营分类ID查询挂载在其下的产品======================================= -->
+	<resultMap type="MountProduct" id="salecategoryAndProducts">
+		<id property="relationId" column="relation_id" javaType="java.lang.Long" />
+		<result property="productId" column="product_id" javaType="java.lang.Long" />
+		<result property="productCode" column="product_code" javaType="java.lang.String" />
+		<result property="categoryId" column="category_id" javaType="java.lang.Long" />
+		<result property="categoryCode" column="category_code"
+			javaType="java.lang.String" />
+		<result property="orderValue" column="order_value" javaType="java.lang.Long" />
+		<result property="mountType" column="mount_type" javaType="java.lang.Integer" />
+		<result property="optType" column="opt_type" javaType="java.lang.Integer" />
+		<result property="mountTime" column="mount_time" javaType="java.sql.Timestamp" />
+		<result property="mountUser" column="mount_user" javaType="java.lang.String" />
+		<result property="lastUpdateTime" column="last_update_time"
+			javaType="java.sql.Timestamp" />
+		<result property="lastUpdateUser" column="last_update_user"
+			javaType="java.lang.String" />
+		<association property="productMallViewModel" javaType="ProductMallViewModel"
+			column="product_id" columnPrefix="p_" resultMap="productMallViewModel" />
+	</resultMap>
+
+	<resultMap type="ProductMallViewModel" id="productMallViewModel">
+		<id property="productId" column="product_id" javaType="java.lang.Long" />
+		<result property="productName" column="product_name" javaType="java.lang.String" />
+		<result property="productCode" column="product_code" javaType="java.lang.String" />
+		<result property="productDesc" column="product_desc" javaType="java.lang.String" />
+		<result property="productShelves" column="product_shelves"
+			javaType="java.lang.Integer" />
+		<result property="productDownShow" column="product_down_show"
+		javaType="java.lang.Integer" />
+		<result property="brandName" column="brand_name" javaType="java.lang.String" />
+		<result property="mainPic" column="main_pic" javaType="java.lang.String" />
+	</resultMap>
+
+	<select id="countProductsListPageByCategoryId" parameterType="MountProduct"
+		resultType="java.lang.Long">
+		select
+			count(1)
+		from
+			t_salecategory_product_relation t1
+		join
+			t_product_mall_view t2 on t1.product_id = t2.product_id
+			and t1.category_id = #{categoryId}
+			and t1.opt_type = 1
+	</select>
+
+	<!-- 根据运营分类ID查询挂载在其下的产品列表 -->
+	<select id="queryProductsByCategoryId" parameterType="MountProduct"
+		resultMap="salecategoryAndProducts">
+		select
+			t1.relation_id,
+			t1.product_id,
+			t1.product_code,
+			t1.category_id,
+			t1.category_code,
+			t1.order_value,
+			t1.mount_type,
+			t1.opt_type,
+			t1.mount_time,
+			t1.mount_user,
+			t1.last_update_time,
+			t1.last_update_user,
+			t2.product_id AS p_product_id,
+			t2.product_name AS p_product_name,
+			t2.product_code AS p_product_code,
+			t2.product_shelves AS p_product_shelves,
+			t2.brand_name AS p_brand_name,
+			t2.main_pic AS p_main_pic
+		from
+			t_salecategory_product_relation t1
+		join
+			t_product_mall_view t2 on t1.product_id = t2.product_id
+			and t1.category_id = #{categoryId}
+			and t1.opt_type = 1 order by t1.order_value desc
+	</select>
+	
+	
+	
+	<!-- 根据运营分类ID查询挂载在其下的产品列表 用于导出 -->
+	<select id="queryExprotProdsByCategoryId" parameterType="MountProduct"
+		resultMap="salecategoryAndProducts">
+		select
+			t1.relation_id,
+			t1.product_id,
+			t1.product_code,
+			t1.category_id,
+			t1.category_code,
+			t1.order_value,
+			t1.mount_type,
+			t1.opt_type,
+			t1.mount_time,
+			t1.mount_user,
+			t1.last_update_time,
+			t1.last_update_user,
+			t2.product_id AS p_product_id,
+			t2.product_name AS p_product_name,
+			t2.product_code AS p_product_code,
+			t2.product_shelves AS p_product_shelves,
+			t2.product_down_show AS p_product_down_show,
+			t2.brand_name AS p_brand_name,
+			t2.main_pic AS p_main_pic
+		from
+			t_salecategory_product_relation t1
+		join
+			t_product_mall_view t2 on t1.product_id = t2.product_id
+			and t1.category_id = #{categoryId}
+			and t1.opt_type = 1
+	</select>
+	
+	
+	<!-- end================================一对多，根据运营分类ID查询挂载在其下的产品======================================= -->
+
+	<select id="countListPage" parameterType="MountProduct"
+		resultType="java.lang.Long">
+		select count(1) from t_salecategory_product_relation t
+		where 1=1
+		<include refid="query" />
+	</select>
+
+	<!-- 查询该分类和子分类下挂载的商品总数 -->
+	<select id="countProductsInSubCategory" parameterType="java.util.List"
+		resultType="java.lang.Long">
+		select
+			count(1)
+		from
+			t_salecategory_product_relation t1
+		where
+			opt_type = 1
+			and 
+			<foreach collection="list" open="(" close=")" separator="or" item="categoryCode">
+				category_code like CONCAT(#{categoryCode},'%')
+			</foreach>
+	</select>
+	
+	<insert id="insert" parameterType="MountProduct">
+		<selectKey resultType="java.lang.Long" keyProperty="id"
+			order="AFTER">
+			SELECT @@IDENTITY as id
+		</selectKey>
+		insert into t_salecategory_product_relation
+		(
+			relation_id,
+			product_id,
+			product_code,
+			category_id,
+			category_code,
+			order_value,
+			mount_type,
+			opt_type,
+			mount_time,
+			mount_user,
+			last_update_time,
+			last_update_user
+		)
+		values
+		(
+			#{relationId},
+			#{productId},
+			#{productCode},
+			#{categoryId},
+			#{categoryCode},
+			#{orderValue},
+			#{mountType},
+			#{optType},
+			#{mountTime},
+			#{mountUser},
+			#{lastUpdateTime},
+			#{lastUpdateUser}
+		)
+	</insert>
+
+	<!-- <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER"> 
+		SELECT @@IDENTITY as id </selectKey> -->
+	<insert id="batchInsert" parameterType="MountProduct"
+		useGeneratedKeys="true">
+		insert into t_salecategory_product_relation
+		(
+		product_id,
+		product_code,
+		category_id,
+		category_code,
+		order_value,
+		mount_type,
+		opt_type,
+		mount_time,
+		mount_user,
+		last_update_time,
+		last_update_user
+		)
+		values
+		<foreach collection="list" separator="," index="index" item="item">
+			(
+			#{item.productId},
+			#{item.productCode},
+			#{item.categoryId},
+			#{item.categoryCode},
+			#{item.orderValue},
+			#{item.mountType},
+			#{item.optType},
+			#{item.mountTime},
+			#{item.mountUser},
+			#{item.lastUpdateTime},
+			#{item.lastUpdateUser}
+			)
+		</foreach>
+	</insert>
+
+	<update id="update" parameterType="MountProduct">
+		update t_salecategory_product_relation t
+		<set>
+			<if test="orderValue != null">
+				t.order_value=#{orderValue},
+			</if>
+			<if test="mountType != null  and mountType !=''">
+				t.mount_type=#{mountType},
+			</if>
+			<if test="optType != null  and optType !=''">
+				t.opt_type=#{optType},
+			</if>
+			<if test="mountTime != null  and mountTime !=''">
+				t.mount_time=#{mountTime},
+			</if>
+			<if test="mountUser != null  and mountUser !=''">
+				t.mount_user=#{mountUser},
+			</if>
+			<if test="lastUpdateTime != null  and lastUpdateTime !=''">
+				t.last_update_time=#{lastUpdateTime},
+			</if>
+			<if test="lastUpdateUser != null  and lastUpdateUser !=''">
+				t.last_update_user=#{lastUpdateUser}
+			</if>
+		</set>
+		where
+		t.relation_id=#{relationId}
+	</update>
+
+	<delete id="delete" parameterType="MountProduct">
+		delete from t_salecategory_product_relation where
+		relation_id =#{relationId}
+	</delete>
+
+	<delete id="deleteByIds" parameterType="java.util.List">
+		delete from t_salecategory_product_relation where
+		relation_id in
+		<foreach item="item" index="index" collection="list" open="("
+			separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+	
+	<!-- 根据运营分类ID查询挂载在其下的产品列表 -->
+	<select id="selectOpt1ByCategoryId" parameterType="MountRulePO" resultMap="mountProduct">
+	select 
+	    t1.product_id,
+	    t1.product_code,
+	    t1.mount_type
+	from
+	    t_salecategory_product_relation t1
+	 where t1.category_id = #{categoryId} and t1.opt_type = 1
+	</select>
+
+	<!-- 根据分类ID categoryId 查看挂载在其下的商品数 -->
+	<select id="countProductsByCategoryId" parameterType="java.lang.Long"
+		resultType="java.lang.Long">
+		select
+			count(1)
+		from
+			t_salecategory_product_relation t1
+		where t1.category_id = #{categoryId}
+			and t1.opt_type = 1
+	</select>
+	
+	
+	<!-- 根据分类ID categoryId 查看挂载在其下的商品数 -->
+	<select id="getMpOrderValByRelId" parameterType="java.lang.Long"
+		resultMap="mountProduct">
+		select
+			t1.RELATION_ID,
+			t1.CATEGORY_ID,
+		    t1.ORDER_VALUE
+		from
+			T_SALECATEGORY_PRODUCT_RELATION t1
+		where t1.RELATION_ID = #{relationId} and t1.OPT_TYPE = 1
+	</select>
+	
+	
+	<update id="updateMpOrderValueByRelId" parameterType="MountProduct">
+		UPDATE T_SALECATEGORY_PRODUCT_RELATION T SET T.ORDER_VALUE=#{orderValue}
+		WHERE
+			T.RELATION_ID = #{relationId}
+	</update>
+	
+	
+	
+</mapper>

@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ProductStockDaoImpl">
+	<resultMap type="ProductStockModel" id="productStockModel">
+		   <result property="stockId" column="stock_id" javaType="java.lang.Long" />
+		   <result property="skuId" column="sku_id" javaType="java.lang.Long" />
+		   <result property="skuCode" column="sku_code" javaType="java.lang.String" />
+		   <result property="productId" column="product_id" javaType="java.lang.Long" />
+		   <result property="virtualStock" column="virtual_stock" javaType="java.lang.Double" />
+		   <result property="manualStock" column="manual_stock" javaType="java.lang.Double" />
+		   <result property="entityStock" column="entity_stock" javaType="java.lang.Double" />
+		   <result property="stockType" column="stock_type" javaType="java.lang.Long" />
+		   <result property="lockStock" column="lock_stock" javaType="java.lang.Double" />
+	</resultMap>
+	<resultMap type="ProductStockQueueModel" id="productStockQueueModel">
+		   <result property="stockQueueId" column="stock_queue_id" javaType="java.lang.Long" />
+		   <result property="skuCode" column="sku_code" javaType="java.lang.String" />
+		   <result property="productCode" column="product_code" javaType="java.lang.String" />
+		   <result property="virtualStock" column="virtual_stock" javaType="java.lang.Double" />
+		   <result property="manualStock" column="manual_stock" javaType="java.lang.Double" />
+		   <result property="entityStock" column="entity_stock" javaType="java.lang.Double" />
+		   <result property="stock" column="stock" javaType="java.lang.Double" />
+		   <result property="upType" column="up_type" javaType="java.lang.Integer" />
+	</resultMap>
+	
+
+    <sql id="query">
+	        <if test="stockId != null and stockId !=''">
+					and t.stock_id=#{stockId}
+		    </if>
+	        <if test="skuId != null and skuId !=''">
+					and t.sku_id=#{skuId}
+		    </if>
+		    <if test="skuCode != null and skuCode !=''">
+					and t.sku_code=#{skuCode}
+		    </if>
+	        <if test="productId != null and productId !=''">
+					and t.product_id=#{productId}
+		    </if>
+	        <if test="virtualStock != null and virtualStock !=''">
+					and t.virtual_stock=#{virtualStock}
+		    </if>
+	        <if test="manualStock != null and manualStock !=''">
+					and t.manual_stock=#{manualStock}
+		    </if>
+	        <if test="entityStock != null and entityStock !=''">
+					and t.entity_stock=#{entityStock}
+		    </if>
+	        <if test="stockType != null and stockType !=''">
+					and t.stock_type=#{stockType}
+		    </if>
+	        <if test="lockStock != null and lockStock !=''">
+					and t.lock_stock=#{lockStock}
+		    </if>
+	    
+    </sql>
+
+
+	<select id="queryOne" parameterType="ProductStockModel"
+	resultMap="productStockModel">
+	select
+	          stock_id,
+	          sku_id,
+	          sku_code,
+	          product_id,
+	          virtual_stock,
+	          manual_stock,
+	          entity_stock,
+	          stock_type,
+	          lock_stock
+	from  t_product_stock t
+	where t.sku_id=#{skuId};
+	</select>
+	<select id="queryListPage" parameterType="ProductStockModel"
+		resultMap="productStockModel">
+		select 
+	          stock_id,
+	    
+	          sku_id,
+	          
+	          sku_code,
+	    
+	          product_id,
+	    
+	          virtual_stock,
+	    
+	          manual_stock,
+	    
+	          entity_stock,
+	    
+	          stock_type,
+	    
+	          lock_stock
+	     from  t_product_stock t
+		where 1=1
+		<include refid="query"/>
+	</select>
+
+	<select id="countListPage" parameterType="ProductStockModel"
+		resultType="java.lang.Long">
+		select count(1) from  t_product_stock t
+		where 1=1
+		<include refid="query"/>
+	 </select>
+
+	<insert id="insert" parameterType="ProductStockModel">
+		<selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER">
+    		SELECT @@IDENTITY as id
+    	</selectKey>
+		insert into  t_product_stock
+		(
+	          			    stock_id,
+	          			    sku_id,
+	          			    sku_code,
+	          				product_id,
+	          			    virtual_stock,
+	          			    manual_stock,
+	          			    entity_stock,
+	          			    stock_type,
+	          				lock_stock
+        )
+		values
+		(
+		          			    #{stockId},
+		          			    #{skuId},
+		          			    #{skuCode},
+		          				#{productId},
+		          			    #{virtualStock},
+		          			    #{manualStock},
+		          			    #{entityStock},
+		          			    #{stockType},
+	          					#{lockStock}
+        )
+	</insert>
+
+	<update id="update" parameterType="ProductStockModel">
+		update  t_product_stock t 
+		  <set>
+			         <if test="virtualStock != null   ">
+				          t.virtual_stock=#{virtualStock},
+				    </if>
+			         <if test="manualStock != null   ">
+				          t.manual_stock=#{manualStock},
+				    </if>
+			         <if test="entityStock != null  ">
+				          t.entity_stock=#{entityStock},
+				    </if>
+			         <if test="stockType != null  ">
+				          t.stock_type=#{stockType},
+				    </if>
+			         <if test="lockStock != null  ">
+				          t.lock_stock=#{lockStock}
+				    </if>
+		    </set>
+		where 1=1
+		 <if test="skuCode != null ">
+					and t.sku_code=#{skuCode}
+		 </if>
+		  <if test="stockId != null">
+					and t.stock_id=#{stockId}
+		    </if>
+		
+	</update>
+	
+	<delete id="delete" parameterType="ProductStockModel">
+    	delete from  t_product_stock  where stock_id=#{stockId};
+    </delete>
+    
+	<delete id="deleteByIds" parameterType="java.util.Map">
+    	delete from t_product_stock  where product_id=#{productId}
+    	 <if test="list != null  and list.size > 0">
+			and sku_id not in 
+	    	<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		 </if>
+    </delete>	
+    
+    
+    <delete id="deleteQueue" parameterType="productStockQueueModel">
+    	delete from  t_product_stock_queue  where stock_queue_id=#{stockQueueId};
+    </delete>
+    <select id="queryQueueListPage" parameterType="productStockQueueModel"
+		resultMap="productStockQueueModel">
+		select 
+	          stock_queue_id,
+	          sku_code,
+	          product_code,
+	          virtual_stock,
+	          manual_stock,
+	          entity_stock,
+	          stock,
+	          up_type
+	     from  t_product_stock_queue t
+		where 1=1
+	</select>
+    <insert id="insertQueue" parameterType="productStockQueueModel">
+		<selectKey resultType="java.lang.Long" keyProperty="id"
+			order="AFTER">
+			SELECT @@IDENTITY as id
+		</selectKey>
+		insert into t_product_stock_queue
+		(
+		stock_queue_id,
+		sku_code,
+		product_code,
+		virtual_stock,
+		manual_stock,
+		entity_stock,
+		stock,
+		up_type
+		)
+		values
+		(
+		#{stockQueueId},
+		#{skuCode},
+		#{productCode},
+		#{virtualStock},
+		#{manualStock},
+		#{entityStock},
+		#{stock},
+		#{upType}
+		)
+	</insert>
+    
+</mapper>

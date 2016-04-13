@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ProductPriceDaoImpl">
+	
+	<resultMap type="ProductPriceModel" id="productPriceModel">
+		   <result property="productPriceId" column="product_price_id" javaType="java.lang.Long" />
+		   <result property="productSkuId" column="product_sku_id" javaType="java.lang.Long" />
+		   <result property="productId" column="product_id" javaType="java.lang.Long" />
+		   <result property="productSkuCode" column="product_sku_code" javaType="java.lang.String" />
+		   <result property="costPrice" column="cost_price" javaType="java.lang.Double" />
+		   <result property="tshPrice" column="tsh_price" javaType="java.lang.Double" />
+		   <result property="tb" column="tb" javaType="java.lang.Long" />
+		   <result property="marketPrice" column="market_price" javaType="java.lang.Double" />
+		   <result property="zeroPrice" column="zero_price" javaType="java.lang.Double" />
+	</resultMap>
+
+    <sql id="query">
+	        <if test="productPriceId != null and productPriceId !=''">
+					and t.product_price_id=#{productPriceId}
+		    </if>
+		    <if test="productId != null and productId !=''">
+					and t.product_id=#{productId}
+		    </if>
+	        <if test="productSkuId != null and productSkuId !=''">
+					and t.product_sku_id=#{productSkuId}
+		    </if>
+		    <if test="productSkuCode != null and productSkuCode !=''">
+					and t.product_sku_code=#{productSkuCode}
+		    </if>
+	        <if test="costPrice != null and costPrice !=''">
+					and t.cost_price=#{costPrice}
+		    </if>
+	        <if test="tshPrice != null and tshPrice !=''">
+					and t.tsh_price=#{tshPrice}
+		    </if>
+	        <if test="tb != null and tb !=''">
+					and t.tb=#{tb}
+		    </if>
+	        <if test="marketPrice != null and marketPrice !=''">
+					and t.market_price=#{marketPrice}
+		    </if>
+	    
+    </sql>
+
+
+	<select id="queryOne" parameterType="ProductPriceModel"
+	resultMap="productPriceModel">
+	select
+	          product_price_id,
+	          product_sku_id,
+	          product_id,
+	          product_sku_code,
+	          cost_price,
+	          tsh_price,
+	          tb,
+	          market_price,
+	          zero_price
+	from  t_product_price t
+	where 1=1 
+	<if test="productSkuId!=null and productSkuId!=''">
+		and t.product_sku_id=#{productSkuId}
+	</if>
+	<if test="productSkuCode!=null and productSkuCode!=''">
+		and t.product_sku_code=#{productSkuCode}
+	</if>
+	</select>
+	<select id="queryListPage" parameterType="ProductPriceModel"
+		resultMap="productPriceModel">
+		select 
+	          product_price_id,
+	    
+	          product_sku_id,
+	          
+	          product_id,
+	          
+	          product_sku_code,
+	    		
+	          cost_price,
+	    
+	          tsh_price,
+	    
+	          tb,
+	    
+	          market_price,
+	          
+	          zero_price
+	          
+	     from  t_product_price t
+		where 1=1
+		<include refid="query"/>
+	</select>
+
+	<select id="countListPage" parameterType="ProductPriceModel"
+		resultType="java.lang.Long">
+		select count(1) from  t_product_price t
+		where 1=1
+		<include refid="query"/>
+	 </select>
+
+	<insert id="insert" parameterType="ProductPriceModel">
+		<selectKey resultType="java.lang.Long" keyProperty="productPriceId" order="AFTER">
+    		SELECT @@IDENTITY as productPriceId
+    	</selectKey>
+		insert into  t_product_price
+		(
+	          			    product_price_id,
+	          			    product_sku_id,
+	          			    product_id,
+	          			    product_sku_code,
+	          				cost_price,
+	          			    tsh_price,
+	          			    tb,
+	          				market_price,
+	          				zero_price
+        )
+		values
+		(
+		          			    #{productPriceId},
+		          			    #{productSkuId},
+		          			    #{productId},
+		          			    #{productSkuCode},
+		          				#{costPrice},
+		          			    #{tshPrice},
+		          			    #{tb},
+	          					#{marketPrice},
+	          					#{zeroPrice}
+        )
+	</insert>
+
+	<update id="update" parameterType="ProductPriceModel">
+		update  t_product_price t 
+		  <set>
+			         <if test="productPriceId != null  and productPriceId !=''">
+				          t.product_price_id=#{productPriceId},
+				    </if>
+				     <if test="productId != null  and productId !=''">
+				          t.product_id=#{productId},
+				    </if>
+			        <if test="productSkuId != null  and productSkuId !=''">
+				          t.product_sku_id=#{productSkuId},
+				    </if>
+				    <if test="productSkuCode != null  and productSkuCode !=''">
+				          t.product_sku_code=#{productSkuCode},
+				    </if>
+			         <if test="costPrice != null  and costPrice !=''">
+				          t.cost_price=#{costPrice},
+				    </if>
+			         <if test="tshPrice != null  and tshPrice !=''">
+				          t.tsh_price=#{tshPrice},
+				    </if>
+			         <if test="tb != null  and tb !=''">
+				          t.tb=#{tb},
+				    </if>
+			        <if test="marketPrice != null  and marketPrice !=''">
+				          t.market_price=#{marketPrice}
+				    </if>
+				    <if test="zeroPrice != null  and zeroPrice !=''">
+				          t.zero_price=#{zeroPrice}
+				    </if>
+		    </set>
+		where 
+		t.product_price_id=#{productPriceId}
+	</update>
+	
+	<delete id="delete" parameterType="ProductPriceModel">
+    	delete from  t_product_price  where product_price_id=#{productPriceId}
+    </delete>
+    
+	<delete id="deleteByIds" parameterType="java.util.Map">
+    	delete from t_product_price  where product_id=#{productId}
+    	 <if test="list != null  and list.size > 0">
+			and product_sku_id not in 
+	    	<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		 </if>
+    </delete>
+    <select id="getProductPriceListByProductId" parameterType="java.util.List" resultMap="productPriceModel">
+	select product_price_id,
+		product_sku_id,
+		product_id,
+		product_sku_code,
+		cost_price,
+		tsh_price,
+		tb,
+		market_price,
+		zero_price
+	from t_product_price where product_id in 
+		<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+    </select>
+</mapper>

@@ -1,0 +1,337 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.zhaidou.product.dao.impl.ProductStockDaoImpl">
+	
+	<resultMap type="ProductStockModel" id="productStockModel">
+		   <result property="stockId" column="stock_id" javaType="java.lang.Long" />
+		   <result property="stockCode" column="stock_code" javaType="java.lang.String" />
+		   <result property="skuId" column="sku_id" javaType="java.lang.Long" />
+		   <result property="skuCode" column="sku_code" javaType="java.lang.String" />
+		   <result property="productId" column="product_id" javaType="java.lang.Long" />
+		   <result property="productCode" column="product_code" javaType="java.lang.String" />
+		   <result property="productName" column="product_name" javaType="java.lang.String" />
+		   <result property="productEname" column="product_ename" javaType="java.lang.String" />
+		   <result property="brandId" column="brand_id" javaType="java.lang.Long" />
+		   <result property="brandCode" column="brand_code" javaType="java.lang.String" />
+		   <result property="brandName" column="brand_name" javaType="java.lang.String" />
+		   <result property="categoryId" column="category_id" javaType="java.lang.Long" />
+		   <result property="categoryCode" column="category_code" javaType="java.lang.String" />
+		   <result property="categoryName" column="category_name" javaType="java.lang.String" />
+		   <result property="virtualStock" column="virtual_stock" javaType="java.lang.Double" />
+		   <result property="manualStock" column="manual_stock" javaType="java.lang.Double" />
+		   <result property="entityStock" column="entity_stock" javaType="java.lang.Double" />
+		   <result property="stockType" column="stock_type" javaType="java.lang.Integer" />
+		   <result property="relationCode" column="relation_code" javaType="java.lang.String" />
+	</resultMap>
+	
+	<sql id="field">
+	            stock_id,
+ 			    t.stock_code,
+ 				sku_id,
+ 			    sku_code,
+ 			    product_id,
+ 			    product_code,
+ 			    product_name,
+ 			    product_ename,
+ 			    brand_id,
+ 			    brand_code,
+ 			    brand_name,
+ 			    category_id,
+ 			    category_code,
+ 			    category_name,
+ 			    virtual_stock,
+ 			    manual_stock,
+ 			    entity_stock,
+ 			    stock_type
+    </sql>
+
+
+
+
+    <insert id="insert" parameterType="ProductStockModel"  keyProperty="stockId" useGeneratedKeys="true">
+		
+		insert into  t_product_stock
+		(
+	          			    
+	          			    stock_code,
+	          				sku_id,
+	          			    sku_code,
+	          			    product_id,
+	          			    product_code,
+	          			    product_name,
+	          			    product_ename,
+	          			    brand_id,
+	          			    brand_code,
+	          			    brand_name,
+	          			    category_id,
+	          			    category_code,
+	          			    category_name,
+	          			    virtual_stock,
+	          			    manual_stock,
+	          			    entity_stock,
+	          			    stock_type
+        )
+		values
+		(
+		          			   
+		          			    #{stockCode},
+		          				#{skuId},
+		          			    #{skuCode},
+		          			    #{productId},
+		          			    #{productCode},
+		          			    #{productName},
+		          			    #{productEname},
+		          			    #{brandId},
+		          			    #{brandCode},
+		          			    #{brandName},
+		          			    #{categoryId},
+		          			    #{categoryCode},
+		          			    #{categoryName},
+		          			    #{virtualStock},
+		          			    #{manualStock},
+		          			    #{entityStock},
+	          				    #{stockType}
+        )
+	</insert>
+   
+
+
+	<select id="queryOne" parameterType="ProductStockModel"
+	resultMap="productStockModel">
+	select
+	         <include refid="field"/>
+	from  t_product_stock t
+	where t.stock_id=#{stockId}
+	</select>
+	
+	<select id="queryBySkuCode" parameterType="ProductStockModel"
+	resultMap="productStockModel">
+		SELECT
+		         <include refid="field"/>
+		FROM  t_product_stock t
+		
+		WHERE t.sku_code= #{skuCode}
+		
+	</select>
+	
+	
+	<select id="queryBySkuCodeList" parameterType="ProductStockModel"
+	resultMap="productStockModel">
+		SELECT
+		     <include refid="field"/>
+		FROM  t_product_stock t
+		
+		WHERE 1 = 1 
+		<choose>
+	     <when test="skuCodeList != null and skuCodeList != '' ">
+	       AND t.sku_code IN
+		   <foreach item="item" index="index" collection="skuCodeList" open="(" separator="," close=")">
+			     #{item}
+		   </foreach>
+	     </when>
+	     <otherwise>
+	        AND 1=2
+	     </otherwise>
+	   </choose>
+	</select>
+	
+	
+	<select id="getStockByCondition" parameterType="ProductStockModel"
+		resultMap="productStockModel">
+		select 
+	         <include refid="field"/>
+	          
+	     from  t_product_stock t
+		where 1=1
+		<include refid="query"/>
+	</select>
+	
+	
+	
+	<select id="queryListPage" parameterType="ProductStockModel"
+		resultMap="productStockModel">
+		select 
+	         <include refid="field"/>
+	     from  t_product_stock t
+		where 1=1
+		<include refid="query"/>
+	</select>
+
+	<select id="countListPage" parameterType="ProductStockModel"
+		resultType="java.lang.Long">
+		select count(1) from  t_product_stock t
+		where 1=1
+		<include refid="query"/>
+	 </select>
+	
+	<select id="getProductStock" parameterType="ProductStockModel"
+	resultMap="productStockModel">
+	select
+	         <include refid="field"/>
+	    from  t_product_stock t
+		where product_code = #{productCode} and sku_code = #{skuCode}
+	</select>
+	
+	
+	<select id="getProductStockByCode" parameterType="java.lang.String"
+	resultMap="productStockModel">
+	select
+	          <include refid="field"/>
+	    from  t_product_stock t
+		where stock_code = #{stockCode}
+	</select>
+	
+	
+ <sql id="query">
+	        <if test="stockId != null and stockId !=''">
+					and t.stock_id=#{stockId}
+		    </if>
+	        <if test="stockCode != null and stockCode !=''">
+		        	and t.stock_code = #{stockCode}
+		    </if>
+	        <if test="skuId != null ">
+					and t.sku_id = #{skuId}
+		    </if>
+	        <if test="skuCode != null and skuCode !=''">
+		        	and t.sku_code = #{skuCode}
+		    </if>
+	        <if test="productId != null ">
+					and t.product_id = #{productId}
+		    </if>
+	        <if test="productCode != null and productCode !=''">
+		        	and t.product_code = #{productCode}
+		    </if>
+	        <if test="productName != null and productName !=''">
+		        	and t.product_name = #{productName}
+		    </if>
+	        <if test="productEname != null and productEname !=''">
+		        	and t.product_ename = #{productEname}
+		    </if>
+	        <if test="brandId != null ">
+					and t.brand_id = #{brandId}
+		    </if>
+	        <if test="brandCode != null and brandCode !=''">
+		        	and t.brand_code = #{brandCode}
+		    </if>
+	        <if test="brandName != null and brandName !=''">
+		        	and t.brand_name = #{brandName}
+		    </if>
+	        <if test="categoryId != null ">
+					and t.category_id = #{categoryId}
+		    </if>
+	        <if test="categoryCode != null and categoryCode !=''">
+		        	and t.category_code = #{categoryCode}
+		    </if>
+	        <if test="categoryName != null and categoryName !=''">
+		        	and t.category_name = #{categoryName}
+		    </if>
+	        <if test="virtualStock != null">
+					and t.virtual_stock = #{virtualStock}
+		    </if>
+	        <if test="manualStock != null ">
+					and t.manual_stock = #{manualStock}
+		    </if>
+	        <if test="entityStock != null ">
+					and t.entity_stock=#{entityStock}
+		    </if>
+	        <if test="stockType != null">
+					and t.stock_type=#{stockType}
+		    </if>
+	    
+    </sql>
+	<update id="update" parameterType="ProductStockModel">
+		update  t_product_stock t 
+		  <set>
+			         <if test="stockId != null  and stockId !=''">
+				          t.stock_id=#{stockId},
+				    </if>
+			         <if test="stockCode != null  and stockCode !=''">
+				          t.stock_code=#{stockCode},
+				    </if>
+			         <if test="skuId != null  and skuId !=''">
+				          t.sku_id=#{skuId},
+				    </if>
+			         <if test="skuCode != null  and skuCode !=''">
+				          t.sku_code=#{skuCode},
+				    </if>
+			         <if test="productId != null">
+				          t.product_id=#{productId},
+				    </if>
+			         <if test="productCode != null  and productCode !=''">
+				          t.product_code=#{productCode},
+				    </if>
+			         <if test="productName != null  and productName !=''">
+				          t.product_name=#{productName},
+				    </if>
+			         <if test="productEname != null  and productEname !=''">
+				          t.product_ename=#{productEname},
+				    </if>
+			         <if test="brandId != null">
+				          t.brand_id=#{brandId},
+				    </if>
+			         <if test="brandCode != null  and brandCode !=''">
+				          t.brand_code=#{brandCode},
+				    </if>
+			         <if test="brandName != null  and brandName !=''">
+				          t.brand_name=#{brandName},
+				    </if>
+			         <if test="categoryId != null">
+				          t.category_id=#{categoryId},
+				    </if>
+			         <if test="categoryCode != null  and categoryCode !=''">
+				          t.category_code=#{categoryCode},
+				    </if>
+			         <if test="categoryName != null  and categoryName !=''">
+				          t.category_name=#{categoryName},
+				    </if>
+			         <if test="virtualStock != null">
+				          t.virtual_stock=#{virtualStock},
+				    </if>
+			         <if test="manualStock != null">
+				          t.manual_stock=#{manualStock},
+				    </if>
+			         <if test="entityStock != null">
+				          t.entity_stock=#{entityStock},
+				    </if>
+			         <if test="stockType != null">
+				          t.stock_type=#{stockType}
+				    </if>
+		    </set>
+		where 
+		t.stock_id=#{stockId}
+	</update>
+	
+	<update id="updateProductStockFromOrder" parameterType="java.util.Map">
+		update  t_product_stock t 
+		  <set>
+			        
+			         <if test="stockType == 2">
+				          t.virtual_stock=#{subCount} + t.virtual_stock,
+				    </if>
+			         <if test="stockType == 1">
+				          t.manual_stock=#{subCount} + t.manual_stock,
+				    </if>
+			         <if test="stockType == 3">
+				          t.entity_stock=#{subCount} + t.entity_stock,
+				    </if>
+		    </set>
+		where 
+		t.sku_code=#{skuCode}
+	</update>
+	
+	<delete id="delete" parameterType="ProductStockModel">
+    	delete from  t_product_stock  where 
+    	stock_id =#{stockId}
+    </delete>
+    
+    <delete id="deleteByIds" parameterType="java.util.List">
+    	delete from t_product_stock  where 
+    	stock_id in
+    	<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+    </delete>
+
+</mapper>

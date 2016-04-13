@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="ProductToErpLogDaoImpl">
+	
+	<resultMap type="ProductToErpLogModel" id="productToErpLogModel">
+		   <result property="logId" column="log_id" javaType="java.lang.Long" />
+		   <result property="productName" column="product_name" javaType="java.lang.String" />
+		   <result property="productCode" column="product_code" javaType="java.lang.String" />
+		   <result property="errorMessage" column="error_message" javaType="java.lang.String" />
+		   <result property="createTime" column="create_time" javaType="java.lang.Long" />
+	</resultMap>
+
+
+	<insert id="insert" parameterType="ProductToErpLogModel" useGeneratedKeys="true" keyProperty="log_id" >
+		<selectKey resultType="java.lang.Long" keyProperty="logId" order="AFTER">
+    		SELECT @@IDENTITY as logId
+    	</selectKey>
+    	
+		insert into  t_product_to_erp_log
+		(
+	          			    log_id,
+	          			    product_name,
+	          			    product_code,
+	          			    error_message,
+	          			    create_time
+        )
+		values
+		(
+	          			    #{logId},
+	          			    #{productName},
+	          			    #{productCode},
+	          			    #{errorMessage},
+	          			    now()
+        )
+	</insert>
+
+</mapper>

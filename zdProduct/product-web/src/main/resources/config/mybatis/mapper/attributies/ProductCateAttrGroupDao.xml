@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.zhaidou.product.attributies.dao.impl.ProductCateAttrGroupDaoImpl">
+
+	<resultMap type="ProductCateAttrGroupModel" id="productCateAttrGroupModel">
+		   <result property="categoryId" column="category_id" javaType="java.lang.Long" />
+		   <result property="categoryCode" column="category_Code" javaType="java.lang.String" />
+		   <result property="groupId" column="group_id" javaType="java.lang.Long" />
+		   <result property="groupCode" column="group_code" javaType="java.lang.String" />
+		   <result property="groupName" column="group_name" javaType="java.lang.String" />
+		   <result property="attrId" column="attr_id" javaType="java.lang.Long" />
+		   <result property="attrCode" column="attr_code" javaType="java.lang.String" />
+		   <result property="attrName" column="attr_name" javaType="java.lang.String" />
+		   <result property="attrValueId" column="attr_value_id" javaType="java.lang.Long" />
+		   <result property="attrValueCode" column="attr_value_code" javaType="java.lang.String" />
+		   <result property="attrValue" column="attr_value" javaType="java.lang.String" />
+		   <result property="attrDesign" column="attr_design" javaType="java.lang.Integer" />
+		   <result property="required" column="required" javaType="java.lang.Integer" />
+	</resultMap>
+	
+	<!-- 提供给搜索用  -->
+	<select id="queryGroupAndAttrValueByCate" parameterType="java.lang.String"
+	 resultMap="productCateAttrGroupModel">
+	 select
+	          category_id,
+	          category_Code,
+	          group_id,
+	          group_code,
+	          group_name,
+	          attr_id,
+	          attr_code,
+	          attr_name,
+	          attr_value_id,
+	          attr_value_code,
+	          attr_value,
+	          required,
+	          attr_design
+	 from v_search_classattr t
+	  where category_Code = #{categoryCode} 
+	</select>
+	
+	<!-- 提供给product用 -->
+	<select id="queryProductAttrValueByCate" parameterType="java.lang.String"
+	 resultMap="productCateAttrGroupModel">
+	 select
+	          category_id,
+	          category_Code,
+	          group_id,
+	          group_code,
+	          group_name,
+	          attr_id,
+	          attr_code,
+	          attr_name,
+	          attr_value_id,
+	          attr_value_code,
+	          attr_value,
+	          required,
+	          attr_design
+	 from v_product_classattr t
+	  where category_Code = #{categoryCode} 
+	</select>
+	
+
+   
+</mapper>

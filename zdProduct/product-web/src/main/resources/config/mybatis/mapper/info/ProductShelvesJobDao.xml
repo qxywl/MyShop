@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ProductShelvesJobDaoImpl">
+
+	<resultMap type="ProductShelvesJobModel" id="productShelvesJobModel">
+		<result property="productShelvesJob" column="product_shelves_job_id"
+			javaType="java.lang.Long" />
+		<result property="productId" column="product_id" javaType="java.lang.Long" />
+		<result property="status" column="status" javaType="java.lang.Integer" />
+		<result property="productCode" column="product_code" javaType="java.lang.String" />
+		<result property="createTime" column="create_time" javaType="java.lang.Long" />
+		<result property="shelvesStatus" column="shelves_status"
+			javaType="java.lang.Long" />
+		<result property="timeStart" column="time_start" javaType="java.lang.Long" />
+	</resultMap>
+
+	<sql id="query">
+		<if test="productShelvesJob != null and productShelvesJob !=''">
+			and t.product_shelves_job_id=#{productShelvesJob}
+		</if>
+		<if test="productId != null and productId !=''">
+			and t.product_id=#{productId}
+		</if>
+		<if test="status != null and status !=''">
+			and t.status=#{status}
+		</if>
+		<if test="productCode != null and productCode !=''">
+			and t.product_code like CONCAT(CONCAT('%', #{productCode}), '%')
+		</if>
+		<if test="createTime != null and createTime !=''">
+			and t.create_time=#{createTime}
+		</if>
+		<if test="shelvesStatus != null and shelvesStatus !=''">
+			and t.shelves_status=#{shelvesStatus}
+		</if>
+		<if test="timeStart != null  and timeStart !=''">
+			and a.time_start=#{timeStart}
+		</if>
+	</sql>
+
+
+	<select id="queryOne" parameterType="ProductShelvesJobModel"
+		resultMap="productShelvesJobModel">
+		select
+		product_shelves_job_id,
+		product_id,
+		status,
+		product_code,
+		create_time,
+		shelves_status,
+		time_start
+		from t_product_shelves_job t
+		where t.product_shelves_job_id=#{productShelvesJob}
+	</select>
+	<select id="queryListPage" parameterType="ProductShelvesJobModel"
+		resultMap="productShelvesJobModel">
+		select
+		product_shelves_job_id,
+
+		product_id,
+
+		status,
+
+		product_code,
+
+		create_time,
+
+		shelves_status,
+		time_start
+		from t_product_shelves_job t
+		where 1=1
+		<include refid="query" />
+	</select>
+
+	<select id="countListPage" parameterType="ProductShelvesJobModel"
+		resultType="java.lang.Long">
+		select count(1) from t_product_shelves_job t
+		where 1=1
+		<include refid="query" />
+	</select>
+
+	<insert id="insert" parameterType="ProductShelvesJobModel">
+		<selectKey resultType="java.lang.Long" keyProperty="id"
+			order="AFTER">
+			SELECT @@IDENTITY as id
+		</selectKey>
+		insert into t_product_shelves_job
+		(
+		product_shelves_job_id,
+		product_id,
+		status,
+		product_code
+		create_time,
+		shelves_status,
+		time_start
+		)
+		values
+		(
+		#{productShelvesJob},
+		#{productId},
+		#{status},
+		#{productCode}
+		#{createTime},
+		#{shelvesStatus},
+		#{timeStart}
+		)
+	</insert>
+
+	<update id="update" parameterType="ProductShelvesJobModel">
+		update t_product_shelves_job t
+		<set>
+			<if test="productShelvesJob != null  and productShelvesJob !=''">
+				t.product_shelves_job_id=#{productShelvesJob},
+			</if>
+			<if test="productId != null  and productId !=''">
+				t.product_id=#{productId},
+			</if>
+			<if test="status != null  and status !=''">
+				t.status=#{status},
+			</if>
+			<if test="productCode != null  and productCode !=''">
+				t.product_code=#{productCode},
+			</if>
+			<if test="createTime != null  and createTime !=''">
+				t.create_time=#{createTime},
+			</if>
+			<if test="timeStart != null  and timeStart !=''">
+				t.time_start=#{timeStart},
+			</if>
+			<if test="shelvesStatus != null  and shelvesStatus !=''">
+				t.shelves_status=#{shelvesStatus}
+			</if>
+		</set>
+		where
+		t.product_shelves_job_id=#{productShelvesJob}
+	</update>
+
+	<delete id="delete" parameterType="ProductShelvesJobModel">
+		delete from t_product_shelves_job where
+		product_shelves_job_id =#{productShelvesJob}
+	</delete>
+
+	<delete id="deleteByIds" parameterType="java.util.List">
+		delete from t_product_shelves_job where
+		product_shelves_job_id in
+		<foreach item="item" index="index" collection="list" open="("
+			separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+
+</mapper>

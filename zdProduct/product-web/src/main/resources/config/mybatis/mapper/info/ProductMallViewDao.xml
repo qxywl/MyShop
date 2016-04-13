@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ProductMallViewDaoImpl">
+	<resultMap type="ProductMallViewModel" id="productMallViewModel">
+		   <id property="productId" column="product_id" javaType="java.lang.Long" />
+		   <result property="productName" column="product_name" javaType="java.lang.String" />
+		   <result property="productCode" column="product_code" javaType="java.lang.String" />
+		   <result property="productDesc" column="product_desc" javaType="java.lang.String" />
+		   <result property="productShelves" column="product_shelves" javaType="java.lang.Integer" />
+		   <result property="createTime" column="create_time" javaType="java.lang.Long" />
+		   <result property="createBy" column="create_by" javaType="java.lang.Long" />
+		   <result property="createUserName" column="create_user_name" javaType="java.lang.String" />
+		   <result property="updateTime" column="update_time" javaType="java.lang.Long" />
+		   <result property="updateBy" column="update_by" javaType="java.lang.Long" />
+		   <result property="updateUserName" column="update_user_name" javaType="java.lang.String" />
+		   <result property="firstShelves" column="first_shelves" javaType="java.lang.Long" />
+		   <result property="firstShelvesName" column="first_shelves_name" javaType="java.lang.String" />
+		   <result property="firstShelvesTime" column="first_shelves_time" javaType="java.lang.Long" />
+		   <result property="lastShelves" column="last_shelves" javaType="java.lang.Long" />
+		   <result property="lastShelvesName" column="last_shelves_name" javaType="java.lang.String" />
+		   <result property="lastShelvesTime" column="last_shelves_time" javaType="java.lang.Long" />
+		   <result property="downShelves" column="down_shelves" javaType="java.lang.Long" />
+		   <result property="downShelvesName" column="down_shelves_name" javaType="java.lang.String" />
+		   <result property="downShelvesTime" column="down_shelves_time" javaType="java.lang.Long" />
+		   <result property="costPrice" column="cost_price" javaType="java.lang.Double" />
+		   <result property="tshPrice" column="tsh_price" javaType="java.lang.Double" /> 
+		   <result property="tb" column="tb" javaType="java.lang.Long" />
+		   <result property="marketPrice" column="market_price" javaType="java.lang.Double" />
+		   <result property="brandCode" column="brand_code" javaType="java.lang.String" />
+		   <result property="brandName" column="brand_name" javaType="java.lang.String" />
+		   <result property="catCode" column="cat_code" javaType="java.lang.String" />
+		   <result property="catName" column="cat_name" javaType="java.lang.String" />
+		   <result property="type" column="type" javaType="java.lang.String" />
+		   <result property="status" column="status" javaType="java.lang.Long" />
+		   <result property="mainPic" column="main_pic" javaType="java.lang.String" />
+		   <result property="supplierId" column="supplier_id" javaType="java.lang.Long" />
+		   <result property="shopId" column="shop_id" javaType="java.lang.Long" />
+		   <result property="integrity" column="integrity" javaType="java.lang.Integer" />
+		   <result property="integrityDesc" column="integrity_desc" javaType="java.lang.String" />
+	</resultMap>
+	
+	<!-- 查询上架且审核通过的商品 -->
+	<select id="countByCatCodes" parameterType="java.util.List" resultType="java.lang.Long">
+		select count(1) from t_product_mall_view 
+		where
+			status =2 
+			and product_shelves = 1
+			and 
+			<foreach collection="list" item="categoryCode" open="(" close=")" separator="or">
+				cat_code like CONCAT(#{categoryCode},'%')
+			</foreach>
+	</select>
+</mapper>

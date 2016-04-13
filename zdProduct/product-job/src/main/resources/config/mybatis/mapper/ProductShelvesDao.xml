@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ProductShelvesDaoImpl">
+
+	<resultMap type="ProductShelvesModel" id="productShelvesModel">
+		<result property="productShelvesId" column="product_shelves_id"
+			javaType="java.lang.Long" />
+		<result property="productId" column="product_id" javaType="java.lang.Long" />
+		<result property="productName" column="product_name" javaType="java.lang.String" />
+		<result property="status" column="status" javaType="java.lang.Integer" />
+		<result property="reason" column="reason" javaType="java.lang.String" />
+		<result property="productCode" column="product_code" javaType="java.lang.String" />
+		<result property="createBy" column="create_by" javaType="java.lang.Long" />
+		<result property="createUserName" column="create_user_name"
+			javaType="java.lang.String" />
+		<result property="createTime" column="create_time" javaType="java.lang.Long" />
+		<result property="synTime" column="syn_time" javaType="java.lang.Long" />
+		<result property="updateTime" column="update_time" javaType="java.lang.Long" />
+		<result property="updateBy" column="update_by" javaType="java.lang.Long" />
+		<result property="updateUserName" column="update_user_name"
+			javaType="java.lang.String" />
+		<result property="shelvesStatus" column="shelves_status"
+			javaType="java.lang.Integer" />
+		<result property="sourceType" column="source_type" javaType="java.lang.Integer" />
+		<result property="timeStart" column="time_start" javaType="java.lang.Long" />
+	</resultMap>
+
+	<sql id="query">
+
+		and t.status=#{status} and product_shelves_id <![CDATA[ % #{total} = #{remainder} ]]> and (time_start &lt;=unix_timestamp(now()) or time_start is null)
+
+	</sql>
+
+
+	<select id="queryOne" parameterType="ProductShelvesModel"
+		resultMap="productShelvesModel">
+		select
+		product_shelves_id,
+		product_id,
+		product_name,
+		status,
+		reason,
+		product_code,
+		create_by,
+		create_user_name,
+		create_time,
+		update_time,
+		update_by,
+		update_user_name,
+		source_type,
+		shelves_status,
+		time_start
+		from t_product_shelves t
+		where t.product_shelves_id=#{productShelvesId}
+	</select>
+	<select id="queryListPage" parameterType="ProductShelvesModel"
+		resultMap="productShelvesModel">
+		select
+		product_shelves_id,
+
+		product_id,
+
+		product_name,
+
+		status,
+
+		reason,
+
+		product_code,
+
+		create_by,
+
+		create_user_name,
+
+		create_time,
+
+		update_time,
+
+		update_by,
+
+		update_user_name,
+
+		source_type,
+
+		shelves_status,
+		time_start
+		from t_product_shelves t
+		where 1=1
+		<include refid="query" />
+	</select>
+
+	<select id="countListPage" parameterType="ProductShelvesModel"
+		resultType="java.lang.Long">
+		select count(1) from t_product_shelves t
+		where 1=1
+		<include refid="query" />
+	</select>
+
+
+	<select id="getProductIntegrity" parameterType="ProductShelvesModel"
+		resultType="java.lang.Long">
+		select count(1) from t_product t
+		where t.product_code =
+		#{productCode} and t.integrity=100
+	</select>
+
+
+	<insert id="insert" parameterType="ProductShelvesModel">
+		<selectKey resultType="java.lang.Long" keyProperty="id"
+			order="AFTER">
+			SELECT @@IDENTITY as id
+		</selectKey>
+		insert into t_product_shelves
+		(
+		product_shelves_id,
+		product_id,
+		product_name,
+		status,
+		reason,
+		product_code,
+		create_by,
+		create_user_name,
+		create_time,
+		update_user_name,
+		source_type,
+		shelves_status,
+		time_start
+		)
+		values
+		(
+		#{productShelvesId},
+		#{productId},
+		#{productName},
+		#{status},
+		#{reason},
+		#{productCode},
+		#{createBy},
+		#{createUserName},
+		#{createTime},
+		#{updateUserName},
+		#{sourceType},
+		#{shelvesStatus},
+		#{timeStart}
+		)
+	</insert>
+
+	<update id="update" parameterType="ProductShelvesModel">
+		update t_product_shelves t
+		<set>
+			<if test="productShelvesId != null  and productShelvesId !=''">
+				t.product_shelves_id=#{productShelvesId},
+			</if>
+			<if test="productId != null  and productId !=''">
+				t.product_id=#{productId},
+			</if>
+			<if test="productName != null  and productName !=''">
+				t.product_name=#{productName},
+			</if>
+			<if test="status != null  and status !=''">
+				t.status=#{status},
+			</if>
+			<if test="reason != null  and reason !=''">
+				t.reason=#{reason},
+			</if>
+			<if test="productCode != null  and productCode !=''">
+				t.product_code=#{productCode},
+			</if>
+			<if test="createBy != null  and createBy !=''">
+				t.create_by=#{createBy},
+			</if>
+			<if test="createUserName != null  and createUserName !=''">
+				t.create_user_name=#{createUserName},
+			</if>
+			<if test="createTime != null  and createTime !=''">
+				t.create_time=#{createTime},
+			</if>
+			<if test="updateTime != null  and updateTime !=''">
+				t.update_time=#{updateTime},
+			</if>
+			<if test="updateBy != null  and updateBy !=''">
+				t.update_by=#{updateBy},
+			</if>
+			<if test="updateUserName != null  and updateUserName !=''">
+				t.update_user_name=#{updateUserName},
+			</if>
+			<if test="synTime != null  and synTime !=''">
+				t.syn_time=#{synTime},
+			</if>
+			<if test="timeStart != null  and timeStart !=''">
+				t.time_start=#{timeStart},
+			</if>
+			<if test="shelvesStatus != null  and shelvesStatus !=''">
+				t.shelves_status=#{shelvesStatus}
+			</if>
+
+		</set>
+		where
+		t.product_shelves_id=#{productShelvesId}
+	</update>
+	
+	<update id="updateStatusList" parameterType="java.util.Map">
+		update t_product_shelves t
+			<set>
+				<if test="status != null  and status !=''">
+					t.status=#{status},
+				</if>
+				<if test="reason != null">
+					t.reason=#{reason},
+				</if>
+			</set>
+			where
+		t.product_shelves_id in 
+			<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+	</update>
+	
+	<delete id="delete" parameterType="ProductShelvesModel">
+		delete from t_product_shelves where
+		product_shelves_id =#{productShelvesId}
+	</delete>
+
+	<delete id="deleteByIds" parameterType="java.util.List">
+		delete from t_product_shelves where
+		product_shelves_id in
+		<foreach item="item" index="index" collection="list" open="("
+			separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+
+</mapper>

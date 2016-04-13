@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ProductImageDaoImpl">
+	
+	<resultMap type="ProductImageModel" id="productImageModel">
+		   <result property="productImageId" column="product_image_id" javaType="java.lang.Long" />
+		   <result property="productSkuId" column="product_sku_id" javaType="java.lang.Long" />
+		   <result property="image" column="image" javaType="java.lang.String" />
+		   <result property="level" column="level" javaType="java.lang.Long" />
+		   <result property="type" column="type" javaType="java.lang.Long" />
+	</resultMap>
+
+    <sql id="query">
+	        <if test="productImageId != null and productImageId !=''">
+					and t.product_image_id=#{productImageId}
+		    </if>
+	        <if test="productSkuId != null and productSkuId !=''">
+					and t.product_sku_id=#{productSkuId}
+		    </if>
+	        <if test="image != null and image !=''">
+		        	and t.image like CONCAT(CONCAT('%', #{image}), '%') 
+		    </if>
+	        <if test="level != null and level !=''">
+					and t.level=#{level}
+		    </if>
+	        <if test="type != null and type !=''">
+					and t.type=#{type}
+		    </if>
+	    
+    </sql>
+
+
+	<select id="queryOne" parameterType="ProductImageModel"
+	resultMap="productImageModel">
+	select
+	          product_image_id,
+	          product_sku_id,
+	          image,
+	          level,
+	          type
+	from  t_product_image t
+	where t.product_image_id=#{productImageId};
+	</select>
+	<select id="queryListPage" parameterType="ProductImageModel"
+		resultMap="productImageModel">
+		select 
+	          product_image_id,
+	    
+	          product_sku_id,
+	    
+	          image,
+	    
+	          level,
+	    
+	          type
+	     from  t_product_image t
+		where 1=1
+		<include refid="query"/>
+	</select>
+
+	<select id="countListPage" parameterType="ProductImageModel"
+		resultType="java.lang.Long">
+		select count(1) from  t_product_image t
+		where 1=1
+		<include refid="query"/>
+	 </select>
+
+	<insert id="insert" parameterType="ProductImageModel">
+		<selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER">
+    		SELECT @@IDENTITY as id
+    	</selectKey>
+		insert into  t_product_image
+		(
+	          			    product_image_id,
+	          			    product_sku_id,
+	          				image,
+	          			    level,
+	          				type
+        )
+		values
+		(
+		          			    #{productImageId},
+		          			    #{productSkuId},
+		          				#{image},
+		          			    #{level},
+	          					#{type}
+        )
+	</insert>
+
+	<update id="update" parameterType="ProductImageModel">
+		update  t_product_image t 
+		  <set>
+			         <if test="productImageId != null  and productImageId !=''">
+				          t.product_image_id=#{productImageId},
+				    </if>
+			         <if test="productSkuId != null  and productSkuId !=''">
+				          t.product_sku_id=#{productSkuId},
+				    </if>
+			         <if test="image != null  and image !=''">
+				          t.image=#{image},
+				    </if>
+			         <if test="level != null  and level !=''">
+				          t.level=#{level},
+				    </if>
+			         <if test="type != null  and type !=''">
+				          t.type=#{type}
+				    </if>
+		    </set>
+		where 
+		t.product_image_id=#{productImageId};
+	</update>
+	
+	<delete id="delete" parameterType="ProductImageModel">
+    	delete from  t_product_image  where product_sku_id=#{productSkuId};
+    </delete>
+    
+    <delete id="deleteByIds" parameterType="java.util.List">
+    	delete from t_product_image  where product_image_id
+    	 in
+    	<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+    </delete>
+	
+	<select id="getImageBySkuId" parameterType="ProductImageModel" resultMap="productImageModel">
+		select
+				  product_image_id,
+		          product_sku_id,
+		          image,
+		          level,
+		          type
+		from  t_product_image t
+		where t.product_sku_id=#{productSkuId};
+	</select>
+</mapper>

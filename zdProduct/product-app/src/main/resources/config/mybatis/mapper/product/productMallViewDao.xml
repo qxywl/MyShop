@@ -1,0 +1,332 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.zhaidou.product.dao.impl.ProductMallViewDaoImpl">
+	<resultMap type="ProductMallViewModel" id="product_query_map">
+		<result property="productId" column="product_id" />
+		<result property="productName" column="product_name" />
+		<result property="productCode" column="product_code" />
+		<result property="productDesc" column="product_desc" />
+		<result property="productShelves" column="product_shelves" />
+		
+		<result property="createTime" column="create_time" />
+		<result property="createBy" column="create_by" />
+		<result property="createUserName" column="create_user_name" />
+		<result property="updateTime" column="update_time" />
+		<result property="updateBy" column="update_by" />
+		<result property="updateUserName" column="update_user_name" />
+		
+		<result property="firstShelves" column="first_shelves" />
+		<result property="firstShelvesName" column="first_shelves_name" />
+		<result property="firstShelvesTime" column="first_shelves_time" />
+		<result property="lastShelves" column="last_shelves" />
+		<result property="lastShelvesTime" column="last_shelves_time" />
+		<result property="lastShelvesName" column="last_shelves_name" />
+		<result property="downShelves" column="down_shelves" />
+		<result property="downShelvesTime" column="down_shelves_time" />
+		<result property="downShelvesName" column="down_shelves_name" />
+		<result property="costPrice" column="cost_price" />
+		<result property="tshPrice" column="tsh_price" />
+		<result property="tb" column="tb" />
+		<result property="marketPrice" column="market_price" />
+		<result property="brandCode" column="brand_code" />
+		<result property="brandName" column="brand_name" />
+		<result property="catCode" column="cat_code" />
+		<result property="catName" column="cat_name" />
+		<result property="type" column="type" />
+		<result property="status" column="status" />
+		<result property="mainPic" column="main_pic" />
+		<result property="supplierId" column="supplier_id" />
+		<result property="shopId" column="shop_id" />
+		<result property="integrity" column="integrity" />
+		<result property="integrityDesc" column="integrity_dDesc" />
+		<result property="productShortName" column="product_short_name" />
+		<result property="productPrefix" column="product_prefix" />
+		<result property="productSuffix" column="product_suffix" />
+		<result property="productKeyword" column="product_keyword" />
+		<result property="productDownShow" column="product_down_show" />
+		<result property="productAutoUp" column="product_auto_up" />
+		<result property="productSizeCompare" column="product_size_compare" />
+		<result property="productCatCode" column="product_cat_code" />
+		<result property="productCatName" column="product_cat_name" />
+		<result property="productLevel" column="product_level" />
+		<result property="productPriceRate" column="product_price_rate" />
+    
+        <result property="productWeight" column="product_weight" />
+        <result property="productLong" column="product_long" />
+        <result property="productWidth" column="product_width" />
+        <result property="productHeight" column="product_height" />
+        <result property="productProducer" column="product_producer" />
+        <result property="productDensity" column="product_density" />
+    	<result property="productAtrNumber" column="product_atr_number" />
+		<result property="column3" column="Column_3" />
+		<result property="column4" column="Column_4" />
+		
+    	<result property="productVideoUrl" column="product_video_url"/>
+    	<result property="productVideoThumbnail" column="product_thumbnail"/>
+    	<result property="isSupportExpensive" column="is_expensive"/>
+    	
+		<result property="column3" column="Column_3" />
+		<result property="column4" column="Column_4" />
+		<result property="userMaxNum" column="user_max_num" javaType="java.lang.Integer" />
+		<result property="userMaxType" column="user_max_type" javaType="java.lang.Integer" />
+		<result property="zeroMaxCount" column="zero_max_count" javaType="java.lang.Integer" />
+	</resultMap>
+	
+	
+	<sql id="field">
+	
+	        t.product_id,
+	        t.product_name,
+			t.product_code,
+			t.product_desc,
+			t.product_shelves,
+			
+			t.create_time,
+			t.create_by,
+			t.create_user_name,
+			t.update_time,
+			t.update_by,
+			
+			t.update_user_name,
+			t.first_shelves,
+			t.first_shelves_name,
+			t.first_shelves_time,
+			t.last_shelves,
+			t.last_shelves_name,
+			t.last_shelves_time,
+			t.down_shelves,
+			t.down_shelves_name,
+			t.down_shelves_time,
+			
+			t.cost_price,
+			t.tsh_price,
+			t.tb,
+			t.market_price,
+			t.brand_code,
+			t.brand_name,
+			t.cat_code,
+			t.cat_name,
+			t.type,
+			t.status,
+			
+			t.main_pic,
+			t.supplier_id,
+			t.shop_id,
+			t.integrity,
+			t.integrity_desc,
+			t.product_short_name,
+			t.product_prefix,
+			t.product_suffix,
+			t.product_keyword,
+			t.product_down_show,
+			
+			t.product_auto_up,
+			t.product_size_compare,
+			t.product_cat_code,
+			t.product_cat_name,
+			t.product_level,
+			t.product_price_rate,
+			
+			t.product_weight,
+	        t.product_long,
+	        t.product_width,
+	        t.product_height,
+	        t.product_producer,
+	        t.product_density,
+			t.product_atr_number,
+			
+			t.product_video_url,
+			t.product_thumbnail,
+			t.is_expensive,
+			
+			t.user_max_num,
+		    t.user_max_type,
+		    t.zero_max_count,
+			
+			t.Column_3,
+			t.Column_4
+			
+    </sql>
+    
+    <select id="queryOne" parameterType="ProductMallViewModel"
+	resultMap="product_query_map">
+		select
+		      <include refid="field"/>
+		from  t_product_mall_view t
+		where 1=1
+		<if test="productCode != null and productCode != '' ">
+		    	and product_code = #{productCode}
+		</if>
+	</select>
+	
+	
+	<select id="selectByProductId" parameterType="ProductMallViewModel"
+	resultMap="product_query_map">
+		select
+		      <include refid="field"/>
+		from  t_product_mall_view t
+		where 1=1
+		<if test="productId != null and productId != '' ">
+		    	and product_id = #{productId}
+		</if>
+	</select>
+	
+	
+   <select id="selectByProductCode" parameterType="ProductMallViewModel"
+	resultMap="product_query_map">
+		select
+		      <include refid="field"/>
+		from  t_product_mall_view t
+		where 1=1
+		<if test="productCode != null and productCode != '' ">
+		    	and product_code = #{productCode}
+		</if>
+	</select>
+
+
+	<select id="queryListPage" parameterType="ProductMallViewModel"
+		resultMap="product_query_map">
+		SELECT
+			
+			<include refid="field"/>
+			
+		from t_product_mall_view t where 1=1 
+	</select>
+	
+	
+	<sql id="query">
+	        <if test="productId != null and productId !=''">
+					and t.product_id=#{productId}
+		    </if>
+	        <if test="productName != null and productName !=''">
+		        	and t.product_name = #{productName} 
+		    </if>
+	        <if test="productCode != null and productCode !=''">
+		        	and t.product_code = #{productCode} 
+		    </if>
+	        <if test="productDesc != null and productDesc !=''">
+		        	and t.product_desc = #{productDesc}
+		    </if>
+	        <if test="productShelves != null and productShelves !=''">
+		        	and t.product_shelves = #{productShelves}
+		    </if>
+	        <if test="catCode != null and catCode !=''">
+		        	and t.cat_code = #{brandStory}
+		    </if>
+	        
+		    <!-- <if test="statusList != null and statusList !=''">
+		            and t.brand_status 
+		            in
+		        <foreach item="item" index="index" collection="statusList" open="(" separator="," close=")">
+			          #{item}
+		        </foreach>
+		    </if> -->
+    </sql>
+
+
+    <!-- 通过skuCode 商品 -->
+	<select id="selectListBySkuCode" parameterType="java.util.Map"
+		resultMap="product_query_map">
+		SELECT
+		    DISTINCT
+			<include refid="field"/>
+		FROM t_product_mall_view t 
+		JOIN t_product_sku_view t_sku  ON t.product_id = t_sku.product_id
+		WHERE 1=1 
+        <if test="skuCode != null and skuCode !=''">
+	        AND t_sku.product_sku_code = #{skuCode}
+	    </if>
+	</select>
+	
+	
+	
+	<select id="getProductShelvesFiledByProductCode" parameterType="java.lang.String"
+		resultType="java.lang.Long">
+		SELECT
+		t.product_shelves
+		FROM t_product_mall_view t 
+		where t.product_code = #{productCode} limit 1
+	</select>
+	
+	
+	<!-- 通过sku集合 获取列表 -->
+	<select id="selectListBySkuList" parameterType="java.util.Map"
+		resultMap="product_query_map">
+		SELECT
+		    DISTINCT 
+			<include refid="field"/>
+		FROM 
+		     t_product_mall_view t 
+		JOIN 
+		     t_product_sku_view t_sku  
+		ON 
+		     t.product_id = t_sku.product_id
+		
+		WHERE 1=1
+		<choose>
+	     <when test="skuList != null and skuList != '' ">
+	        AND t_sku.product_sku_code 
+		    IN
+		    <foreach item="item" index="index" collection="skuList" open="(" separator="," close=")">
+			          #{item}
+		    </foreach>
+	     </when>
+	     <otherwise>
+	        AND 1=2
+	     </otherwise>
+	    </choose>
+	</select>
+	
+	<!-- 通过productId集合 获取列表  -->
+	<select id="selectListByProductIdList" parameterType="ProductMallViewModel"
+	resultMap="product_query_map" >
+		SELECT
+		      <include refid="field"/>
+		FROM  t_product_mall_view t
+		WHERE 1=1  
+		<choose>
+	     <when test="productIdList != null and productIdList != '' ">
+	        AND t.product_id 
+		    IN
+		    <foreach item="item" index="index" collection="productIdList" open="(" separator="," close=")">
+			          #{item}
+		    </foreach>
+	     </when>
+	     <otherwise>
+	        AND 1=2
+	     </otherwise>
+	    </choose>
+	</select>
+	
+	
+	<!-- 通过productCode集合 获取列表  -->
+	<select id="selectListByProductCodeList" parameterType="ProductMallViewModel"
+	resultMap="product_query_map" >
+		SELECT
+		      <include refid="field"/>
+		FROM  t_product_mall_view t
+		WHERE 1=1  
+		<choose>
+	     <when test="productCodeList != null and productCodeList != '' ">
+	        AND t.product_code 
+		    IN
+		    <foreach item="item" index="index" collection="productCodeList" open="(" separator="," close=")">
+			          #{item}
+		    </foreach>
+	     </when>
+	     <otherwise>
+	        AND 1=2
+	     </otherwise>
+	    </choose>
+	</select>
+	
+	
+	<select id="countListPage" parameterType="ProductMallViewModel"
+		resultType="java.lang.Long">
+		SELECT count(1) FROM  t_product_mall_view t
+		WHERE 1=1 
+		<include refid="query"/>
+	</select>
+	
+</mapper>

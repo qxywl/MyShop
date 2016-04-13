@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="MountRuleLogDaoImpl">
+	
+	<resultMap type="MountRuleLog" id="salecategoryProductMountRuleLogModel">
+		   <result property="id" column="id" javaType="java.lang.Long" />
+		   <result property="mountId" column="mount_id" javaType="java.lang.Long" />
+		   <result property="categoryId" column="category_id" javaType="java.lang.Long" />
+		   <result property="categoryCode" column="category_code" javaType="java.lang.String" />
+		   <result property="productName" column="product_name" javaType="java.lang.String" />
+		   <result property="productPrefix" column="product_prefix" javaType="java.lang.String" />
+		   <result property="productSuffix" column="product_suffix" javaType="java.lang.String" />
+		   <result property="searchTag" column="search_tag" javaType="java.lang.String" />
+		   <result property="brandCodes" column="brand_codes" javaType="java.lang.String" />
+		   <result property="categoryCodes" column="category_codes" javaType="java.lang.String" />
+		   <result property="optType" column="opt_type" javaType="java.lang.Integer" />
+		   <result property="operateUser" column="operate_user" javaType="java.lang.String" />
+		   <result property="operateTime" column="operate_time" javaType="java.sql.Timestamp" />
+		   <result property="logDate" column="log_date" javaType="java.sql.Timestamp" />
+	</resultMap>
+
+    <sql id="query">
+	        <if test="id != null and id !=''">
+					and t.id=#{id}
+		    </if>
+	        <if test="mountId != null and mountId !=''">
+					and t.mount_id=#{mountId}
+		    </if>
+	        <if test="categoryId != null and categoryId !=''">
+					and t.category_id=#{categoryId}
+		    </if>
+	        <if test="categoryCode != null and categoryCode !=''">
+		        	and t.category_code like CONCAT(CONCAT('%', #{categoryCode}), '%') 
+		    </if>
+	        <if test="productName != null and productName !=''">
+		        	and t.product_name like CONCAT(CONCAT('%', #{productName}), '%') 
+		    </if>
+	        <if test="productPrefix != null and productPrefix !=''">
+		        	and t.product_prefix like CONCAT(CONCAT('%', #{productPrefix}), '%') 
+		    </if>
+	        <if test="productSuffix != null and productSuffix !=''">
+		        	and t.product_suffix like CONCAT(CONCAT('%', #{productSuffix}), '%') 
+		    </if>
+	        <if test="searchTag != null and searchTag !=''">
+		        	and t.search_tag like CONCAT(CONCAT('%', #{searchTag}), '%') 
+		    </if>
+	        <if test="brandCodes != null and brandCodes !=''">
+		        	and t.brand_codes like CONCAT(CONCAT('%', #{brandCodes}), '%') 
+		    </if>
+	        <if test="categoryCodes != null and categoryCodes !=''">
+		        	and t.category_codes like CONCAT(CONCAT('%', #{categoryCodes}), '%') 
+		    </if>
+	        <if test="optType != null and optType !=''">
+		        	and t.opt_type like CONCAT(CONCAT('%', #{optType}), '%') 
+		    </if>
+	        <if test="operateUser != null and operateUser !=''">
+		        	and t.operate_user like CONCAT(CONCAT('%', #{operateUser}), '%') 
+		    </if>
+	        <if test="operateTime != null and operateTime !=''">
+					and t.operate_time=#{operateTime}
+		    </if>
+	        <if test="logDate != null and logDate !=''">
+					and t.log_date=#{logDate}
+		    </if>
+	    	<if test="logDateFrom != null and logDateFrom !=''">
+					and t.log_date >= #{logDateFrom}
+		    </if>
+		    <if test="logDateTo != null and logDateTo !=''">
+					and t.log_date <![CDATA[<=]]> #{logDateTo}
+		    </if>
+	
+    </sql>
+
+
+	<select id="queryOne" parameterType="MountRuleLog"
+	resultMap="salecategoryProductMountRuleLogModel">
+	select
+	          id,
+	          mount_id,
+	          category_id,
+	          category_code,
+	          product_name,
+	          product_prefix,
+	          product_suffix,
+	          search_tag,
+	          brand_codes,
+	          category_codes,
+	          opt_type,
+	          operate_user,
+	          operate_time,
+	          log_date
+	from  t_salecategory_product_mount_rule_log t
+	where t.id=#{id}
+	</select>
+	<select id="queryListPage" parameterType="MountRuleLog"
+		resultMap="salecategoryProductMountRuleLogModel">
+		select 
+	          id,
+	    
+	          mount_id,
+	    
+	          category_id,
+	    
+	          category_code,
+	    
+	          product_name,
+	    
+	          product_prefix,
+	    
+	          product_suffix,
+	    
+	          search_tag,
+	    
+	          brand_codes,
+	    
+	          category_codes,
+	    
+	          opt_type,
+	    
+	          operate_user,
+	    
+	          operate_time,
+	    
+	          log_date
+	     from  t_salecategory_product_mount_rule_log t
+		where 1=1
+			<include refid="query"/>
+		order by log_date desc
+	</select>
+
+	<select id="countListPage" parameterType="MountRuleLog"
+		resultType="java.lang.Long">
+		select count(1) from  t_salecategory_product_mount_rule_log t
+		where 1=1
+		<include refid="query"/>
+	 </select>
+
+	<insert id="insert" parameterType="MountRuleLog">
+		<selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER">
+    		SELECT @@IDENTITY as id
+    	</selectKey>
+		insert into  t_salecategory_product_mount_rule_log
+		(
+	          			    mount_id,
+	          			    category_id,
+	          			    category_code,
+	          				product_name,
+	          			    product_prefix,
+	          			    product_suffix,
+	          			    search_tag,
+	          			    brand_codes,
+	          			    category_codes,
+	          			    opt_type,
+	          			    operate_user,
+	          			    operate_time,
+	          			log_date
+        )
+		values
+		(
+		          			    #{mountId},
+		          			    #{categoryId},
+		          			    #{categoryCode},
+		          				#{productName},
+		          			    #{productPrefix},
+		          			    #{productSuffix},
+		          			    #{searchTag},
+		          			    #{brandCodes},
+		          			    #{categoryCodes},
+		          			    #{optType},
+		          			    #{operateUser},
+		          			    #{operateTime},
+	          				#{logDate}
+        )
+	</insert>
+
+	<update id="update" parameterType="MountRuleLog">
+		update  t_salecategory_product_mount_rule_log t 
+		  <set>
+			         <if test="mountId != null  and mountId !=''">
+				          t.mount_id=#{mountId},
+				    </if>
+			         <if test="categoryId != null  and categoryId !=''">
+				          t.category_id=#{categoryId},
+				    </if>
+			         <if test="categoryCode != null  and categoryCode !=''">
+				          t.category_code=#{categoryCode},
+				    </if>
+			         <if test="productName != null  and productName !=''">
+				          t.product_name=#{productName},
+				    </if>
+			         <if test="productPrefix != null  and productPrefix !=''">
+				          t.product_prefix=#{productPrefix},
+				    </if>
+			         <if test="productSuffix != null  and productSuffix !=''">
+				          t.product_suffix=#{productSuffix},
+				    </if>
+			         <if test="searchTag != null  and searchTag !=''">
+				          t.search_tag=#{searchTag},
+				    </if>
+			         <if test="brandCodes != null  and brandCodes !=''">
+				          t.brand_codes=#{brandCodes},
+				    </if>
+			         <if test="categoryCodes != null  and categoryCodes !=''">
+				          t.category_codes=#{categoryCodes},
+				    </if>
+			         <if test="optType != null  and optType !=''">
+				          t.opt_type=#{optType},
+				    </if>
+			         <if test="operateUser != null  and operateUser !=''">
+				          t.operate_user=#{operateUser},
+				    </if>
+			         <if test="operateTime != null  and operateTime !=''">
+				          t.operate_time=#{operateTime},
+				    </if>
+			         <if test="logDate != null  and logDate !=''">
+				          t.log_date=#{logDate}
+				    </if>
+		    </set>
+		where 
+		t.id=#{id}
+	</update>
+	
+	<delete id="delete" parameterType="MountRuleLog">
+    	delete from  t_salecategory_product_mount_rule_log  where 
+    	id =#{id}
+    </delete>
+    
+    <delete id="deleteByIds" parameterType="java.util.List">
+    	delete from t_salecategory_product_mount_rule_log  where 
+    	id in
+    	<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+    </delete>
+
+</mapper>

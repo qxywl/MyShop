@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ProductSkuSupplierDaoImpl">
+	
+	<resultMap type="ProductSkuModel" id="productSkuModel">
+		   <result property="productSkuId" column="product_sku_id" javaType="java.lang.Long" />
+		   <result property="productSkuCode" column="product_sku_code" javaType="java.lang.String" />
+		   <result property="productId" column="product_id" javaType="java.lang.Long" />
+		   <result property="attrColorName" column="attr_color_name" javaType="java.lang.String" />
+		   <result property="attrColorValue" column="attr_color_value" javaType="java.lang.String" />
+		   <result property="attrSpecName" column="attr_spec_name" javaType="java.lang.String" />
+		   <result property="attrSpecValue" column="attr_spec_value" javaType="java.lang.String" />
+		   <result property="colorValueAlias" column="color_value_alias" javaType="java.lang.String" />
+		   <result property="specValueAlias" column="spec_value_alias" javaType="java.lang.String" />
+		   <result property="mainSku" column="main_sku" javaType="java.lang.Long" />
+		   
+		   <result property="status" column="status" javaType="java.lang.Integer" />
+		   <result property="reason" column="reason" javaType="java.lang.String" />
+	</resultMap>
+
+    <sql id="query">
+	        <if test="productSkuId != null and productSkuId !=''">
+					and t.product_sku_id=#{productSkuId}
+		    </if>
+		    <if test="productSkuCode != null and productSkuCode !=''">
+					and t.product_sku_code=#{productSkuCode}
+		    </if>
+	        <if test="productId != null and productId !=''">
+					and t.product_id=#{productId}
+		    </if>
+	        <if test="attrColorName != null and attrColorName !=''">
+		        	and t.attr_color_name like CONCAT(CONCAT('%', #{attrColorName}), '%') 
+		    </if>
+	        <if test="attrColorValue != null and attrColorValue !=''">
+		        	and t.attr_color_value like CONCAT(CONCAT('%', #{attrColorValue}), '%') 
+		    </if>
+	        <if test="attrSpecName != null and attrSpecName !=''">
+		        	and t.attr_spec_name like CONCAT(CONCAT('%', #{attrSpecName}), '%') 
+		    </if>
+	        <if test="attrSpecValue != null and attrSpecValue !=''">
+		        	and t.attr_spec_value like CONCAT(CONCAT('%', #{attrSpecValue}), '%') 
+		    </if>
+	        <if test="mainSku != null and mainSku !=''">
+					and t.main_sku=#{mainSku}
+		    </if>
+	    
+    </sql>
+
+
+	<select id="queryOne" parameterType="ProductSkuModel"
+	resultMap="productSkuModel">
+	select
+	          product_sku_id,
+	          product_sku_code,
+	          product_id,
+	          attr_color_name,
+	          attr_color_value,
+	          attr_spec_name,
+	          attr_spec_value,
+	          color_value_alias,
+	          spec_value_alias,
+	          main_sku
+	from  t_product_sku t
+	where t.product_sku_id=#{productSkuId};
+	</select>
+	<select id="queryListPage" parameterType="ProductSkuModel"
+		resultMap="productSkuModel">
+		select 
+	          product_sku_id,
+	    	  
+	    	  product_sku_code,
+	    	  
+	          product_id,
+	    
+	          attr_color_name,
+	    
+	          attr_color_value,
+	    
+	          attr_spec_name,
+	    
+	          attr_spec_value,
+	          
+	          color_value_alias,
+	          
+	          spec_value_alias,
+	    
+	          main_sku
+	     from  t_product_sku t
+		where 1=1
+		<include refid="query"/>
+	</select>
+
+	<select id="countListPage" parameterType="ProductSkuModel"
+		resultType="java.lang.Long">
+		select count(1) from  t_product_sku t
+		where 1=1
+		<include refid="query"/>
+	 </select>
+
+	<insert id="insert" parameterType="ProductSkuModel">
+		<selectKey resultType="java.lang.Long" keyProperty="productSkuId" order="AFTER">
+    		SELECT @@IDENTITY as productSkuId
+    	</selectKey>
+		insert into  t_product_sku
+		(
+	          			    product_sku_id,
+	          			    product_sku_code,
+	          			    product_id,
+	          				attr_color_name,
+	          			    attr_color_value,
+	          			    attr_spec_name,
+	          			    attr_spec_value,
+	          			    color_value_alias,
+	          			    spec_value_alias,
+	          				main_sku
+        )
+		values
+		(
+		          			    #{productSkuId},
+		          			    #{productSkuCode},
+		          			    #{productId},
+		          				#{attrColorName},
+		          			    #{attrColorValue},
+		          			    #{attrSpecName},
+		          			    #{attrSpecValue},
+	          					#{mainSku}
+        )
+	</insert>
+
+	<update id="update" parameterType="ProductSkuModel">
+		update  t_product_sku t 
+		  <set>
+				    <if test="status != null  and status !=''">
+				          t.status=#{status},
+				    </if>
+				    <if test="reason != null">
+				          t.reason=#{reason}
+				    </if>
+		    </set>
+		where 
+		t.product_sku_code=#{productSkuCode};
+	</update>
+	<update id="updateStatusList" parameterType="java.util.Map">
+		update  t_product_sku t 
+		  <set>
+				    <if test="status != null  and status !=''">
+				          t.status=#{status},
+				    </if>
+				    <if test="reason != null">
+				          t.reason=#{reason}
+				    </if>
+		    </set>
+		where 
+		t.product_sku_code in 
+		<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</update>
+	
+	<delete id="delete" parameterType="ProductSkuModel">
+    	delete from  t_product_sku  where  product_sku_id=#{productSkuId};
+    </delete>
+    
+    <delete id="deleteByIds" parameterType="java.util.Map">
+    	delete from t_product_sku  where product_id=#{productId}
+    	 <if test="list != null  and list.size > 0">
+			and product_sku_id not in 
+	    	<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		 </if>
+    </delete>
+	
+	<select id="getSkuByProductId" parameterType="ProductSkuModel" resultMap="productSkuModel">
+		select 
+			  product_sku_id,
+			  product_sku_code,
+	          product_id,
+	          attr_color_name,
+	          attr_color_value,
+	          attr_spec_name,
+	          attr_spec_value,
+	          color_value_alias,
+	          spec_value_alias,
+	          main_sku
+	    from t_product_sku where product_id=#{productId}
+	</select>
+	
+</mapper>

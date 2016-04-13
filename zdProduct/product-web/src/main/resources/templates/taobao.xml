@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<workbook>
+    <worksheet idx="0">        
+        <loop startRow="3" endRow="3" items="taoBaoExcelModelList" var="taoBaoExcelModel" varType="com.zhaidou.product.info.model.TaoBaoExcelModel">
+            <section startRow="3" endRow="3">
+                <mapping cell="A4">taoBaoExcelModel.taobaoProductName</mapping>
+                <mapping cell="U4">taoBaoExcelModel.taobaoDescription</mapping>
+                <mapping cell="AC4">taoBaoExcelModel.taobaoPic</mapping>
+                <mapping cell="AE4">taoBaoExcelModel.taobaoSkuGroup</mapping>
+                <mapping cell="AI4">taoBaoExcelModel.taobaoGroupAlias</mapping>
+                <mapping cell="AR4">taoBaoExcelModel.taobaoCpvMemo</mapping>
+                <mapping cell="AS4">taoBaoExcelModel.taobaoInputCustomCpv</mapping>             
+            </section>
+             <loopbreakcondition>
+                <rowcheck offset="0">
+                    <cellcheck offset="0"/>
+                </rowcheck>
+            </loopbreakcondition>
+        </loop>
+    </worksheet>   
+</workbook>

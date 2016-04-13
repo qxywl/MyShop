@@ -1,0 +1,377 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="SaleCategoryDaoImpl">
+
+ 	<resultMap type="com.zhaidou.product.category.model.CategoryPO" id="CategoryPO_query_list">
+        <result property="id" column="category_id"/>
+        <result property="categoryName" column="category_name"/>
+        <result property="categoryCode" column="category_code"/>
+        <result property="parentId" column="parent_id"/>
+        <result property="parentCode" column="parent_code"/>
+        <result property="imageUrl" column="image_url"/>
+        <result property="showFlag" column="show_flag"/>
+        <result property="deleteFlag" column="delete_flag"/>
+        <result property="colorName" column="color_name"/>
+        <result property="sizeName" column="size_name"/>
+        <result property="createDate" column="create_time"/>
+        <result property="createUser" column="create_user"/>
+        <result property="updateUser" column="last_update_user"/>
+        <result property="updateDate" column="last_update_time"/>
+        <result property="sortNumber" column="sort_number"/>
+    </resultMap>
+
+	<insert id="insert" parameterType="com.zhaidou.product.category.model.CategoryPO" useGeneratedKeys="true" keyProperty="id">
+		insert into t_sale_category
+		(
+		   category_name,
+		   category_code,
+		   parent_id ,
+		   parent_code ,
+		   image_url,
+		   show_flag,
+		   delete_flag,
+		   color_name,
+		   size_name,
+		   create_time,
+		   create_user,
+		   last_update_time,
+		   last_update_user,
+		   sort_number
+		) 
+	   values 
+	   (
+	      #{categoryName},
+	      #{categoryCode},
+	      #{parentId},
+	      #{parentCode},
+	      #{imageUrl},
+	      #{showFlag},
+	      #{deleteFlag},
+	      #{colorName},
+	      #{sizeName},
+	      #{createDate},
+	      #{createUser},
+	      #{createDate},
+	      #{createUser},
+	      #{sortNumber}
+	  )
+	</insert>
+	 
+	<update id="update" parameterType="com.zhaidou.product.category.model.CategoryPO" >
+	   UPDATE t_sale_category
+	      SET 
+	         <if test="categoryName != null and categoryName != '' ">
+		          category_name = #{categoryName},
+	         </if>
+	         <if test="imageUrl != null and imageUrl != '' ">
+		          image_url = #{imageUrl},
+	         </if>
+	         <if test="colorName != null ">
+		          color_name = #{colorName},
+	         </if>
+	         <if test="sizeName != null ">
+		          size_name = #{sizeName},
+	         </if>
+	         <if test="showFlag != null ">
+	              show_flag = #{showFlag},
+	         </if>
+	         <if test="deleteFlag != null ">
+		          delete_flag = #{deleteFlag},
+	         </if>
+	         <if test="sortNumber != null ">
+		          sort_number = #{sortNumber},
+	         </if>
+	          last_update_time = now(),
+		      last_update_user = #{updateUser}
+	    WHERE category_id = #{id}
+	</update>
+		   
+    <select id="queryAll" resultMap="CategoryPO_query_list">
+       SELECT
+           category_id,
+           category_name,
+		   category_code,
+		   parent_id ,
+		   parent_code ,
+		   image_url,
+		   show_flag,
+		   delete_flag,
+		    color_name,
+		   size_name,
+		   create_time,
+		   create_user,
+		   last_update_time,
+		   last_update_user
+	   FROM t_sale_category 
+	   WHERE  delete_flag=0 order by sort_number desc ,category_code asc 
+    </select>
+    
+    <select id="queryOne" parameterType="com.zhaidou.product.category.model.CategoryPO" resultMap="CategoryPO_query_list">
+       SELECT
+           category_id,
+           category_name,
+		   category_code,
+		   parent_id ,
+		   parent_code ,
+		   image_url,
+		   show_flag,
+		   delete_flag,
+		    color_name,
+		   size_name,
+		   create_time,
+		   create_user,
+		   last_update_time,
+		   last_update_user,
+		   sort_number
+	   FROM t_sale_category 
+        WHERE 1=1  
+       	 <if test="categoryCode != null ">
+	         and category_code = #{categoryCode}
+         </if>
+         <if test="id != null ">
+	         and  category_id = #{id}
+         </if>
+         <if test="categoryName != null ">
+	         and  category_name = #{categoryName}
+         </if>
+	</select>
+	
+	<select id="countListPage"  parameterType="com.zhaidou.product.category.model.CategoryPO" resultType="long">
+       SELECT COUNT(1) FROM t_sale_category 
+        WHERE 1=1 
+         <if test="id != null ">
+	         and   parent_id = #{id}
+         </if>
+       	 <if test="id == null ">
+	        and   parent_id is null 
+         </if>
+    </select>
+    
+    <update id="deleteByParentCode" parameterType="com.zhaidou.product.category.model.CategoryPO" >
+	   UPDATE t_sale_category
+	   SET   delete_flag = 1,
+	          last_update_time = now(),
+		      last_update_user = #{updateUser}
+	    WHERE  left(parent_code,length(#{categoryCode})) = #{categoryCode} and delete_flag != 1
+	</update>
+	
+	
+	<update id="hiddenByParentCode" parameterType="com.zhaidou.product.category.model.CategoryPO" >
+	   UPDATE t_sale_category
+	   SET     show_flag = 0,
+	          last_update_time = now(),
+		      last_update_user = #{updateUser}
+	    WHERE  left(parent_code,length(#{categoryCode})) = #{categoryCode} and show_flag != 0
+	</update>
+	
+	<update id="showByParentCode" parameterType="com.zhaidou.product.category.model.CategoryPO" >
+	   UPDATE t_sale_category
+	   SET     show_flag = 1,
+	          last_update_time = now(),
+		      last_update_user = #{updateUser}
+	    WHERE  left(parent_code,length(#{categoryCode})) = #{categoryCode} and show_flag != 1
+	</update>
+	
+	<select id="selectByParentCode" parameterType="CategoryPO" resultMap="CategoryPO_query_list">
+	   SELECT
+           category_id,
+           category_name,
+		   category_code,
+		   parent_id ,
+		   parent_code ,
+		   image_url,
+		   show_flag,
+		   delete_flag,
+		    color_name,
+		   size_name,
+		   create_time,
+		   create_user,
+		   last_update_time,
+		   last_update_user
+	    FROM t_sale_category  
+	    WHERE  left(parent_code,length(#{categoryCode})) = #{categoryCode} and delete_flag != 1
+	</select>
+	
+	<select id="selectSonsByParentCode" parameterType="CategoryPO" resultMap="CategoryPO_query_list">
+	   SELECT
+           category_id,
+           category_name,
+		   category_code,
+		   parent_id ,
+		   parent_code ,
+		   image_url,
+		   show_flag,
+		   delete_flag,
+		    color_name,
+		   size_name,
+		   create_time,
+		   create_user,
+		   last_update_time,
+		   last_update_user
+	    FROM t_sale_category  
+	    WHERE  delete_flag = 0 
+	    <if test="categoryCode == null ">
+	    	and parent_code is null 
+	    </if>
+	    <if test="categoryCode != null ">
+	    	parent_code = #{categoryCode}
+	    </if>
+	</select>
+    
+    <select id="queryListByCategoryCode" parameterType="java.util.List"
+		resultMap="CategoryPO_query_list">
+		select 
+	          category_id,
+	          category_code
+	    from  t_sale_category t
+		where 
+			t.category_code in
+			<foreach collection="list" item="item" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+	</select>
+	
+	
+	<select id="queryCategoryListByCategoryCodes" parameterType="java.util.List"
+		resultMap="CategoryPO_query_list">
+		select 
+	       category_id,
+           category_name,
+		   category_code,
+		   parent_id ,
+		   parent_code ,
+		   image_url,
+		   show_flag,
+		   delete_flag,
+		    color_name,
+		   size_name,
+		   create_time,
+		   create_user,
+		   last_update_time,
+		   last_update_user
+	    from  t_sale_category t
+		where 
+			delete_flag != 1
+			and t.category_code in
+			<foreach collection="list" item="item" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+			order by t.category_code desc
+	</select>
+	
+	 <select id="selectByParentIdAndCategoryName" resultMap="CategoryPO_query_list" parameterType="CategoryPO">
+       SELECT
+           category_id,
+           category_name,
+		   category_code,
+		   parent_id ,
+		   parent_code ,
+		   image_url,
+		   show_flag,
+		   delete_flag,
+		    color_name,
+		   size_name,
+		   create_time,
+		   create_user,
+		   last_update_time,
+		   last_update_user
+	   FROM t_sale_category  
+	   WHERE category_name = #{categoryName} 
+	   <if test="parentId == null ">
+	    	and parent_id is null 
+	    </if>
+	    <if test="parentId != null ">
+	    	and parent_id=#{parentId}
+	    </if>
+	    and show_flag = 1 and delete_flag=0 
+    </select>
+	
+	<select id="countCategoryAndSubList"  parameterType="java.lang.Long" resultType="long">
+       SELECT COUNT(1) FROM t_sale_category 
+        WHERE 
+        	delete_flag = 0
+	        and(	
+	        	category_id = #{categoryId}
+	        	or parent_id = #{categoryId} 
+	        )
+    </select>
+    
+    <select id="countCategoryAndSubListByCode"  parameterType="java.lang.String" resultType="long">
+       SELECT COUNT(1) FROM t_sale_category 
+        WHERE 
+        	delete_flag = 0
+	        and(	
+	        	category_code = #{categoryCode}
+	        	or parent_code = #{categoryCode} 
+	        )
+    </select>
+    
+    
+    
+    
+    <select id="queryCodeListByIds" parameterType="java.util.List" resultType="java.lang.String">
+    	select 
+    		category_code 
+    	from 
+    		t_sale_category
+    	where
+    		delete_flag = 0
+    		and category_id in
+    		<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+    </select>
+    
+    
+    <select id="selectAllByLevel"  parameterType="java.util.Map" resultMap="CategoryPO_query_list">
+	   SELECT
+           category_id,
+           category_name,
+		   category_code,
+		   parent_id ,
+		   parent_code ,
+		   image_url,
+		   show_flag,
+		   delete_flag,
+		    color_name,
+		   size_name,
+		   create_time,
+		   create_user,
+		   last_update_time,
+		   last_update_user 
+	    FROM t_base_category   
+	    WHERE  delete_flag = 0 
+	    <if test="level != null ">
+	    	and length(category_code) =#{level}
+	    </if>
+	  </select>
+	   
+	  <select id="selectParentAndSonByCode"  parameterType="java.util.Map" resultMap="CategoryPO_query_list">
+	   SELECT
+           category_id,
+           category_name,
+		   category_code,
+		   parent_id ,
+		   parent_code ,
+		   image_url,
+		   show_flag,
+		   delete_flag,
+		    color_name,
+		   size_name,
+		   create_time,
+		   create_user,
+		   last_update_time,
+		   last_update_user 
+	    FROM t_base_category   
+	    WHERE  delete_flag = 0 
+	    <if test="categoryCode != null ">
+	    	and 
+	    	(   category_code =#{categoryCode}
+	    	    or 
+	    	    left(parent_code,length(#{categoryCode})) = #{categoryCode}
+	    	 )
+	    </if>
+	  </select>
+	   
+</mapper>

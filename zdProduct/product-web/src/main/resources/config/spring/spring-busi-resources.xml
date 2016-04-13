@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jee="http://www.springframework.org/schema/jee" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd  
+	                      http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+	                      http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd         
+	                      http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-3.0.xsd         
+	                      http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd">
+
+    <!-- 启动 ioc 注解 -->
+	<context:component-scan base-package="com.zhaidou" />
+	<import resource="classpath:config/spring/spring-config-framework.xml"/>
+	<import resource="spring-remote.xml"/>
+	<tx:annotation-driven />
+	
+	<!-- 属性资源文件设置 -->
+	<bean id="propertyConfigurerForProject3" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">  
+    <property name="order" value="2" />  
+    <property name="ignoreUnresolvablePlaceholders" value="true" />  
+    <property name="locations">  
+      <list>  
+        <value>classpath:config.properties</value>  
+      </list>  
+    </property>  
+    </bean>  
+	
+	<bean id="propertyConfigurerForProject2" class="org.springframework.beans.factory.config.PropertiesFactoryBean">  
+    <property name="locations">  
+      <list>  
+        <value>classpath:config.properties</value>  
+      </list>  
+    </property> 
+    </bean>
+
+	<aop:config>
+		<aop:pointcut id="pc"
+			expression="execution(public * com.zhaidou.product.*.service..*.*(..))" /> <!--把事务控制在Service层 -->
+		<aop:advisor pointcut-ref="pc" advice-ref="userTxAdvice" />
+	</aop:config>
+	<!-- mybatis config 
+	-->
+	<bean id="SqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="bonedataSource" />
+		  <property name="configLocation" value="classpath:config/mybatis/mybatis-cas-config.xml" /> 
+		<!-- 自动扫描po目录, 省掉Configuration.xml里的手工配置 -->
+        <property name="typeAliasesPackage" value="com.zhaidou.product.info.model,
+        											com.zhaidou.product.brand.model,
+        											com.zhaidou.product.attributies.model,
+        											com.zhaidou.product.category.model,
+        											com.zhaidou.common.model" />
+		 <!-- 显式指定Mapper文件位置 
+        <property name="mapperLocations" value="classpath:config/mybatis/*.xml" />
+        -->
+        <property name="mapperLocations" value="classpath*:config/mybatis/mapper/*/*.xml"></property>  
+        
+	</bean>
+	<bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate" >
+		<constructor-arg index="0" ref="SqlSessionFactory" />
+	</bean>
+</beans>

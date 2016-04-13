@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="FilterMountLogDaoImpl">
+	
+	<resultMap type="FilterMountLog" id="filterMountLog">
+		   <result property="id" column="id" javaType="java.lang.Long" />
+		   <result property="relationId" column="relation_id" javaType="java.lang.Long" />
+		   <result property="categoryId" column="category_id" javaType="java.lang.Long" />
+		   <result property="categoryCode" column="category_code" javaType="java.lang.String" />
+		   <result property="attrId" column="attr_id" javaType="java.lang.Integer" />
+		   <result property="attrCode" column="attr_code" javaType="java.lang.String" />
+		   <result property="attrvalueId" column="attrValue_id" javaType="java.lang.Integer" />
+		   <result property="attrvalueCode" column="attrValue_code" javaType="java.lang.String" />
+		   <result property="optType" column="opt_type" javaType="java.lang.Integer" />
+		   <result property="orderNumber" column="order_number" javaType="java.lang.Integer" />
+		   <result property="operateUser" column="operate_user" javaType="java.lang.String" />
+		   <result property="operateTime" column="operate_time" javaType="java.util.Date" />
+		   <result property="logDate" column="log_date" javaType="java.util.Date" />
+	</resultMap>
+
+    <sql id="query">
+	        <if test="id != null and id !=''">
+					and t.id=#{id}
+		    </if>
+	        <if test="relationId != null and relationId !=''">
+					and t.relation_id=#{relationId}
+		    </if>
+	        <if test="categoryId != null and categoryId !=''">
+					and t.category_id=#{categoryId}
+		    </if>
+	        <if test="categoryCode != null and categoryCode !=''">
+		        	and t.category_code = #{categoryCode}
+		    </if>
+	        <if test="attrId != null and attrId !=''">
+					and t.attr_id=#{attrId}
+		    </if>
+	        <if test="attrCode != null and attrCode !=''">
+		        	and t.attr_code like CONCAT(CONCAT('%', #{attrCode}), '%') 
+		    </if>
+	        <if test="attrvalueId != null and attrvalueId !=''">
+		        	and t.attrValue_id like CONCAT(CONCAT('%', #{attrvalueId}), '%') 
+		    </if>
+	        <if test="attrvalueCode != null and attrvalueCode !=''">
+		        	and t.attrValue_code like CONCAT(CONCAT('%', #{attrvalueCode}), '%') 
+		    </if>
+	        <if test="optType != null and optType !=''">
+		        	and t.opt_type like CONCAT(CONCAT('%', #{optType}), '%') 
+		    </if>
+	        <if test="orderNumber != null and orderNumber !=''">
+		        	and t.order_number like CONCAT(CONCAT('%', #{orderNumber}), '%') 
+		    </if>
+	        <if test="operateUser != null and operateUser !=''">
+		        	and t.operate_user like CONCAT(CONCAT('%', #{operateUser}), '%') 
+		    </if>
+	        <if test="operateTime != null and operateTime !=''">
+					and t.operate_time=#{operateTime}
+		    </if>
+	        <if test="logDate != null and logDate !=''">
+					and t.log_date=#{logDate}
+		    </if>
+	        <if test="logDateFrom != null and logDateFrom !=''">
+					and t.log_date>=#{logDateFrom}
+		    </if>
+	        <if test="logDateTo != null and logDateTo !=''">
+					and t.log_date<![CDATA[<=]]>#{logDate}
+		    </if>
+	    
+    </sql>
+
+
+	<select id="queryOne" parameterType="FilterMountLog"
+	resultMap="filterMountLog">
+	select
+	          id,
+	          relation_id,
+	          category_id,
+	          category_code,
+	          attr_id,
+	          attr_code,
+	          attrValue_id,
+	          attrValue_code,
+	          opt_type,
+	          order_number,
+	          operate_user,
+	          operate_time,
+	          log_date
+	from  t_salecategory_filter_relation_log t
+	where t.id=#{id}
+	</select>
+	<select id="queryListPage" parameterType="FilterMountLog"
+		resultMap="filterMountLog">
+		select 
+	          id,
+	    
+	          relation_id,
+	    
+	          category_id,
+	    
+	          category_code,
+	    
+	          attr_id,
+	    
+	          attr_code,
+	    
+	          attrValue_id,
+	    
+	          attrValue_code,
+	    
+	          opt_type,
+	    
+	          order_number,
+	    
+	          operate_user,
+	    
+	          operate_time,
+	    
+	          log_date
+	     from  t_salecategory_filter_relation_log t
+		where 1=1
+			<include refid="query"/>
+		order by log_date desc
+	</select>
+
+	<select id="countListPage" parameterType="FilterMountLog"
+		resultType="java.lang.Long">
+		select count(1) from  t_salecategory_filter_relation_log t
+		where 1=1
+		<include refid="query"/>
+	 </select>
+
+	<insert id="insert" parameterType="FilterMountLog">
+		<selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER">
+    		SELECT @@IDENTITY as id
+    	</selectKey>
+		insert into  t_salecategory_filter_relation_log
+		(
+			relation_id,
+			category_id,
+			category_code,
+			attr_id,
+			attr_code,
+			attrValue_id,
+			attrValue_code,
+			opt_type,
+			order_number,
+			operate_user,
+			operate_time,
+			log_date
+        )
+		values
+		(
+			#{relationId},
+			#{categoryId},
+			#{categoryCode},
+			#{attrId},
+			#{attrCode},
+			#{attrvalueId},
+			#{attrvalueCode},
+			#{optType},
+			#{orderNumber},
+			#{operateUser},
+			#{operateTime},
+			#{logDate}
+        )
+	</insert>
+
+	<update id="update" parameterType="FilterMountLog">
+		update  t_salecategory_filter_relation_log t 
+		<set>
+		     <if test="relationId != null  and relationId !=''">
+		       t.relation_id=#{relationId},
+		 	</if>
+		     <if test="categoryId != null  and categoryId !=''">
+		       t.category_id=#{categoryId},
+			 </if>
+		     <if test="categoryCode != null  and categoryCode !=''">
+		       t.category_code=#{categoryCode},
+		 	</if>
+		     <if test="attrId != null  and attrId !=''">
+		       t.attr_id=#{attrId},
+		 	</if>
+		     <if test="attrCode != null  and attrCode !=''">
+		       t.attr_code=#{attrCode},
+		 	</if>
+		     <if test="attrvalueId != null  and attrvalueId !=''">
+		       t.attrValue_id=#{attrvalueId},
+		 	</if>
+		     <if test="attrvalueCode != null  and attrvalueCode !=''">
+		       t.attrValue_code=#{attrvalueCode},
+		 	</if>
+		     <if test="optType != null  and optType !=''">
+		       t.opt_type=#{optType},
+		 	</if>
+		     <if test="orderNumber != null  and orderNumber !=''">
+		       t.order_number=#{orderNumber},
+		 	</if>
+		     <if test="operateUser != null  and operateUser !=''">
+		       t.operate_user=#{operateUser},
+		 	</if>
+		     <if test="operateTime != null  and operateTime !=''">
+		       t.operate_time=#{operateTime},
+		 	</if>
+		    <if test="logDate != null  and logDate !=''">
+		       t.log_date=#{logDate}
+		 	</if>
+		</set>
+		where 
+			t.id=#{id}
+	</update>
+	
+	<delete id="delete" parameterType="FilterMountLog">
+    	delete from  t_salecategory_filter_relation_log  where 
+    	id =#{id}
+    </delete>
+    
+    <delete id="deleteByIds" parameterType="java.util.List">
+    	delete from t_salecategory_filter_relation_log  where 
+    	id in
+    	<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+    </delete>
+
+</mapper>

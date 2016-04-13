@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ReportConDaoImpl">
+	
+	<resultMap type="ReportConModel" id="reportConModel">
+		   <result property="conId" column="con_id" javaType="java.lang.Integer" />
+		   <result property="conName" column="con_name" javaType="java.lang.String" />
+		   <result property="conProperty" column="con_property" javaType="java.lang.String" />
+		   <result property="conType" column="con_type" javaType="java.lang.Integer" />
+		   <result property="conDefault" column="con_default" javaType="java.lang.String" />
+		   <result property="conSelectSql" column="con_select_sql" javaType="java.lang.String" />
+		   <result property="reportId" column="report_id" javaType="java.lang.Integer" />
+		   <result property="conSelectPropertyName" column="con_select_property_name" javaType="java.lang.String" />
+	</resultMap>
+
+    <sql id="query">
+	        <if test="conId != null and conId !=''">
+					and t.con_id=#{conId}
+		    </if>
+	        <if test="conName != null and conName !=''">
+					and t.con_name like CONCAT(CONCAT('%', #{conName}), '%') 
+		    </if>
+	        <if test="conProperty != null and conProperty !=''">
+		        	and t.con_property like CONCAT(CONCAT('%', #{conProperty}), '%') 
+		    </if>
+		    <if test="conSelectSql != null and conSelectSql !=''">
+		        	and t.con_select_sql like CONCAT(CONCAT('%', #{conSelectSql}), '%') 
+		    </if>
+    </sql>
+
+
+	<select id="queryOne" parameterType="ReportConModel"
+	resultMap="reportConModel">
+	select
+	          con_id,
+	          con_name,
+	          con_property,
+	          con_type,
+	          con_default,
+	          con_select_sql,
+	          report_id,
+	          con_select_property_name
+	from  t_report_con t
+	where t.con_id=#{conId};
+	</select>
+	<select id="queryListPage" parameterType="ReportConModel"
+		resultMap="reportConModel">
+		select 
+	          con_id,
+	          con_name,
+	          con_property,
+	          con_type,
+	          con_default,
+	          con_select_sql,
+	          report_id,
+	          con_select_property_name
+	     from  t_report_con t
+		where 1=1
+		<include refid="query"/>
+	</select>
+	
+	<select id="getConListByReportId" parameterType="ReportConModel"
+		resultMap="reportConModel">
+		select 
+	          t.con_id,
+	          t.con_name,
+	          t.con_property,
+	          t.con_type,
+	          t.con_default,
+	          t.con_select_sql,
+	          t.report_id,
+	          con_select_property_name
+	     from  t_report_con t
+		where t.report_id=#{reportId}
+	</select>
+
+	<select id="countListPage" parameterType="ReportConModel"
+		resultType="java.lang.Long">
+		select count(1) from  t_report_con t
+		where 1=1
+		<include refid="query"/>
+	 </select>
+
+	<insert id="insert" parameterType="ReportConModel">
+		<selectKey resultType="java.lang.Integer" keyProperty="conId" order="AFTER">
+    		SELECT @@IDENTITY as conId
+    	</selectKey>
+		insert into  t_report_con
+		(
+	          			  con_id,
+				          con_name,
+				          con_property,
+				          con_type,
+				          con_default,
+				          con_select_sql,
+				          report_id,
+				          con_select_property_name
+        )
+		values
+		(
+		          			    #{conId},
+		          			    #{conName},
+		          			    #{conProperty},
+		          			    #{conType},
+		          			    #{conDefault},
+		          			    #{conSelectSql},
+		          			    #{reportId},
+		          			    #{conSelectPropertyName}
+        )
+	</insert>
+
+	<update id="update" parameterType="ReportConModel">
+		update  t_report_con t 
+		  <set>
+			         <if test="conName != null  and conName !=''">
+				          t.con_name=#{conName},
+				    </if>
+			         <if test="conProperty != null  and conProperty !=''">
+				          t.con_property=#{conProperty},
+				    </if>
+			         <if test="conType != null  and conType !=''">
+				          t.con_type=#{conType},
+				    </if>
+				    <if test="conDefault != null  and conDefault !=''">
+				          t.con_default=#{conDefault},
+				    </if>
+				     <if test="conSelectSql != null  and conSelectSql !=''">
+				          t.con_select_sql=#{conSelectSql},
+				    </if>
+				    <if test="reportId != null  and reportId !=''">
+				          t.report_id=#{reportId},
+				    </if>
+				    <if test="conSelectPropertyName != null  and conSelectPropertyName !=''">
+				          t.con_select_property_name=#{conSelectPropertyName},
+				    </if>
+				    <if test="conId != null  and conId !=''">
+				          t.con_id=#{conId}
+				    </if>
+		    </set>
+		where 
+		t.con_id=#{conId};
+	</update>
+	
+	<delete id="delete" parameterType="ReportConModel">
+    	delete from  t_report_con  where report_id=#{reportId};
+    </delete>
+    
+    <delete id="deleteByIds" parameterType="java.util.Map">
+    	delete from t_report_con  where report_id=#{reportId} and con_id not
+    	 in
+    	<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+    </delete>
+    
+    <delete id="deleteReportConByReportId" parameterType="java.lang.Integer">
+    	delete from t_report_con  where report_id=#{reportId}
+    </delete>
+	
+	<select id="getSelectValue" parameterType="ReportConModel" resultType="java.util.HashMap">
+		${conSelectSql}
+	</select>
+	
+</mapper>

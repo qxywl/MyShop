@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="MountProductDaoImpl">
+
+	<resultMap type="MountProductModel" id="mountProduct">
+		<id property="relationId" column="relation_id" javaType="java.lang.Long" />
+		<result property="productId" column="product_id" javaType="java.lang.Long" />
+		<result property="productCode" column="product_code" javaType="java.lang.String" />
+		<result property="categoryId" column="category_id" javaType="java.lang.Long" />
+		<result property="categoryCode" column="category_code"
+			javaType="java.lang.String" />
+		<result property="orderValue" column="order_value" javaType="java.lang.Long" />
+		<result property="mountType" column="mount_type" javaType="java.lang.Integer" />
+		<result property="optType" column="opt_type" javaType="java.lang.Integer" />
+		<result property="mountTime" column="mount_time" javaType="java.sql.Timestamp" />
+		<result property="mountUser" column="mount_user" javaType="java.lang.String" />
+		<result property="lastUpdateTime" column="last_update_time"
+			javaType="java.sql.Timestamp" />
+		<result property="lastUpdateUser" column="last_update_user"
+			javaType="java.lang.String" />
+	</resultMap>
+
+	<sql id="base_column_list">
+		relation_id,
+		product_id,
+		product_code,
+		category_id,
+		category_code,
+		order_value,
+		mount_type,
+		opt_type,
+		mount_time,
+		mount_user,
+		last_update_time,
+		last_update_user
+	</sql>
+
+	<sql id="query">
+		<if test="relationId != null and relationId !=''">
+			and t.relation_id=#{relationId}
+		</if>
+		<if test="productId != null and productId !=''">
+			and t.product_id=#{productId}
+		</if>
+		<if test="productCode != null and productCode !=''">
+			and t.product_code like CONCAT(CONCAT('%', #{productCode}), '%')
+		</if>
+		<if test="categoryId != null and categoryId !=''">
+			and t.category_id=#{categoryId}
+		</if>
+		<if test="categoryCode != null and categoryCode !=''">
+			and t.category_code like CONCAT(CONCAT('%', #{categoryCode}), '%')
+		</if>
+		<if test="orderValue != null and orderValue !=''">
+			and t.order_value=#{orderValue}
+		</if>
+		<if test="mountType != null and mountType !=''">
+			and t.mount_type like CONCAT(CONCAT('%', #{mountType}), '%')
+		</if>
+		<if test="optType != null and optType !=''">
+			and t.opt_type like CONCAT(CONCAT('%', #{optType}), '%')
+		</if>
+		<if test="mountTime != null and mountTime !=''">
+			and t.mount_time=#{mountTime}
+		</if>
+		<if test="mountUser != null and mountUser !=''">
+			and t.mount_user like CONCAT(CONCAT('%', #{mountUser}), '%')
+		</if>
+		<if test="lastUpdateTime != null and lastUpdateTime !=''">
+			and t.last_update_time=#{lastUpdateTime}
+		</if>
+		<if test="lastUpdateUser != null and lastUpdateUser !=''">
+			and t.last_update_user like CONCAT(CONCAT('%', #{lastUpdateUser}), '%')
+		</if>
+
+	</sql>
+
+
+	<select id="queryListByCategoryCode" parameterType="MountProductModel"
+		resultMap="mountProduct">
+		select
+			<include refid="base_column_list" />
+		from
+			t_salecategory_product_relation t
+		where t.category_code = #{categoryCode}
+	</select>
+
+	<!-- <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER"> 
+		SELECT @@IDENTITY as id </selectKey> -->
+	<insert id="batchInsert" parameterType="MountProductModel"
+		useGeneratedKeys="true">
+		insert into t_salecategory_product_relation
+		(
+		product_id,
+		product_code,
+		category_id,
+		category_code,
+		order_value,
+		mount_type,
+		opt_type,
+		mount_time,
+		mount_user,
+		last_update_time,
+		last_update_user
+		)
+		values
+		<foreach collection="list" separator="," index="index" item="item">
+			(
+			#{item.productId},
+			#{item.productCode},
+			#{item.categoryId},
+			#{item.categoryCode},
+			#{item.orderValue},
+			#{item.mountType},
+			#{item.optType},
+			#{item.mountTime},
+			#{item.mountUser},
+			#{item.lastUpdateTime},
+			#{item.lastUpdateUser}
+			)
+		</foreach>
+	</insert>
+
+	<update id="update" parameterType="MountProductModel">
+		update t_salecategory_product_relation t
+		<set>
+			<if test="orderValue != null  and orderValue !=''">
+				t.order_value=#{orderValue},
+			</if>
+			<if test="mountType != null  and mountType !=''">
+				t.mount_type=#{mountType},
+			</if>
+			<if test="optType != null  and optType !=''">
+				t.opt_type=#{optType},
+			</if>
+			<if test="mountTime != null  and mountTime !=''">
+				t.mount_time=#{mountTime},
+			</if>
+			<if test="mountUser != null  and mountUser !=''">
+				t.mount_user=#{mountUser},
+			</if>
+			<if test="lastUpdateTime != null  and lastUpdateTime !=''">
+				t.last_update_time=#{lastUpdateTime},
+			</if>
+			<if test="lastUpdateUser != null  and lastUpdateUser !=''">
+				t.last_update_user=#{lastUpdateUser}
+			</if>
+		</set>
+		where
+		t.relation_id=#{relationId}
+	</update>
+	
+	<!-- 根据运营分类ID查询挂载在其下的产品列表 -->
+	<select id="selectOpt1ByCategoryId" parameterType="MountProductModel" resultMap="mountProduct">
+	select 
+	    t1.product_id,
+	    t1.product_code,
+	    t1.mount_type,
+		t1.category_id,
+		t1.category_code,
+		t1.order_value,
+		t1.opt_type 
+	from
+	    t_salecategory_product_relation t1
+	 where t1.category_id = #{categoryId} and t1.opt_type = 1
+	</select>
+
+</mapper>

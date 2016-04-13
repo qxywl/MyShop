@@ -1,0 +1,375 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ProductOperateDaoImpl">
+
+	<resultMap type="ProductOperateModel" id="productOperateModel">
+		<result property="productOperateId" column="product_operate_id"
+			javaType="java.lang.Long" />
+		<result property="productId" column="product_id" javaType="java.lang.Long" />
+		<result property="productShortName" column="product_short_name"
+			javaType="java.lang.String" />
+		<result property="productPrefix" column="product_prefix"
+			javaType="java.lang.String" />
+		<result property="productSuffix" column="product_suffix"
+			javaType="java.lang.String" />
+		<result property="productKeyword" column="product_keyword"
+			javaType="java.lang.String" />
+		<result property="productDownShow" column="product_down_show"
+			javaType="java.lang.Long" />
+		<result property="productAutoUp" column="product_auto_up"
+			javaType="java.lang.Long" />
+		<result property="productSizeCompare" column="product_size_compare"
+			javaType="java.lang.String" />
+		<result property="productCatCode" column="product_cat_code"
+			javaType="java.lang.String" />
+		<result property="productCatName" column="product_cat_name"
+			javaType="java.lang.String" />
+		<result property="productPriceRate" column="product_price_rate"
+			javaType="java.lang.Double" />
+		<result property="productLevel" column="product_level"
+			javaType="java.lang.Integer" />
+
+		<result property="productVideoUrl" column="product_video_url"
+			javaType="java.lang.String" />
+		<result property="productThumbnail" column="product_thumbnail"
+			javaType="java.lang.String" />
+		<result property="isExpensive" column="is_expensive" javaType="java.lang.Integer" />
+		<result property="userMaxNum" column="user_max_num" javaType="java.lang.Integer" />
+		<result property="userMaxType" column="user_max_type" javaType="java.lang.Integer" />
+		<result property="zeroMaxCount" column="zero_max_count" javaType="java.lang.Integer" />
+		
+	</resultMap>
+
+
+	<sql id="query">
+		<if test="productOperateId != null and productOperateId !=''">
+			and t.product_operate_id=#{productOperateId}
+		</if>
+		<if test="productId != null and productId !=''">
+			and t.product_id=#{productId}
+		</if>
+		<if test="productShortName != null and productShortName !=''">
+			and t.product_short_name like CONCAT(CONCAT('%', #{productShortName}),
+			'%')
+		</if>
+		<if test="productPrefix != null and productPrefix !=''">
+			and t.product_prefix like CONCAT(CONCAT('%', #{productPrefix}), '%')
+		</if>
+		<if test="productSuffix != null and productSuffix !=''">
+			and t.product_suffix like CONCAT(CONCAT('%', #{productSuffix}), '%')
+		</if>
+		<if test="productKeyword != null and productKeyword !=''">
+			and t.product_keyword like CONCAT(CONCAT('%', #{productKeyword}), '%')
+		</if>
+		<if test="productDownShow != null and productDownShow !=''">
+			and t.product_down_show=#{productDownShow}
+		</if>
+		<if test="productAutoUp != null and productAutoUp !=''">
+			and t.product_auto_up=#{productAutoUp}
+		</if>
+		<if test="productSizeCompare != null and productSizeCompare !=''">
+			and t.product_size_compare like CONCAT(CONCAT('%',
+			#{productSizeCompare}), '%')
+		</if>
+		<if test="productCatCode != null and productCatCode !=''">
+			and t.product_cat_code like CONCAT(CONCAT('%', #{productCatCode}), '%')
+		</if>
+		<if test="productCatName != null and productCatName !=''">
+			and t.product_cat_name like CONCAT(CONCAT('%', #{productCatName}), '%')
+		</if>
+		<if test="isExpensive != null and isExpensive !=''">
+			and t.is_expensive=#{isExpensive}
+		</if>
+	</sql>
+
+	<select id="queryOne" parameterType="ProductOperateModel"
+		resultMap="productOperateModel">
+		select
+		product_operate_id,
+		product_id,
+		product_short_name,
+		product_prefix,
+		product_suffix,
+		product_keyword,
+		product_down_show,
+		product_auto_up,
+		product_size_compare,
+		product_cat_code,
+		product_cat_name,
+		product_price_rate,
+		product_level,
+		product_video_url,
+		product_thumbnail,
+		is_expensive,
+		user_max_num,
+		user_max_type,
+		zero_max_count
+		from t_product_operate t
+		where t.product_id=#{productId}
+	</select>
+	<select id="queryListPage" parameterType="ProductOperateModel"
+		resultMap="productOperateModel">
+		select
+		product_operate_id,
+
+		product_id,
+
+		product_short_name,
+
+		product_prefix,
+
+		product_suffix,
+
+		product_keyword,
+
+		product_down_show,
+
+		product_auto_up,
+
+		product_size_compare,
+
+		product_cat_code,
+
+		product_cat_name,
+		product_price_rate,
+		product_level,
+		product_video_url,
+		product_thumbnail,
+		is_expensive,
+		user_max_num,
+		user_max_type,
+		zero_max_count
+		from t_product_operate t
+		where 1=1
+		<include refid="query" />
+	</select>
+
+	<select id="countListPage" parameterType="ProductOperateModel"
+		resultType="java.lang.Long">
+		select count(1) from t_product_operate t
+		where 1=1
+		<include refid="query" />
+	</select>
+
+	<insert id="insert" parameterType="ProductOperateModel">
+		<selectKey resultType="java.lang.Long" keyProperty="productOperateId"
+			order="AFTER">
+			SELECT @@IDENTITY as productOperateId
+		</selectKey>
+		insert into t_product_operate
+		(
+		product_operate_id,
+		product_id,
+		product_short_name,
+		product_prefix,
+		product_suffix,
+		product_keyword,
+		product_down_show,
+		product_auto_up,
+		product_size_compare,
+		product_cat_code,
+		product_cat_name,
+		product_price_rate,
+		product_level,
+		product_video_url,
+		product_thumbnail,
+		is_expensive,
+		user_max_num,
+		user_max_type,
+		zero_max_count
+
+		)
+		values
+		(
+		#{productOperateId},
+		#{productId},
+		#{productShortName},
+		#{productPrefix},
+		#{productSuffix},
+		#{productKeyword},
+		#{productDownShow},
+		#{productAutoUp},
+		#{productSizeCompare},
+		#{productCatCode},
+		#{productCatName},
+		#{productPriceRate},
+		#{productLevel},
+		#{productVideoUrl},
+		#{productThumbnail},
+		#{isExpensive},
+		#{userMaxNum},
+		#{userMaxType},
+		#{zeroMaxCount}
+		)
+	</insert>
+
+	<update id="update" parameterType="ProductOperateModel">
+		update t_product_operate t
+		<set>
+			<if test="productShortName != null">
+				t.product_short_name=#{productShortName},
+			</if>
+			<if test="productPrefix != null">
+				t.product_prefix=#{productPrefix},
+			</if>
+			<if test="productSuffix != null">
+				t.product_suffix=#{productSuffix},
+			</if>
+			<if test="productKeyword != null">
+				t.product_keyword=#{productKeyword},
+			</if>
+			<if test="productDownShow != null  and productDownShow !=''">
+				t.product_down_show=#{productDownShow},
+			</if>
+			<if test="productAutoUp != null  and productAutoUp !=''">
+				t.product_auto_up=#{productAutoUp},
+			</if>
+			<if test="productSizeCompare != null">
+				t.product_size_compare=#{productSizeCompare},
+			</if>
+			<if test="productCatCode != null  and productCatCode !=''">
+				t.product_cat_code=#{productCatCode},
+			</if>
+			<if test="productCatName != null  and productCatName !=''">
+				t.product_cat_name=#{productCatName},
+			</if>
+			<if test="productPriceRate != null  and productPriceRate !=''">
+				t.product_price_rate=#{productPriceRate},
+			</if>
+			<if test="productLevel != null  and productLevel !=''">
+				t.product_level=#{productLevel},
+			</if>
+			<if test="productVideoUrl != null">
+				t.product_video_url=#{productVideoUrl},
+			</if>
+			<if test="productThumbnail != null  and productThumbnail !=''">
+				t.product_thumbnail=#{productThumbnail},
+			</if>
+			<if test="isExpensive != null  and isExpensive !=''">
+				t.is_expensive=#{isExpensive},
+			</if>
+
+            <if test="userMaxNum != null">
+				t.user_max_num=#{userMaxNum},
+			</if>
+			<if test="userMaxType != null">
+				t.user_max_type=#{userMaxType},
+			</if>
+			<if test="zeroMaxCount != null">
+				t.zero_max_count=#{zeroMaxCount},
+			</if>
+			<if test="productId != null  and productId !=''">
+				t.product_id=#{productId}
+			</if>
+			 
+			
+		</set>
+		where
+		t.product_operate_id=#{productOperateId}
+	</update>
+	
+
+	<update id="updateByProductId" parameterType="ProductOperateModel">
+		update t_product_operate t
+		<set>
+			<if test="productShortName != null">
+				t.product_short_name=#{productShortName},
+			</if>
+			<if test="productPrefix != null">
+				t.product_prefix=#{productPrefix},
+			</if>
+			<if test="productSuffix != null">
+				t.product_suffix=#{productSuffix},
+			</if>
+			<if test="productKeyword != null">
+				t.product_keyword=#{productKeyword},
+			</if>
+			<if test="productDownShow != null  and productDownShow !=''">
+				t.product_down_show=#{productDownShow},
+			</if>
+			<if test="productAutoUp != null  and productAutoUp !=''">
+				t.product_auto_up=#{productAutoUp},
+			</if>
+			<if test="productSizeCompare != null">
+				t.product_size_compare=#{productSizeCompare},
+			</if>
+			<if test="productCatCode != null  and productCatCode !=''">
+				t.product_cat_code=#{productCatCode},
+			</if>
+			<if test="productCatName != null  and productCatName !=''">
+				t.product_cat_name=#{productCatName},
+			</if>
+			<if test="productPriceRate != null  and productPriceRate !=''">
+				t.product_price_rate=#{productPriceRate},
+			</if>
+			<if test="productLevel != null  and productLevel !=''">
+				t.product_level=#{productLevel},
+			</if>
+			<if test="productVideoUrl != null">
+				t.product_video_url=#{productVideoUrl},
+			</if>
+			<if test="productThumbnail != null  and productThumbnail !=''">
+				t.product_thumbnail=#{productThumbnail},
+			</if>
+			<if test="isExpensive != null  and isExpensive !=''">
+				t.is_expensive=#{isExpensive},
+			</if>
+            <if test="userMaxNum != null">
+				t.user_max_num=#{userMaxNum},
+			</if>
+			<if test="userMaxType != null">
+				t.user_max_type=#{userMaxType},
+			</if>
+			<if test="zeroMaxCount != null">
+				t.zero_max_count=#{zeroMaxCount},
+			</if>
+			<if test="productId != null  and productId !=''">
+				t.product_id=#{productId}
+			</if>
+		</set>
+		where
+		t.product_id=#{productId}
+	</update>
+
+	<delete id="delete" parameterType="ProductOperateModel">
+		delete from t_product_operate where product_operate_id=#{productOperateId}
+	</delete>
+
+	<delete id="deleteByIds" parameterType="java.util.List">
+		delete from t_product_operate where product_operate_id
+		in
+		<foreach item="item" index="index" collection="list" open="("
+			separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+	<select id="getProductOperateListByProductId" parameterType="java.util.List"
+		resultMap="productOperateModel">
+		select product_operate_id,
+		product_id,
+		product_short_name,
+		product_prefix,
+		product_suffix,
+		product_keyword,
+		product_down_show,
+		product_auto_up,
+		product_size_compare,
+		product_cat_code,
+		product_cat_name,
+		product_price_rate,
+		product_level,
+		product_video_url,
+		product_thumbnail,
+		is_expensive,
+		user_max_num,
+		user_max_type,
+		zero_max_count
+		from t_product_operate where product_id in
+		<foreach item="item" index="index" collection="list" open="("
+			separator="," close=")">
+			#{item}
+		</foreach>
+	</select>
+</mapper>

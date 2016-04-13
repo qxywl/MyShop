@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.zhaidou.product.brand.dao.impl.CountryDaoImpl">
+	
+	<resultMap type="CountryModel" id="countryModel">
+	
+	       <result property="id" column="id" javaType="java.lang.Long" />
+		   <result property="countryCode" column="country_code" javaType="java.lang.String" />
+		   <result property="countryAbbr" column="country_abbr" javaType="java.lang.String" />
+		   <result property="countryName" column="country_name" javaType="java.lang.String" />
+		   <result property="countryEname" column="country_ename" javaType="java.lang.String" />
+		   <result property="countryPhoneCode" column="country_phone_code" javaType="java.lang.String" />
+		   
+		   <result property="countryCurrencyCode" column="country_currency_code" javaType="java.lang.String" />
+		   <result property="countryCurrencyName" column="country_currency_name" javaType="java.lang.String" />
+		   <result property="countryCurrencySign" column="country_currency_sign" javaType="java.lang.String" />
+		   <result property="countryTimezone" column="country_timezone" javaType="java.lang.Integer" />
+		   <result property="countryRank" column="country_rank" javaType="java.lang.Integer" />
+		   <result property="countryFavorites" column="country_favorites" javaType="java.lang.Integer" />
+	</resultMap>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="countryModel">
+		<!-- <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER">
+    		SELECT @@IDENTITY as id
+    	</selectKey> -->
+		INSERT INTO  t_base_country_info
+		(
+	          			    
+	          			    country_code,
+	          			    country_abbr,
+	          			    country_name,
+	          				country_ename,
+	          			    country_phone_code,
+	          			    country_currency_code,
+	          			    
+	          			    country_currency_name,
+	          			    country_currency_sign,
+	          			    country_timezone,
+	          			    country_rank,
+	          			    country_favorites
+	          			   
+        )
+		VALUES
+		(
+		          			    
+		          			    #{countryCode},
+		          			    #{countryAbbr},
+		          			    #{countryName},
+		          				#{countryEname},
+		          			    #{countryPhoneCode},
+		          			    #{countryCurrencyCode},
+		          			    #{countryCurrencyName},
+		          			    #{countryCurrencySign},
+		          			    #{countryTimezone},
+		          			    #{countryRank},
+		          			    #{countryFavorites}
+        )
+	</insert>
+	
+	
+    <sql id="query">
+	      <if test="countryFavorites != null and countryFavorites !=''">
+					AND t.country_favorites=#{countryFavorites}
+		  </if>
+    </sql>
+
+
+	<select id="queryOne" parameterType="java.lang.Long"
+	resultMap="countryModel">
+	  SELECT
+                country_code,
+ 			    country_abbr,
+ 			    country_name,
+ 				country_ename,
+ 			    country_phone_code,
+ 			    country_currency_code,
+ 			    
+ 			    country_currency_name,
+ 			    country_currency_sign,
+ 			    country_timezone,
+ 			    country_rank,
+ 			    country_favorites
+	
+	         
+	  FROM  t_base_country_info t
+	  WHERE t.id = #{id} 
+	</select>
+	
+	
+	
+	
+	<select id="queryAllList" parameterType="CountryModel"
+	 resultMap="countryModel">
+	 SELECT
+	            country_code,
+ 			    country_abbr,
+ 			    country_name,
+ 				country_ename,
+ 			    country_phone_code,
+ 			    country_currency_code,
+ 			    
+ 			    country_currency_name,
+ 			    country_currency_sign,
+ 			    country_timezone,
+ 			    country_rank,
+ 			    country_favorites
+ 			    
+	  FROM  t_base_country_info t
+	  WHERE 1 = 1  order by  id
+	</select>
+	
+	<!-- 查询满足条件的List -->
+	<select id="queryConditionList" parameterType="CountryModel"
+	 resultMap="countryModel">
+	 SELECT
+	            country_code,
+ 			    country_abbr,
+ 			    country_name,
+ 				country_ename,
+ 			    country_phone_code,
+ 			    country_currency_code,
+ 			    
+ 			    country_currency_name,
+ 			    country_currency_sign,
+ 			    country_timezone,
+ 			    country_rank,
+ 			    country_favorites
+ 			    
+	  FROM  t_base_country_info t
+	  WHERE 1 = 1 
+	  AND  country_favorites = 1
+	  AND  country_abbr != ''
+	  AND  country_name != ''
+	  AND  country_abbr IS NOT NULL
+	  AND  country_name IS NOT NULL
+	  <include refid="query"/>
+	</select>
+	
+	
+	<select id="queryListPage" parameterType="CountryModel"
+		resultMap="countryModel">
+		 SELECT
+	            country_code,
+ 			    country_abbr,
+ 			    country_name,
+ 				country_ename,
+ 			    country_phone_code,
+ 			    country_currency_code,
+ 			    
+ 			    country_currency_name,
+ 			    country_currency_sign,
+ 			    country_timezone,
+ 			    country_rank,
+ 			    country_favorites
+ 			    
+	           FROM  t_base_country_info t
+	     WHERE 1 = 1 
+		
+	</select>
+
+	<select id="countListPage" parameterType="CountryModel"
+		resultType="java.lang.Long">
+		SELECT count(1) FROM  t_base_country_info t
+		WHERE 1=1
+	</select>
+
+</mapper>

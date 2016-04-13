@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="MountRuleDaoImpl">
+
+ 	<resultMap type="com.zhaidou.product.category.model.MountRulePO" id="MountRule_query_list">
+        <result property="id" column="mount_id"/>
+        <result property="categoryId" column="category_id"/>
+        <result property="categoryCode" column="category_code"/>
+        <result property="deleteFlag" column="delete_flag"/>
+        <result property="mountRule" column="mount_rule"/>
+        <result property="productName" column="product_name"/>
+        <result property="productPrefix" column="product_prefix"/>
+        <result property="productSuffix" column="product_suffix"/>
+        <result property="productSearchTags" column="product_search_tags"/>
+        <result property="brandCodeList" column="brand_codes"/>
+        <result property="categoryCodeList" column="category_codes"/>
+        <result property="createDate" column="create_time"/>
+        <result property="createUser" column="create_user"/>
+        <result property="updateUser" column="last_update_user"/>
+        <result property="updateDate" column="last_update_time"/>
+    </resultMap>
+
+	<insert id="insert" parameterType="com.zhaidou.product.category.model.MountRulePO"  useGeneratedKeys="true" keyProperty="id">
+		insert into t_salecategory_product_mount_rule 
+		(
+		   mount_rule,
+		   category_id,
+		   category_code,
+		   delete_flag,
+		   product_name,
+		   product_prefix,
+		   product_suffix,
+		   product_search_tags,
+		   brand_codes,
+		   category_codes,
+		   create_time,
+		   create_user,
+		   last_update_time,
+		   last_update_user
+		) 
+	   values 
+	   (
+	      #{mountRule},
+	      #{categoryId},
+	      #{categoryCode},
+	      #{deleteFlag},
+	      #{productName},
+	      #{productPrefix},
+	      #{productSuffix},
+	      #{productSearchTags},
+	      #{brandCodeList},
+	      #{categoryCodeList},
+	      #{createDate},
+	      #{createUser},
+	      #{createDate},
+	      #{createUser}
+	  )
+	</insert>
+	 
+	<update id="update" parameterType="com.zhaidou.product.category.model.MountRulePO" >
+	   UPDATE t_salecategory_product_mount_rule 
+	      SET 
+	         <if test="deleteFlag != null ">
+		          delete_flag = #{deleteFlag},
+	         </if>
+	         <if test="mountRule != null ">
+		          mount_rule = #{mountRule},
+	         </if>
+	         <if test="productName != null">
+		          product_name = #{productName},
+	         </if>
+	         <if test="productPrefix != null ">
+	              product_prefix = #{productPrefix},
+	         </if>
+	         <if test="productSuffix != null ">
+		          product_suffix = #{productSuffix},
+	         </if>
+	          <if test="productSearchTags != null ">
+		          product_search_tags = #{productSearchTags},
+	         </if>
+	         <!-- <if test="brandCodeList != null ">
+		         brand_codes = #{brandCodeList},
+	         </if> -->
+	         <!-- <if test="categoryCodeList != null ">
+		         category_codes = #{categoryCodeList},
+	         </if> -->
+	          brand_codes = #{brandCodeList},
+	          category_codes = #{categoryCodeList},
+	          last_update_time = now(),
+		      last_update_user = #{updateUser}
+	    WHERE mount_id = #{id}
+	</update>
+		   
+    
+    <select id="queryOne" parameterType="com.zhaidou.product.category.model.MountRulePO" resultMap="MountRule_query_list">
+       SELECT
+       	   mount_id,
+           mount_rule,
+		   category_id,
+		   category_code,
+		   delete_flag,
+		   product_name,
+		   product_prefix,
+		   product_suffix,
+		   product_search_tags,
+		   brand_codes,
+		   category_codes,
+		   create_time,
+		   create_user,
+		   last_update_time,
+		   last_update_user
+	   FROM t_salecategory_product_mount_rule  
+         WHERE delete_flag=0   
+       	 <if test="categoryCode != null ">
+	         and category_code = #{categoryCode}
+         </if>
+         <if test="id != null ">
+	         and  mount_id = #{id}
+         </if>
+         <if test="categoryId != null ">
+	         and  category_id = #{categoryId}
+         </if>
+	</select>
+
+	<select id="totCountByEffective" resultType="java.lang.Long">
+		select count(*) from  t_salecategory_product_mount_rule 
+		where delete_flag=0
+	</select>
+
+	<select id="queryPage" parameterType="com.zhaidou.framework.util.page.Page" resultMap="MountRule_query_list">
+       SELECT
+       	   mount_id,
+           mount_rule,
+		   category_id,
+		   category_code,
+		   delete_flag,
+		   product_name,
+		   product_prefix,
+		   product_suffix,
+		   product_search_tags,
+		   brand_codes,
+		   category_codes,
+		   create_time,
+		   create_user,
+		   last_update_time,
+		   last_update_user
+	   FROM t_salecategory_product_mount_rule  
+         WHERE delete_flag=0  limit #{pageStart},#{numPerPage}
+	</select>	
+	
+	<select id="queryDeleteRuleByDelDate" parameterType="string" resultMap="MountRule_query_list">
+       SELECT
+       	   mount_id,
+           mount_rule,
+		   category_id,
+		   category_code,
+		   delete_flag,
+		   product_name,
+		   product_prefix,
+		   product_suffix,
+		   product_search_tags,
+		   brand_codes,
+		   category_codes,
+		   create_time,
+		   create_user,
+		   last_update_time,
+		   last_update_user
+	   FROM t_salecategory_product_mount_rule  
+         WHERE date_format(last_update_time,'%Y-%m-%d') = #{dateStr} and delete_flag=1 
+	</select>	
+
+	<!-- 根据运营分类ID查询挂载在其下的产品列表 -->
+	<select id="selectOpt1ByCategoryId" parameterType="MountRulePO" resultMap="MountRule_query_list">
+	select 
+	    t1.product_id,
+	    t1.product_code,
+	    t1.mount_type
+	from
+	    t_salecategory_product_relation t1
+	 where t1.category_id = #{categoryId} and t1.opt_type = 1
+	</select>
+
+</mapper>

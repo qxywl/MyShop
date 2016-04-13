@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.zhaidou.product.dao.impl.SupplierDaoImpl">
+	
+	   <resultMap type="SupplierModel" id="supplierModel">
+		<result property="id" column="id" javaType="java.lang.Long"/>
+		<result property="name" column="name" javaType="java.lang.String"/>
+		<result property="userName" column="username" javaType="java.lang.String"/>
+		<result property="userId" column="userid" javaType="java.lang.Long"/>
+		<result property="password" column="password" javaType="java.lang.String"/>
+		
+		<result property="summary" column="summary" javaType="java.lang.String"/>
+		<result property="detailedIntroduction" column="detailed_introduction" javaType="java.lang.String"/>
+		<result property="imageUrls" column="image_urls" javaType="java.lang.String"/>
+		<result property="manageName" column="manage_name" javaType="java.lang.String"/>
+		<result property="phone" column="phone" javaType="java.lang.String"/>
+		
+		<result property="telephone" column="telephone" javaType="java.lang.String"/>
+		<result property="email" column="email" javaType="java.lang.String"/>
+		<result property="status" column="status" javaType="java.lang.Integer"/>
+		<result property="isUpdated" column="is_updated" javaType="java.lang.Integer"/>
+		<result property="shopId" column="shop_id" javaType="java.lang.Long"/>
+		
+		<result property="shopName" column="shop_name" javaType="java.lang.String"/>
+		<result property="shopMainAccount" column="shop_main_account" javaType="java.lang.String"/>
+		<result property="companyName" column="company_name" javaType="java.lang.String"/>
+		<result property="province" column="province" javaType="java.lang.String"/>
+		<result property="city" column="city" javaType="java.lang.String"/>
+		
+		<result property="area" column="area" javaType="java.lang.String"/>
+		<result property="companyAddress" column="company_address" javaType="java.lang.String"/>
+		<result property="merchantsDirector" column="merchants_director" javaType="java.lang.String"/>
+		<result property="merchantsDirectorId" column="merchants_director_id" javaType="java.lang.Long"/>
+		<result property="merchantsDirectorArea" column="merchants_director_area" javaType="java.lang.String"/>
+		
+		<result property="merchantsDirectorEmail" column="merchants_director_email" javaType="java.lang.String"/>
+		<result property="contactsPhone" column="contacts_phone" javaType="java.lang.String"/>
+		<result property="contactsEmail" column="contacts_email" javaType="java.lang.String"/>
+		<result property="bankAccountName" column="bank_account_name" javaType="java.lang.String"/>
+		<result property="bankAccount" column="bank_account" javaType="java.lang.String"/>
+		
+		<result property="branchBankName" column="branch_bank_name" javaType="java.lang.String"/>
+		<result property="branchBankCode" column="branch_bank_code" javaType="java.lang.String"/>
+		<result property="branchBankLocation" column="branch_bank_location" javaType="java.lang.String"/>
+		<result property="permitForOpeningBankAccount" column="permit_for_opening_bank_account" javaType="java.lang.String"/>
+
+	</resultMap>
+	
+	<sql id="field">
+	        t.id,
+			t.name,
+			t.username,
+			t.userid,
+			t.password,
+			
+			t.summary,
+			t.detailed_introduction,
+			t.image_urls,
+			t.manage_name,
+			t.phone,
+			
+			t.telephone,
+			t.email,
+			t.status,
+			t.is_updated,
+			t.shop_id,
+			
+			t.shop_name,
+			t.shop_main_account,
+			t.company_name,
+			t.province,
+			t.city,
+			
+			t.area,
+			t.company_address,
+			t.merchants_director,
+			t.merchants_director_id,
+			t.merchants_director_area,
+			
+			t.merchants_director_email,
+			t.contacts_phone,
+			t.contacts_email,
+			t.bank_account_name,
+			t.bank_account,
+			
+			t.branch_bank_name,
+			t.branch_bank_code,
+			t.branch_bank_location,
+			t.permit_for_opening_bank_account
+		
+    </sql>
+    
+    <select id="queryOne" parameterType="SupplierModel"
+	resultMap="supplierModel">
+		SELECT
+		      <include refid="field"/>
+		FROM  t_supplier t
+		WHERE 1=1  AND  t.id = #{id}
+	</select>
+	
+	
+    <select id="queryOneById" parameterType="SupplierModel"
+	resultMap="supplierModel">
+		SELECT
+		      <include refid="field"/>
+		FROM  t_supplier t
+		WHERE 1=1  AND  t.id = #{id}
+	</select>
+	
+	<select id="queryByproductIdList" parameterType="SupplierModel"
+	 resultMap="supplierModel">
+		SELECT
+		      <include refid="field"/>
+		FROM  t_product_count t
+		WHERE 1=1  
+		<choose>
+	     <when test="productIdList != null and productIdList != '' ">
+	        AND t.product_id 
+		    IN
+		    <foreach item="item" index="index" collection="productIdList" open="(" separator="," close=")">
+			          #{item}
+		    </foreach>
+	     </when>
+	     <otherwise>
+	        AND 1=2
+	     </otherwise>
+	    </choose>
+	</select>
+	
+	<sql id="query">
+	        <if test="id != null and id !=''">
+					and t.id=#{id}
+		    </if>
+    </sql>
+    
+    
+</mapper>

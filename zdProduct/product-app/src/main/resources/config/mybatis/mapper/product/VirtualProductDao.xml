@@ -1,0 +1,365 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="VirtualProductDaoImpl">
+	
+	<resultMap type="VirtualProductModel" id="virtualProductModel">
+		   <result property="productId" column="product_id" javaType="java.lang.Long" />
+		   <result property="productName" column="product_name" javaType="java.lang.String" />
+		   <result property="skuCode" column="sku_code" javaType="java.lang.String" />
+		   <result property="productDesc" column="product_desc" javaType="java.lang.String" />
+		   <result property="productShelves" column="product_shelves" javaType="java.lang.Long" />
+		   <result property="createTime" column="create_time" javaType="java.lang.Long" />
+		   <result property="createBy" column="create_by" javaType="java.lang.Long" />
+		   <result property="createUserName" column="create_user_name" javaType="java.lang.String" />
+		   <result property="updateTime" column="update_time" javaType="java.lang.Long" />
+		   <result property="updateBy" column="update_by" javaType="java.lang.Long" />
+		   <result property="updateUserName" column="update_user_name" javaType="java.lang.String" />
+		   <result property="costPrice" column="cost_price" javaType="java.lang.Double" />
+		   <result property="tshPrice" column="tsh_price" javaType="java.lang.Double" />
+		   <result property="tb" column="tb" javaType="java.lang.Long" />
+		   <result property="marketPrice" column="market_price" javaType="java.lang.Double" />
+		   <result property="brandCode" column="brand_code" javaType="java.lang.String" />
+		   <result property="brandName" column="brand_name" javaType="java.lang.String" />
+		   <result property="catCode" column="cat_code" javaType="java.lang.String" />
+		   <result property="catName" column="cat_name" javaType="java.lang.String" />
+		   <result property="type" column="type" javaType="java.lang.String" />
+		   <result property="mainPic" column="main_pic" javaType="java.lang.String" />
+		   <result property="supplierId" column="supplier_id" javaType="java.lang.Long" />
+		   <result property="shopId" column="shop_id" javaType="java.lang.Long" />
+	</resultMap>
+
+    <sql id="query">
+	        <if test="productId != null and productId !=''">
+					and t.product_id=#{productId}
+		    </if>
+	        <if test="productName != null and productName !=''">
+		        	and t.product_name like CONCAT(CONCAT('%', #{productName}), '%') 
+		    </if>
+	        <if test="skuCode != null and skuCode !=''">
+		        	and t.sku_code like CONCAT(CONCAT('%', #{skuCode}), '%') 
+		    </if>
+	        <if test="productDesc != null and productDesc !=''">
+		        	and t.product_desc like CONCAT(CONCAT('%', #{productDesc}), '%') 
+		    </if>
+	        <if test="productShelves != null and productShelves !=''">
+					and t.product_shelves=#{productShelves}
+		    </if>
+	        <if test="createTime != null and createTime !=''">
+					and t.create_time=#{createTime}
+		    </if>
+	        <if test="createBy != null and createBy !=''">
+					and t.create_by=#{createBy}
+		    </if>
+	        <if test="createUserName != null and createUserName !=''">
+		        	and t.create_user_name like CONCAT(CONCAT('%', #{createUserName}), '%') 
+		    </if>
+	        <if test="updateTime != null and updateTime !=''">
+					and t.update_time=#{updateTime}
+		    </if>
+	        <if test="updateBy != null and updateBy !=''">
+					and t.update_by=#{updateBy}
+		    </if>
+	        <if test="updateUserName != null and updateUserName !=''">
+		        	and t.update_user_name like CONCAT(CONCAT('%', #{updateUserName}), '%') 
+		    </if>
+	        <if test="costPrice != null and costPrice !=''">
+					and t.cost_price=#{costPrice}
+		    </if>
+	        <if test="tshPrice != null and tshPrice !=''">
+					and t.tsh_price=#{tshPrice}
+		    </if>
+	        <if test="tb != null and tb !=''">
+					and t.tb=#{tb}
+		    </if>
+	        <if test="marketPrice != null and marketPrice !=''">
+					and t.market_price=#{marketPrice}
+		    </if>
+	        <if test="brandCode != null and brandCode !=''">
+		        	and t.brand_code like CONCAT(CONCAT('%', #{brandCode}), '%') 
+		    </if>
+	        <if test="brandName != null and brandName !=''">
+		        	and t.brand_name like CONCAT(CONCAT('%', #{brandName}), '%') 
+		    </if>
+	        <if test="catCode != null and catCode !=''">
+		        	and t.cat_code like CONCAT(CONCAT('%', #{catCode}), '%') 
+		    </if>
+	        <if test="catName != null and catName !=''">
+		        	and t.cat_name like CONCAT(CONCAT('%', #{catName}), '%') 
+		    </if>
+	        <if test="type != null and type !=''">
+		        	and t.type like CONCAT(CONCAT('%', #{type}), '%') 
+		    </if>
+	        <if test="mainPic != null and mainPic !=''">
+		        	and t.main_pic like CONCAT(CONCAT('%', #{mainPic}), '%') 
+		    </if>
+	        <if test="supplierId != null and supplierId !=''">
+					and t.supplier_id=#{supplierId}
+		    </if>
+	        <if test="shopId != null and shopId !=''">
+					and t.shop_id=#{shopId}
+		    </if>
+	    
+    </sql>
+
+
+	<select id="queryOne" parameterType="VirtualProductModel"
+	resultMap="virtualProductModel">
+	select
+	          product_id,
+	          product_name,
+	          sku_code,
+	          product_desc,
+	          product_shelves,
+	          create_time,
+	          create_by,
+	          create_user_name,
+	          update_time,
+	          update_by,
+	          update_user_name,
+	          cost_price,
+	          tsh_price,
+	          tb,
+	          market_price,
+	          brand_code,
+	          brand_name,
+	          cat_code,
+	          cat_name,
+	          type,
+	          main_pic,
+	          supplier_id,
+	          shop_id
+	from  t_virtual_product t
+	where t.product_id=#{productId}
+	</select>
+	<select id="queryListPage" parameterType="VirtualProductModel"
+		resultMap="virtualProductModel">
+		select 
+	            product_id,
+	            product_name,
+	            sku_code,
+	            product_desc,
+	            product_shelves,
+	            create_time,
+	            create_by,
+	            create_user_name,
+	            update_time,
+	            update_by,
+	            update_user_name,
+	            cost_price,
+	            tsh_price,
+	            tb,
+	            market_price,
+	            brand_code,
+	            brand_name,
+	            cat_code,
+	            cat_name,
+	            type,
+	            main_pic,
+	            supplier_id,
+	            shop_id
+	    from  t_virtual_product t
+		where 1=1
+		<include refid="query"/>
+	</select>
+	
+	
+	<select id="queryVirtualProductBySkuCodes" parameterType="java.util.List"
+		resultMap="virtualProductModel">
+		select 
+	            product_id,
+	            product_name,
+	            sku_code,
+	            product_desc,
+	            product_shelves,
+	            create_time,
+	            create_by,
+	            create_user_name,
+	            update_time,
+	            update_by,
+	            update_user_name,
+	            cost_price,
+	            tsh_price,
+	            tb,
+	            market_price,
+	            brand_code,
+	            brand_name,
+	            cat_code,
+	            cat_name,
+	            type,
+	            main_pic,
+	            supplier_id,
+	            shop_id
+	    from  t_virtual_product t
+		where 1=1		
+		<choose>
+	     <when test="list != null and list != '' ">
+	        AND t.sku_code 
+		    IN
+		    <foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+			          #{item}
+		    </foreach>
+	     </when>
+	     <otherwise>
+	        AND 1=2
+	     </otherwise>
+	    </choose>
+	</select>
+
+	<select id="countListPage" parameterType="VirtualProductModel"
+		resultType="java.lang.Long">
+		select count(1) from  t_virtual_product t
+		where 1=1
+		<include refid="query"/>
+	 </select>
+
+	<insert id="insert" parameterType="VirtualProductModel">
+		<selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER">
+    		SELECT @@IDENTITY as id
+    	</selectKey>
+		insert into  t_virtual_product
+		(		
+	          			    product_id,	          			
+	          			    product_name,	          			
+	          			    sku_code,	          			
+	          			    product_desc,	          			
+	          			    product_shelves,	          			
+	          			    create_time,	          			
+	          			    create_by,	          			
+	          			    create_user_name,	          			
+	          			    update_time,	          			
+	          			    update_by,	          			
+	          			    update_user_name,	          			
+	          			    cost_price,	          			
+	          			    tsh_price,	          			
+	          			    tb,	          			
+	          			    market_price,	          			
+	          			    brand_code,	          			
+	          			    brand_name,	          			
+	          			    cat_code,	          			
+	          			    cat_name,	          			
+	          			    type,	          			
+	          			    main_pic,	          			
+	          			    supplier_id,	          			
+	          				shop_id
+        )
+		values
+		(
+		          				#{productId},		          			
+		          				#{productName},		          			
+		          				#{skuCode},		          			
+		          				#{productDesc},		          			
+		          				#{productShelves},		          			
+		          				now(),		          			
+		          				#{createBy},		          			
+		          				#{createUserName},		          			
+		          				now(),		          			
+		          				#{updateBy},		          			
+		          				#{updateUserName},		          			
+		          				#{costPrice},		          			
+		          				#{tshPrice},		          			
+		          				#{tb},		          			
+		          				#{marketPrice},		          			
+		          				#{brandCode},		          			
+		          				#{brandName},		          			
+		          				#{catCode},		          			
+		          				#{catName},		          			
+		          				#{type},		          			
+		          				#{mainPic},		          			
+		          				#{supplierId},		          			
+		          				#{shopId}
+        )
+	</insert>
+
+	<update id="update" parameterType="VirtualProductModel">
+		update  t_virtual_product t 
+		  <set>
+			         <if test="productId != null  and productId !=''">
+				          t.product_id=#{productId},
+				    </if>
+			         <if test="productName != null  and productName !=''">
+				          t.product_name=#{productName},
+				    </if>
+			         <if test="skuCode != null  and skuCode !=''">
+				          t.sku_code=#{skuCode},
+				    </if>
+			         <if test="productDesc != null  and productDesc !=''">
+				          t.product_desc=#{productDesc},
+				    </if>
+			         <if test="productShelves != null  and productShelves !=''">
+				          t.product_shelves=#{productShelves},
+				    </if>
+			         <if test="createTime != null  and createTime !=''">
+				          t.create_time=#{createTime},
+				    </if>
+			         <if test="createBy != null  and createBy !=''">
+				          t.create_by=#{createBy},
+				    </if>
+			         <if test="createUserName != null  and createUserName !=''">
+				          t.create_user_name=#{createUserName},
+				    </if>
+			         <if test="updateTime != null  and updateTime !=''">
+				          t.update_time=#{updateTime},
+				    </if>
+			         <if test="updateBy != null  and updateBy !=''">
+				          t.update_by=#{updateBy},
+				    </if>
+			         <if test="updateUserName != null  and updateUserName !=''">
+				          t.update_user_name=#{updateUserName},
+				    </if>
+			         <if test="costPrice != null  and costPrice !=''">
+				          t.cost_price=#{costPrice},
+				    </if>
+			         <if test="tshPrice != null  and tshPrice !=''">
+				          t.tsh_price=#{tshPrice},
+				    </if>
+			         <if test="tb != null  and tb !=''">
+				          t.tb=#{tb},
+				    </if>
+			         <if test="marketPrice != null  and marketPrice !=''">
+				          t.market_price=#{marketPrice},
+				    </if>
+			         <if test="brandCode != null  and brandCode !=''">
+				          t.brand_code=#{brandCode},
+				    </if>
+			         <if test="brandName != null  and brandName !=''">
+				          t.brand_name=#{brandName},
+				    </if>
+			         <if test="catCode != null  and catCode !=''">
+				          t.cat_code=#{catCode},
+				    </if>
+			         <if test="catName != null  and catName !=''">
+				          t.cat_name=#{catName},
+				    </if>
+			         <if test="type != null  and type !=''">
+				          t.type=#{type},
+				    </if>
+			         <if test="mainPic != null  and mainPic !=''">
+				          t.main_pic=#{mainPic},
+				    </if>
+			         <if test="supplierId != null  and supplierId !=''">
+				          t.supplier_id=#{supplierId},
+				    </if>
+			         <if test="shopId != null  and shopId !=''">
+				          t.shop_id=#{shopId}
+				    </if>
+		    </set>
+		where 
+		t.product_id=#{productId}
+	</update>
+	
+	<delete id="delete" parameterType="VirtualProductModel">
+    	delete from  t_virtual_product  where 
+    	product_id =#{productId}
+    </delete>
+    
+    <delete id="deleteByIds" parameterType="java.util.List">
+    	delete from t_virtual_product  where 
+    	product_id in
+    	<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+    </delete>
+
+</mapper>

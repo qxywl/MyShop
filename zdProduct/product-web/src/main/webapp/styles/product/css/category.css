@@ -1,0 +1,226 @@
+
+/*--内边框-*/
+* {
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+.hide, .hidden{display:none;}
+/* body{
+	font:12px/24px,Arial,sans-serif;
+	text-decoration:none;
+	设置轮廓
+	outline:none;
+	text-align:left;
+	background-color:#f5f9ff;
+	支持IE,FF超出自动换行
+	word-wrap:break-word;
+	height:100%;
+	overflow:hidden;
+	clear:both;
+} */
+/*abbr,acronym首字母缩写（<abbr title="United Nations">U.N.</abbr>）*/
+fieldset,img,a img,abbr,acronym{
+	border:0;
+}
+
+ul,li,ol{
+	list-style:none;
+}
+
+abbr,acronym{
+	font-variant:normal;
+}
+
+q:before,q:after{
+	content:'';
+}
+
+blockquote,q{
+	quotes:"" "";
+}
+
+:focus{
+	outline:0;
+}
+
+/* 重置，减少对行高的影响 */
+sup{
+	vertical-align:text-top;
+}
+sub{
+	vertical-align:text-bottom;
+}
+/* for ie6 */
+legend{
+	color:#000;
+}
+/*----------强行换行----------*/ 
+p{
+	word-wrap:break-word;
+}
+
+blockquote:before,blockquote:after{
+	content:"";
+}
+
+
+#warp {
+	width:auto !important;
+	/* min-width:500px;
+	min-height:300px; */
+	height:auto !important;
+	
+	
+	padding:20px;
+}
+.d_first,.d_second,.d_three {
+	width:228px;
+	height:240px;
+	position:absolute;
+	border:#d5e5fb solid 1px;
+	background:#fff;
+	overflow:auto;/*多余设置滚动条*/
+}
+.d_second {
+	left:250px;
+}
+.d_f_search {
+	width:100%;
+	height:28px;
+	background:#f5f9ff;
+}
+.d_f_search_div {
+	width:95%;
+	height:24px;
+	background:#fff;
+	border:#d5e5fb solid 1px;
+	margin:2px auto 2px auto;
+}
+.d_f_input {
+	background:none;
+	border:none;
+	text-indent:24px;
+}
+.d_f_list_box {
+	width:90%;
+	height:auto !important;
+	min-height:50px;
+	margin:0 auto;
+	padding-top:10px;
+}
+.d_f_list_box div {
+	font-size:12px;
+	line-height:24px ;
+	height:24px ;
+	color:#404040;
+	text-indent:15px;
+}
+.d_f_blue { color:#3266cb;}
+.d_f_list_box div a {
+	color:#404040;
+	text-decoration:none;
+	display:block;
+	border:1px dashed #fff;
+	line-height:24px
+}
+.d_f_list_box div a:hover {
+	background:#84bde1;
+	color:#fff;
+	border:1px dashed #dff1fb;
+}
+.d_f_list_box div a:active {
+	background:#dff1fb;
+	color:#000;
+	border:1px dashed #84bde1;
+}
+.d_f_list_on {
+	background:#dff1fb;
+	color:#000;
+	border:1px dashed #84bde1;
+}
+.right_ico {
+	width:14px;
+	height:14px;
+	position:absolute;
+	right:0;
+}
+.right_ico img {
+	width:14px;
+	height:14px;
+	background-size:100%;
+}
+.dashedline {
+	width:100%;
+	height:2px;
+	border-top:1px dashed #c9c9cb;
+	margin-top:5px;
+}
+.clear { clear:both;}
+.d_f_list_div {
+	width:100%;
+	height:auto !important;
+	min-height:50px;
+}
+.span_num {
+	width:22px;
+	height:15px;
+	background:#ababab;
+	color:#fff;
+	text-align:center;
+	padding:2px 4px 2px 4px;
+	margin-right:5px;
+}
+.d_three {
+	left:480px;
+}
+.fdj {
+	width:22px;
+	height:19px;
+	position:absolute;
+}
+.title_ice,.title_ice02 {
+	width:95%;
+	height:33px;
+	background:#fffbf3;
+	border:#ffdcab solid 1px;
+	position:absolute;
+	font-size:16px;
+	line-height:33px;
+	text-indent:24px;
+}
+.title_ice {
+	margin-top:250px;
+}
+.title_ice02 {
+	margin-top:5px;
+}
+.topico {
+	width:14px;
+	height:7px;
+	background:url(/product-web/styles/product_img/topico.png) no-repeat;
+	position:absolute;
+	margin-left:50px;
+	margin-top:-7px;
+}
+.rightico {
+	width:14px;
+	height:14px;
+	
+	background:url(/product-web/styles/product_img/right_ico.png) no-repeat;
+	position:absolute;
+	right:10px;
+	margin-top:-22px;
+}
+.main_warpdiv {
+	width:100%;
+	height:auto !important;
+	margin-top:45px;
+}
+.exel {
+	width:95%;
+	height:auto !important;
+	position:absolute;
+	margin-top:290px;
+}

@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.zhaidou.product.dao.impl.SupplierShopDaoImpl">
+	
+	   <resultMap type="SupplierShopModel" id="supplierShopModel">
+	   
+		<result property="id" column="id" javaType="java.lang.Long"/>
+		
+		<result property="name" column="name" javaType="java.lang.String"/>
+		<result property="url" column="url" javaType="java.lang.String"/>
+		<result property="type" column="type" javaType="java.lang.Integer"/>
+		<result property="status" column="status" javaType="java.lang.Integer"/>
+		<result property="isRealName" column="is_real_name" javaType="java.lang.Integer"/>
+		
+		<result property="isEntityShop" column="is_entity_shop" javaType="java.lang.Integer"/>
+		<result property="shopValidTill" column="shop_valid_till" javaType="java.lang.Long"/>
+		<result property="supplierId" column="supplier_id" javaType="java.lang.Long"/>
+		<result property="supplierName" column="supplier_name" javaType="java.lang.String"/>
+		<result property="mainAccount" column="main_account" javaType="java.lang.String"/>
+	
+		<result property="manageName" column="manage_name" javaType="java.lang.String"/>
+		<result property="managePhone" column="manage_phone" javaType="java.lang.String"/>
+		<result property="manageEmail" column="manage_email" javaType="java.lang.String"/>
+		<result property="manageTelephone" column="manage_telephone" javaType="java.lang.String"/>
+		<result property="manageQQ" column="manage_qq" javaType="java.lang.String"/>
+		
+		<result property="businessContactsName" column="business_contacts_name" javaType="java.lang.String"/>
+		<result property="businessContactsPhone" column="business_contacts_phone" javaType="java.lang.String"/>
+		<result property="businessContactsEmail" column="business_contacts_email" javaType="java.lang.String"/>
+		<result property="businessContactsTelephone" column="business_contacts_telephone" javaType="java.lang.String"/>
+		<result property="businessContactsQQ" column="business_contacts_qq" javaType="java.lang.String"/>
+		
+		<result property="customerServiceName" column="customer_service_name" javaType="java.lang.String"/>
+		<result property="customerServicePhone" column="customer_service_phone" javaType="java.lang.String"/>
+		<result property="customerServiceEmail" column="customer_service_email" javaType="java.lang.String"/>
+		<result property="customerServiceTelephone" column="customer_service_telephone" javaType="java.lang.String"/>
+		<result property="customerServiceQQ" column="customer_service_qq" javaType="java.lang.String"/>
+		
+		<result property="financialName" column="financial_name" javaType="java.lang.String"/>
+		<result property="financialPhone" column="financial_phone" javaType="java.lang.String"/>
+		<result property="financialEmail" column="financial_email" javaType="java.lang.String"/>
+		<result property="financialTelephone" column="financial_telephone" javaType="java.lang.String"/>
+		<result property="financialQQ" column="financial_qq" javaType="java.lang.String"/>
+
+		
+
+	</resultMap>
+	
+	<sql id="field">
+	        t.id,
+	        
+			t.name,
+			t.url,
+			t.type,
+			t.status,
+			t.is_real_name,
+			
+			t.is_entity_shop,
+			t.shop_valid_till,
+			t.supplier_id,
+			t.supplier_name,
+			t.main_account,
+			
+			t.manage_name,
+			t.manage_phone,
+			t.manage_email,
+			t.manage_telephone,
+			t.manage_qq,
+					
+		    t.business_contacts_name,
+			t.business_contacts_phone,
+			t.business_contacts_email,
+			t.business_contacts_telephone,
+			t.business_contacts_qq,
+			
+			t.customer_service_name,
+			t.customer_service_phone,
+			t.customer_service_email,
+			t.customer_service_telephone,
+			t.customer_service_qq,
+			
+			t.financial_name,
+			t.financial_phone,
+			t.financial_email,
+			t.financial_telephone,
+			t.financial_qq
+		
+    </sql>
+    
+    <select id="queryOne" parameterType="SupplierShopModel"
+	resultMap="supplierShopModel">
+		SELECT
+		      <include refid="field"/>
+		FROM  t_supplier_shop t
+		WHERE 1=1  AND  t.id = #{id}
+	</select>
+	
+	
+    <select id="queryOneById" parameterType="SupplierShopModel"
+	resultMap="supplierShopModel">
+		SELECT
+		      <include refid="field"/>
+		FROM  t_supplier_shop t
+		WHERE 1=1  AND  t.id = #{id}
+	</select>
+	
+	
+	<select id="queryByIdList" parameterType="SupplierShopModel"
+	resultMap="supplierShopModel">
+		SELECT
+		      <include refid="field"/>
+		FROM  t_supplier_shop t
+		WHERE 1=1 
+		<choose>
+	     <when test="idList != null and idList != '' ">
+	        AND t.id 
+		    IN
+		    <foreach item="item" index="index" collection="idList" open="(" separator="," close=")">
+			          #{item}
+		    </foreach>
+	     </when>
+	     <otherwise>
+	        AND 1=2
+	     </otherwise>
+	    </choose>
+	</select>
+	
+	<select id="queryByproductIdList" parameterType="SupplierShopModel"
+	 resultMap="supplierShopModel">
+		SELECT
+		      <include refid="field"/>
+		FROM  t_supplier_shop t
+		WHERE 1=1  
+		<choose>
+	     <when test="productIdList != null and productIdList != '' ">
+	        AND t.product_id 
+		    IN
+		    <foreach item="item" index="index" collection="productIdList" open="(" separator="," close=")">
+			          #{item}
+		    </foreach>
+	     </when>
+	     <otherwise>
+	        AND 1=2
+	     </otherwise>
+	    </choose>
+	</select>
+	
+	<sql id="query">
+	        <if test="id != null and id !=''">
+					and t.id=#{id}
+		    </if>
+    </sql>
+    
+    
+</mapper>

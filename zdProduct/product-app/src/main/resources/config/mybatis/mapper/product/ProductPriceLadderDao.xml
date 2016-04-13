@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ProductPriceLadderDaoImpl">
+
+	<resultMap type="ProductPriceLadderModel" id="productPriceLadderModel">
+		<result property="id" column="id" javaType="java.lang.Long" />
+		<result property="productId" column="product_id" javaType="java.lang.Long" />
+		<result property="productCode" column="product_code" javaType="java.lang.String" />
+		<result property="productName" column="product_name" javaType="java.lang.String" />
+		<result property="supplierId" column="supplier_id" javaType="java.lang.Long" />
+		<result property="priceLevel1" column="price_level_1" javaType="java.lang.Long" />
+		<result property="priceLevel2" column="price_level_2" javaType="java.lang.Long" />
+		<result property="priceLevel3" column="price_level_3" javaType="java.lang.Long" />
+		<result property="priceLevel4" column="price_level_4" javaType="java.lang.Long" />
+		<result property="priceLevel5" column="price_level_5" javaType="java.lang.Long" />
+		<result property="createTime" column="create_time" javaType="java.util.Date" />
+		<result property="createBy" column="create_by" javaType="java.lang.Long" />
+		<result property="createUserName" column="create_user_name"
+			javaType="java.lang.String" />
+		<result property="updateTime" column="update_time" javaType="java.util.Date" />
+		<result property="updateBy" column="update_by" javaType="java.lang.Long" />
+		<result property="updateUserName" column="update_user_name"
+			javaType="java.lang.String" />
+		<result property="isDeleted" column="is_deleted" javaType="java.lang.Long" />
+	</resultMap>
+
+	<sql id="query">
+		<if test="id != null and id !=''">
+			and t.id=#{id}
+		</if>
+		<if test="productId != null and productId !=''">
+			and t.product_id=#{productId}
+		</if>
+		<if test="productCode != null and productCode !=''">
+			and t.product_code like CONCAT(CONCAT('%', #{productCode}), '%')
+		</if>
+		<if test="productName != null and productName !=''">
+			and t.product_name like CONCAT(CONCAT('%', #{productName}), '%')
+		</if>
+		<if test="supplierId != null and supplierId !=''">
+			and t.supplier_id=#{supplierId}
+		</if>
+		<if test="priceLevel1 != null and priceLevel1 !=''">
+			and t.price_level_1=#{priceLevel1}
+		</if>
+		<if test="priceLevel2 != null and priceLevel2 !=''">
+			and t.price_level_2=#{priceLevel2}
+		</if>
+		<if test="priceLevel3 != null and priceLevel3 !=''">
+			and t.price_level_3=#{priceLevel3}
+		</if>
+		<if test="priceLevel4 != null and priceLevel4 !=''">
+			and t.price_level_4=#{priceLevel4}
+		</if>
+		<if test="priceLevel5 != null and priceLevel5 !=''">
+			and t.price_level_5=#{priceLevel5}
+		</if>
+		<if test="createTime != null and createTime !=''">
+			and t.create_time=#{createTime}
+		</if>
+		<if test="createBy != null and createBy !=''">
+			and t.create_by=#{createBy}
+		</if>
+		<if test="createUserName != null and createUserName !=''">
+			and t.create_user_name like CONCAT(CONCAT('%', #{createUserName}), '%')
+		</if>
+		<if test="updateTime != null and updateTime !=''">
+			and t.update_time=#{updateTime}
+		</if>
+		<if test="updateBy != null and updateBy !=''">
+			and t.update_by=#{updateBy}
+		</if>
+		<if test="updateUserName != null and updateUserName !=''">
+			and t.update_user_name like CONCAT(CONCAT('%', #{updateUserName}), '%')
+		</if>
+		<if test="isDeleted != null and isDeleted !=''">
+			and t.is_deleted=#{isDeleted}
+		</if>
+
+	</sql>
+
+
+	<select id="queryOne" parameterType="ProductPriceLadderModel"
+		resultMap="productPriceLadderModel">
+		select
+		t.id,
+		t.product_id,
+		t.product_code,
+		t.product_name,
+		t.supplier_id,
+		o.product_price_rate*10 price_level_1,
+		t.price_level_2,
+		t.price_level_3,
+		t.price_level_4,
+		t.price_level_5,
+		t.create_time,
+		t.create_by,
+		t.create_user_name,
+		t.update_time,
+		t.update_by,
+		t.update_user_name,
+		t.is_deleted
+		from t_product_price_ladder t
+		left join t_product_operate o
+		on t.product_id=o.product_id
+		where t.id=#{id}
+	</select>
+	<select id="queryOneByProductCode" parameterType="ProductPriceLadderModel"
+		resultMap="productPriceLadderModel">
+		select
+		t.id,
+		product.product_id,
+		product.product_code,
+		product.product_name,
+		product.supplier_id,
+		o.product_price_rate*10 price_level_1,
+		t.price_level_2,
+		t.price_level_3,
+		t.price_level_4,
+		t.price_level_5,
+		t.create_time,
+		t.create_by,
+		t.create_user_name,
+		t.update_time,
+		t.update_by,
+		t.update_user_name,
+		t.is_deleted
+		from t_product product
+		left join t_product_price_ladder t
+		on product.product_id=t.product_id
+		left join t_product_operate o
+		on product.product_id=o.product_id
+		where product.product_code=#{productCode}
+	</select>
+	<select id="queryListPage" parameterType="ProductPriceLadderModel"
+		resultMap="productPriceLadderModel">
+		select
+		t.id,
+		t.product_id,
+		t.product_code,
+		t.product_name,
+		t.supplier_id,
+		o.product_price_rate*10 price_level_1,
+		t.price_level_2,
+		t.price_level_3,
+		t.price_level_4,
+		t.price_level_5,
+		t.create_time,
+		t.create_by,
+		t.create_user_name,
+		t.update_time,
+		t.update_by,
+		t.update_user_name,
+		t.is_deleted
+		from t_product_price_ladder t
+		left join t_product_operate o
+		on t.product_id=o.product_id
+		where 1=1
+		<include refid="query" />
+	</select>
+
+	<select id="countListPage" parameterType="ProductPriceLadderModel"
+		resultType="java.lang.Long">
+		select count(1) from t_product_price_ladder t
+		where 1=1
+		<include refid="query" />
+	</select>
+
+	<insert id="insert" parameterType="ProductPriceLadderModel">
+		<selectKey resultType="java.lang.Long" keyProperty="id"
+			order="AFTER">
+			SELECT @@IDENTITY as id
+		</selectKey>
+		insert into t_product_price_ladder
+		(
+		product_id,
+		product_code,
+		product_name,
+		supplier_id,
+		price_level_1,
+		price_level_2,
+		price_level_3,
+		price_level_4,
+		price_level_5,
+		create_time,
+		create_by,
+		create_user_name,
+		update_time,
+		update_by,
+		update_user_name,
+		is_deleted
+		)
+		values
+		(
+		#{productId},
+		#{productCode},
+		#{productName},
+		#{supplierId},
+		#{priceLevel1},
+		#{priceLevel2},
+		#{priceLevel3},
+		#{priceLevel4},
+		#{priceLevel5},
+		now(),
+		#{createBy},
+		#{createUserName},
+		now(),
+		#{updateBy},
+		#{updateUserName},
+		0
+		)
+	</insert>
+
+	<update id="update" parameterType="ProductPriceLadderModel">
+		update t_product_price_ladder t
+		<set>
+			<if test="productId != null  and productId !=''">
+				t.product_id=#{productId},
+			</if>
+			<if test="productCode != null  and productCode !=''">
+				t.product_code=#{productCode},
+			</if>
+			<if test="productName != null  and productName !=''">
+				t.product_name=#{productName},
+			</if>
+			<if test="supplierId != null  and supplierId !=''">
+				t.supplier_id=#{supplierId},
+			</if>
+			<if test="priceLevel1 != null  and priceLevel1 !=''">
+				t.price_level_1=#{priceLevel1},
+			</if>
+			<if test="priceLevel2 != null  and priceLevel2 !=''">
+				t.price_level_2=#{priceLevel2},
+			</if>
+			<if test="priceLevel3 != null  and priceLevel3 !=''">
+				t.price_level_3=#{priceLevel3},
+			</if>
+			<if test="priceLevel4 != null  and priceLevel4 !=''">
+				t.price_level_4=#{priceLevel4},
+			</if>
+			<if test="priceLevel5 != null  and priceLevel5 !=''">
+				t.price_level_5=#{priceLevel5},
+			</if>
+			<if test="createTime != null  and createTime !=''">
+				t.create_time=#{createTime},
+			</if>
+			<if test="createBy != null  and createBy !=''">
+				t.create_by=#{createBy},
+			</if>
+			<if test="createUserName != null  and createUserName !=''">
+				t.create_user_name=#{createUserName},
+			</if>
+			<if test="updateTime != null  and updateTime !=''">
+				t.update_time=#{updateTime},
+			</if>
+			<if test="updateBy != null  and updateBy !=''">
+				t.update_by=#{updateBy},
+			</if>
+			<if test="updateUserName != null  and updateUserName !=''">
+				t.update_user_name=#{updateUserName},
+			</if>
+			<if test="isDeleted != null  and isDeleted !=''">
+				t.is_deleted=#{isDeleted}
+			</if>
+		</set>
+		where
+		t.id=#{id}
+	</update>
+
+	<delete id="delete" parameterType="ProductPriceLadderModel">
+		delete from t_product_price_ladder where
+		id =#{id}
+	</delete>
+
+	<delete id="deleteByIds" parameterType="java.util.List">
+		delete from t_product_price_ladder where
+		id in
+		<foreach item="item" index="index" collection="list" open="("
+			separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+
+</mapper>

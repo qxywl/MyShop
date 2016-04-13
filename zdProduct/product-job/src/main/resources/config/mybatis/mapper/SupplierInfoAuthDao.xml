@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="SupplierInfoAuthDaoImpl">
+	
+	<resultMap type="SupplierInfoAuthModel" id="supplierInfoAuthModel">
+		   <result property="infoAuthBackupId" column="info_auth_backup_id" javaType="java.lang.Long" />
+		   <result property="type" column="type" javaType="java.lang.Long" />
+		   <result property="newValue" column="new_Value" javaType="java.lang.String" />
+		   <result property="oldValue" column="old_value" javaType="java.lang.String" />
+		   <result property="status" column="staus" javaType="java.lang.Long" />
+		   <result property="productCode" column="product_code" javaType="java.lang.String" />
+		   <result property="createTime" column="create_time" javaType="java.lang.Long" />
+		   <result property="createBy" column="create_by" javaType="java.lang.Long" />
+		   <result property="createUserName" column="create_user_name" javaType="java.lang.String" />
+		   <result property="sourceType" column="source_type" javaType="java.lang.Integer" />
+	</resultMap>
+
+	<select id="queryOne" parameterType="SupplierInfoAuthModel"
+	resultMap="supplierInfoAuthModel">
+	select
+	          info_auth_backup_id,
+	          type,
+	          old_value,
+	          new_Value,
+	          product_code,
+	          create_time,
+	          create_by,
+	          create_user_name,
+	          source_type,
+	          status 
+	from  t_info_auth_backup t
+	where t.info_auth_backup_id=#{infoAuthBackupId}
+	</select>
+	<select id="queryListPage" parameterType="SupplierInfoAuthModel"
+		resultMap="supplierInfoAuthModel">
+		select 
+	          info_auth_backup_id,
+	          type,
+	          old_value,
+	          new_Value,
+	          product_code,
+	          create_time,
+	          create_by,
+	          create_user_name,
+	    	  source_type,
+	          status 
+	     from  t_info_auth_backup t 
+		where t.status=#{status}  and  info_auth_backup_id <![CDATA[ % #{total} = #{remainder} ]]>
+		
+	</select>
+
+	<select id="countListPage" parameterType="SupplierInfoAuthModel"
+		resultType="java.lang.Long">
+		select count(1) from  t_info_auth_backup t
+		where t.status=#{status}  and  info_auth_backup_id <![CDATA[ % #{total} = #{remainder} ]]>
+	 </select>
+
+	<insert id="insert" parameterType="SupplierInfoAuthModel">
+		<selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER">
+    		SELECT @@IDENTITY as id
+    	</selectKey>
+		insert into  t_info_auth_backup
+		(
+	          			    info_auth_backup_id,
+	          			    type,
+	          			    old_value,
+	          				new_Value,
+	          				product_code,
+	          				create_time,
+				            create_by,
+				            create_user_name,
+				            source_type,
+	          			    status 
+        )
+		values
+		(
+		          			    #{productInfoAuth},
+		          			    #{type},
+		          			    #{oldValue},
+		          				#{newValue},
+		          				#{productCode},
+		          				#{createTime},
+		          				#{createBy},
+		          				#{createUserName},
+		          				#{sourceType,},
+		          			    #{status} 
+        )
+	</insert>
+
+	<update id="update" parameterType="SupplierInfoAuthModel">
+		update  t_info_auth_backup t 
+		  <set>
+			         <if test="staus != null">
+				          t.staus=#{staus},
+				    </if>
+			         
+		    </set>
+		where 
+		t.info_auth_backup_id=#{infoAuthBackupId}
+	</update>
+	
+	<delete id="delete" parameterType="SupplierInfoAuthModel">
+    	delete from  t_info_auth_backup  where 
+    	info_auth_backup_id =#{infoAuthBackupId}
+    </delete>
+    
+    <delete id="deleteByIds" parameterType="java.util.List">
+    	delete from t_info_auth_backup  where 
+    	info_auth_backup_id in
+    	<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+    </delete>
+
+</mapper>

@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ProductInfoDaoImpl">
+	
+	<resultMap type="ProductInfoModel" id="productInfoModel">
+		   <result property="productInfoId" column="product_info_id" javaType="java.lang.Long" />
+		   <result property="productId" column="product_id" javaType="java.lang.Long" />
+		   <result property="pcProductInfo" column="pc_product_info" javaType="java.lang.String" />
+		   <result property="appProductInfo" column="app_product_info" javaType="java.lang.String" />
+	</resultMap>
+
+    <sql id="query">
+	        <if test="productInfoId != null and productInfoId !=''">
+					and t.product_info_id=#{productInfoId}
+		    </if>
+	        <if test="productId != null and productId !=''">
+					and t.product_id=#{productId}
+		    </if>
+    </sql>
+
+
+	<select id="queryOne" parameterType="ProductInfoModel"
+	resultMap="productInfoModel">
+	select
+	          product_info_id,
+	          product_id,
+	          pc_product_info,
+	          app_product_info
+	from  t_product_info t
+	where t.product_id=#{productId}
+	</select>
+	<select id="queryListPage" parameterType="ProductInfoModel"
+		resultMap="productInfoModel">
+		select 
+	          product_info_id,
+	    
+	          product_id,
+	    
+	          pc_product_info,
+	          
+	          app_product_info
+	     from  t_product_info t
+		where 1=1
+		<include refid="query"/>
+	</select>
+
+	<select id="countListPage" parameterType="ProductInfoModel"
+		resultType="java.lang.Long">
+		select count(1) from  t_product_info t
+		where 1=1
+		<include refid="query"/>
+	 </select>
+
+	<insert id="insert" parameterType="ProductInfoModel">
+		<selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER">
+    		SELECT @@IDENTITY as id
+    	</selectKey>
+		insert into  t_product_info
+		(
+	          			    product_info_id,
+	          			    product_id,
+	          				pc_product_info,
+	          				app_product_info
+        )
+		values
+		(
+		          			    #{productInfoId},
+		          			    #{productId},
+	          					#{pcProductInfo},
+	          					#{appProductInfo}
+        )
+	</insert>
+
+	<update id="update" parameterType="ProductInfoModel">
+		update  t_product_info t 
+		  <set>
+			         
+			         <if test="pcProductInfo != null  and pcProductInfo !=''">
+				          t.pc_product_info=#{pcProductInfo},
+				    </if>
+				    <if test="appProductInfo != null  and appProductInfo !=''">
+				          t.app_product_info=#{appProductInfo},
+				    </if>
+				    <if test="productId != null  and productId !=''">
+				          t.product_id=#{productId}
+				    </if>
+		    </set>
+		where 
+		t.product_id=#{productId}
+	</update>
+	
+	<delete id="delete" parameterType="ProductInfoModel">
+    	delete from  t_product_info  where product_info_id=#{productInfoId}
+    </delete>
+    
+    <delete id="deleteByIds" parameterType="java.util.List">
+    	delete from t_product_info  where product_info_id
+    	 in
+    	<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+    </delete>
+
+</mapper>

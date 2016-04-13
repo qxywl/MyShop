@@ -1,0 +1,1175 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jee="http://www.springframework.org/schema/jee" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd  
+	                      http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+	                      http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd         
+	                      http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-3.0.xsd         
+	                      http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd"
+	                      default-lazy-init="true" >
+	                      
+	 <!--  autoOnsaleCmd   -->                     
+	<bean id="autoOnsaleCmd" class="com.zhaidou.jobCenter.schedule.cmd.AutoOnsaleCmd">
+		<property name="commandName" value="AutoOnsaleCmd" />
+	</bean>	
+    <bean id="autoOnsaleChain" class="com.zhaidou.jobCenter.chain.Chain">
+		<property name="chainName" value="AutoOnsaleChain" />
+		<property name="commands">
+			<list>
+				<ref bean="autoOnsaleCmd" />
+			</list>
+		</property>
+	</bean>	                      
+	<bean id="autoOnsaleSchedule" class="com.zhaidou.jobCenter.schedule.ChainSchedule" parent="baseNodeModeSchedule">
+        <property name="scheduleName" value="AutoOnsaleSchedule" />
+   		<property name="chain" ref="autoOnsaleChain" />
+   	</bean>	   
+   <bean id="autoOnsaleScheduleTask" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject">
+			<ref bean="autoOnsaleSchedule" />
+		</property>
+        <property name="targetMethod" value="perform" />
+        <property name="concurrent" value="false" />
+    </bean>
+    <bean id="autoOnsaleScheduleTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+		<property name="jobDetail">
+			<ref bean="autoOnsaleScheduleTask" />
+		</property>
+		<!-- 60*1000 一分钟 -->
+        <property name="startDelay">
+            <value>15000</value>
+        </property>
+        <property name="repeatInterval">
+            <value>8000</value>
+        </property>
+	</bean>       
+		 <!--  autoOnImportsaleCmd   -->                     
+	<bean id="autoOnImportSaleCmd" class="com.zhaidou.jobCenter.schedule.cmd.AutoOnImportSaleCmd">
+		<property name="commandName" value="AutoOnImportSaleCmd" />
+	</bean>	
+    <bean id="autoOnImportSaleChain" class="com.zhaidou.jobCenter.chain.Chain">
+		<property name="chainName" value="AutoOnImportSaleChain" />
+		<property name="commands">
+			<list>
+				<ref bean="autoOnImportSaleCmd" />
+			</list>
+		</property>
+	</bean>	                      
+	<bean id="autoOnImportSaleSchedule" class="com.zhaidou.jobCenter.schedule.ChainSchedule" parent="baseNodeModeSchedule">
+        <property name="scheduleName" value="AutoOnImportSaleSchedule" />
+   		<property name="chain" ref="autoOnImportSaleChain" />
+   	</bean>	   
+   <bean id="autoOnImportSaleScheduleTask" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject">
+			<ref bean="autoOnImportSaleSchedule" />
+		</property>
+        <property name="targetMethod" value="perform" />
+        <property name="concurrent" value="false" />
+    </bean>
+    <bean id="autoOnImportSaleScheduleTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+		<property name="jobDetail">
+			<ref bean="autoOnImportSaleScheduleTask" />
+		</property>
+		<!-- 60*1000 一分钟 -->
+        <property name="startDelay">
+            <value>15000</value>
+        </property>
+        <property name="repeatInterval">
+            <value>8000</value>
+        </property>
+	</bean>       
+		 <!--  autoOnCreateSaleCmd   -->                     
+	<bean id="autoOnCreateSaleCmd" class="com.zhaidou.jobCenter.schedule.cmd.AutoOnCreateSaleCmd">
+		<property name="commandName" value="AutoOnCreateSaleCmd" />
+	</bean>	
+    <bean id="autoOnCreateSaleChain" class="com.zhaidou.jobCenter.chain.Chain">
+		<property name="chainName" value="AutoOnCreateSaleChain" />
+		<property name="commands">
+			<list>
+				<ref bean="autoOnCreateSaleCmd" />
+			</list>
+		</property>
+	</bean>	                      
+	<bean id="autoOnCreateSaleSchedule" class="com.zhaidou.jobCenter.schedule.ChainSchedule" parent="baseNodeModeSchedule">
+        <property name="scheduleName" value="AutoOnCreateSaleSchedule" />
+   		<property name="chain" ref="autoOnCreateSaleChain" />
+   	</bean>	   
+   <bean id="autoOnCreateSaleScheduleTask" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject">
+			<ref bean="autoOnCreateSaleSchedule" />
+		</property>
+        <property name="targetMethod" value="perform" />
+        <property name="concurrent" value="false" />
+    </bean>
+    <bean id="autoOnCreateSaleScheduleTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+		<property name="jobDetail">
+			<ref bean="autoOnCreateSaleScheduleTask" />
+		</property>
+		<!-- 60*1000 一分钟 -->
+        <property name="startDelay">
+            <value>15000</value>
+        </property>
+        <property name="repeatInterval">
+            <value>8000</value>
+        </property>
+	</bean>       
+	
+	 <!--  autoViewOnSaleCmd   -->                     
+	<bean id="autoViewOnSaleCmd"  class="com.zhaidou.jobCenter.schedule.cmd.AutoViewOnsaleCmd">
+		<property name="commandName" value="AutoViewOnSaleCmd" />
+	</bean>	
+    <bean id="autoViewOnSaleChain" class="com.zhaidou.jobCenter.chain.Chain">
+		<property name="chainName" value="AutoViewOnSaleChain" />
+		<property name="commands">
+			<list>
+				<ref bean="autoViewOnSaleCmd" />
+			</list>
+		</property>
+	</bean>	                      
+	<bean id="autoViewOnSaleSchedule" class="com.zhaidou.jobCenter.schedule.ChainSchedule" parent="baseNodeModeSchedule">
+        <property name="scheduleName" value="AutoViewOnSaleSchedule" />
+   		<property name="chain" ref="autoViewOnSaleChain" />
+   	</bean>	   
+   <bean id="autoViewOnSaleScheduleTask" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject">
+			<ref bean="autoViewOnSaleSchedule" />
+		</property>
+        <property name="targetMethod" value="perform" />
+        <property name="concurrent" value="false" />
+    </bean>
+    <bean id="autoViewOnSaleScheduleTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+		<property name="jobDetail">
+			<ref bean="autoViewOnSaleScheduleTask" />
+		</property>
+		<!-- 60*1000 一分钟 -->
+        <property name="startDelay">
+            <value>30000</value>
+        </property>
+        <property name="repeatInterval">
+            <value>8000</value>
+        </property>
+	</bean>       
+	
+	<!--  autoMemcacheOnSaleCmd   -->                     
+	<bean id="autoMemcacheOnSaleCmd"  class="com.zhaidou.jobCenter.schedule.cmd.AutoMemcacheOnsaleCmd">
+		<property name="commandName" value="AutoMemcacheOnSaleCmd" />
+	</bean>	
+    <bean id="autoMemcacheOnSaleChain" class="com.zhaidou.jobCenter.chain.Chain">
+		<property name="chainName" value="AutoMemcacheOnSaleChain" />
+		<property name="commands">
+			<list>
+				<ref bean="autoMemcacheOnSaleCmd" />
+			</list>
+		</property>
+	</bean>	                      
+	<bean id="autoMemcacheOnSaleSchedule" class="com.zhaidou.jobCenter.schedule.ChainSchedule" parent="baseNodeModeSchedule">
+        <property name="scheduleName" value="AutoMemcacheOnSaleSchedule" />
+   		<property name="chain" ref="autoMemcacheOnSaleChain" />
+   	</bean>	   
+   <bean id="autoMemcacheOnSaleScheduleTask" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject">
+			<ref bean="autoMemcacheOnSaleSchedule" />
+		</property>
+        <property name="targetMethod" value="perform" />
+        <property name="concurrent" value="false" />
+    </bean>
+    <bean id="autoMemcacheOnSaleScheduleTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+		<property name="jobDetail">
+			<ref bean="autoMemcacheOnSaleScheduleTask" />
+		</property>
+		<!-- 60*1000 一分钟 -->
+        <property name="startDelay">
+            <value>15000</value>
+        </property>
+        <property name="repeatInterval">
+            <value>8000</value>
+        </property>
+	</bean>    
+	
+		 <!--  autoMqOnSaleCmd   -->                     
+	<bean id="autoMqOnSaleCmd"  class="com.zhaidou.jobCenter.schedule.cmd.AutoMqOnsaleCmd">
+		<property name="commandName" value="AutoMqOnSaleCmd" />
+	</bean>	
+    <bean id="autoMqOnSaleChain" class="com.zhaidou.jobCenter.chain.Chain">
+		<property name="chainName" value="AutoMqOnSaleChain" />
+		<property name="commands">
+			<list>
+				<ref bean="autoMqOnSaleCmd" />
+			</list>
+		</property>
+	</bean>	                      
+	<bean id="autoMqOnSaleSchedule" class="com.zhaidou.jobCenter.schedule.ChainSchedule" parent="baseNodeModeSchedule">
+        <property name="scheduleName" value="AutoMqOnSaleSchedule" />
+   		<property name="chain" ref="autoMqOnSaleChain" />
+   	</bean>	   
+   <bean id="autoMqOnSaleScheduleTask" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject">
+			<ref bean="autoMqOnSaleSchedule" />
+		</property>
+        <property name="targetMethod" value="perform" />
+        <property name="concurrent" value="false" />
+    </bean>
+    <bean id="autoMqOnSaleScheduleTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+		<property name="jobDetail">
+			<ref bean="autoMqOnSaleScheduleTask" />
+		</property>
+		<!-- 60*1000 一分钟 -->
+        <property name="startDelay">
+            <value>15000</value>
+        </property>
+        <property name="repeatInterval">
+            <value>8000</value>
+        </property>
+	</bean>    
+	
+	
+	 <!--  autoPriceCmd   -->                     
+	<bean id="autoPriceCmd" class="com.zhaidou.jobCenter.schedule.cmd.AutoPriceCmd">
+		<property name="commandName" value="AutoPriceCmd" />
+	</bean>	
+    <bean id="autoPriceChain" class="com.zhaidou.jobCenter.chain.Chain">
+		<property name="chainName" value="AutoPriceChain" />
+		<property name="commands">
+			<list>
+				<ref bean="autoPriceCmd" />
+			</list>
+		</property>
+	</bean>	                      
+	<bean id="autoPriceSchedule" class="com.zhaidou.jobCenter.schedule.ChainSchedule" parent="baseNodeModeSchedule">
+        <property name="scheduleName" value="AutoPriceSchedule" />
+   		<property name="chain" ref="autoPriceChain" />
+   	</bean>	   
+   <bean id="autoPriceScheduleTask" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject">
+			<ref bean="autoPriceSchedule" />
+		</property>
+        <property name="targetMethod" value="perform" />
+        <property name="concurrent" value="false" />
+    </bean>
+    <bean id="autoPriceScheduleTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+		<property name="jobDetail">
+			<ref bean="autoPriceScheduleTask" />
+		</property>
+		<!-- 60*1000 一分钟 -->
+        <property name="startDelay">
+            <value>15000</value>
+        </property>
+        <property name="repeatInterval">
+            <value>8000</value>
+        </property>
+	</bean>       
+	
+	
+	 <!--  autoCreatePriceCmd   -->                     
+	<bean id="autoCreatePriceCmd" class="com.zhaidou.jobCenter.schedule.cmd.AutoCreatePriceCmd">
+		<property name="commandName" value="AutoCreatePriceCmd" />
+	</bean>	
+    <bean id="autoCreatePriceChain" class="com.zhaidou.jobCenter.chain.Chain">
+		<property name="chainName" value="AutoCreatePriceChain" />
+		<property name="commands">
+			<list>
+				<ref bean="autoCreatePriceCmd" />
+			</list>
+		</property>
+	</bean>	                      
+	<bean id="autoCreatePriceSchedule" class="com.zhaidou.jobCenter.schedule.ChainSchedule" parent="baseNodeModeSchedule">
+        <property name="scheduleName" value="AutoCreatePriceSchedule" />
+   		<property name="chain" ref="autoCreatePriceChain" />
+   	</bean>	   
+   <bean id="autoCreatePriceScheduleTask" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject">
+			<ref bean="autoCreatePriceSchedule" />
+		</property>
+        <property name="targetMethod" value="perform" />
+        <property name="concurrent" value="false" />
+    </bean>
+    <bean id="autoCreatePriceScheduleTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+		<property name="jobDetail">
+			<ref bean="autoCreatePriceScheduleTask" />
+		</property>
+		<!-- 60*1000 一分钟 -->
+        <property name="startDelay">
+            <value>15000</value>
+        </property>
+        <property name="repeatInterval">
+            <value>8000</value>
+        </property>
+	</bean>       
+	
+	
+	 <!--  autoPriceImportCmd   -->                     
+	<bean id="autoImportPriceCmd" class="com.zhaidou.jobCenter.schedule.cmd.AutoImportPriceCmd">
+		<property name="commandName" value="AutoImportPriceCmd" />
+	</bean>	
+    <bean id="autoImportPriceChain" class="com.zhaidou.jobCenter.chain.Chain">
+		<property name="chainName" value="AutoImportPriceChain" />
+		<property name="commands">
+			<list>
+				<ref bean="autoImportPriceCmd" />
+			</list>
+		</property>
+	</bean>	                      
+	<bean id="autoImportPriceSchedule" class="com.zhaidou.jobCenter.schedule.ChainSchedule" parent="baseNodeModeSchedule">
+        <property name="scheduleName" value="AutoImportPriceSchedule" />
+   		<property name="chain" ref="autoImportPriceChain" />
+   	</bean>	   
+   <bean id="autoImportPriceScheduleTask" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject">
+			<ref bean="autoImportPriceSchedule" />
+		</property>
+        <property name="targetMethod" value="perform" />
+        <property name="concurrent" value="false" />
+    </bean>
+    <bean id="autoImportPriceScheduleTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+		<property name="jobDetail">
+			<ref bean="autoImportPriceScheduleTask" />
+		</property>
+		<!-- 60*1000 一分钟 -->
+        <property name="startDelay">
+            <value>15000</value>
+        </property>
+        <property name="repeatInterval">
+            <value>8000</value>
+        </property>
+	</bean>       
+	
+	<!--  autoMemcachePriceCmd   -->      
+	<bean id="autoMemcachePriceCmd" class="com.zhaidou.jobCenter.schedule.cmd.AutoMemcachePriceCmd">
+		<property name="commandName" value="AutoMemcachePriceCmd" />
+	</bean>	
+    <bean id="autoMemcachePriceChain" class="com.zhaidou.jobCenter.chain.Chain">
+		<property name="chainName" value="AutoMemcachePriceChain" />
+		<property name="commands">
+			<list>
+				<ref bean="autoMemcachePriceCmd" />
+			</list>
+		</property>
+	</bean>	                      
+	<bean id="autoMemcachePriceSchedule" class="com.zhaidou.jobCenter.schedule.ChainSchedule" parent="baseNodeModeSchedule">
+        <property name="scheduleName" value="AutoMemcachePriceSchedule" />
+   		<property name="chain" ref="autoMemcachePriceChain" />
+   	</bean>	   
+   <bean id="autoMemcachePriceScheduleTask" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject">
+			<ref bean="autoMemcachePriceSchedule" />
+		</property>
+        <property name="targetMethod" value="perform" />
+        <property name="concurrent" value="false" />
+    </bean>
+    <bean id="autoMemcachePriceScheduleTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+		<property name="jobDetail">
+			<ref bean="autoMemcachePriceScheduleTask" />
+		</property>
+		<!-- 60*1000 一分钟 -->
+        <property name="startDelay">
+            <value>15000</value>
+        </property>
+        <property name="repeatInterval">
+            <value>8000</value>
+        </property>
+	</bean>       
+	
+	<!--  autoMqPriceCmd   -->      
+	<bean id="autoMqPriceCmd" class="com.zhaidou.jobCenter.schedule.cmd.AutoMqPriceCmd">
+		<property name="commandName" value="AutoMqPriceCmd" />
+	</bean>	
+    <bean id="autoMqPriceChain" class="com.zhaidou.jobCenter.chain.Chain">
+		<property name="chainName" value="AutoMqPriceChain" />
+		<property name="commands">
+			<list>
+				<ref bean="autoMqPriceCmd" />
+			</list>
+		</property>
+	</bean>	                      
+	<bean id="autoMqPriceSchedule" class="com.zhaidou.jobCenter.schedule.ChainSchedule" parent="baseNodeModeSchedule">
+        <property name="scheduleName" value="AutoMqPriceSchedule" />
+   		<property name="chain" ref="autoMqPriceChain" />
+   	</bean>	   
+   <bean id="autoMqPriceScheduleTask" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject">
+			<ref bean="autoMqPriceSchedule" />
+		</property>
+        <property name="targetMethod" value="perform" />
+        <property name="concurrent" value="false" />
+    </bean>
+    <bean id="autoMqPriceScheduleTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+		<property name="jobDetail">
+			<ref bean="autoMqPriceScheduleTask" />
+		</property>
+		<!-- 60*1000 一分钟 -->
+        <property name="startDelay">
+            <value>15000</value>
+        </property>
+        <property name="repeatInterval">
+            <value>8000</value>
+        </property>
+	</bean>       
+	 
+	 
+	 <!--  autoSupplierPriceCmd   -->      
+	<bean id="autoSupplierPriceCmd" class="com.zhaidou.jobCenter.schedule.cmd.AutoSupplierPriceCmd">
+		<property name="commandName" value="AutoSupplierPriceCmd" />
+	</bean>	
+    <bean id="autoSupplierPriceChain" class="com.zhaidou.jobCenter.chain.Chain">
+		<property name="chainName" value="AutoSupplierPriceChain" />
+		<property name="commands">
+			<list>
+				<ref bean="autoSupplierPriceCmd" />
+			</list>
+		</property>
+	</bean>	                      
+	<bean id="autoSupplierPriceSchedule" class="com.zhaidou.jobCenter.schedule.ChainSchedule" parent="baseNodeModeSchedule">
+        <property name="scheduleName" value="AutoSupplierPriceSchedule" />
+   		<property name="chain" ref="autoSupplierPriceChain" />
+   	</bean>	   
+   <bean id="autoSupplierPriceScheduleTask" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject">
+			<ref bean="autoSupplierPriceSchedule" />
+		</property>
+        <property name="targetMethod" value="perform" />
+        <property name="concurrent" value="false" />
+    </bean>
+    <bean id="autoSupplierPriceScheduleTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+		<property name="jobDetail">
+			<ref bean="autoSupplierPriceScheduleTask" />
+		</property>
+		<!-- 60*1000 一分钟 -->
+        <property name="startDelay">
+            <value>15000</value>
+        </property>
+        <property name="repeatInterval">
+            <value>8000</value>
+        </property>
+	</bean>       
+	 
+	 
+	<!--  autoInfoCmd   -->                     
+	<bean id="autoProductInfoCmd" class="com.zhaidou.jobCenter.schedule.cmd.AutoProductInfoCmd">
+		<property name="commandName" value="AutoProductInfoCmd" />
+	</bean>	
+    <bean id="autoProductInfoChain" class="com.zhaidou.jobCenter.chain.Chain">
+		<property name="chainName" value="AutoProductInfoChain" />
+		<property name="commands">
+			<list>
+				<ref bean="autoProductInfoCmd" />
+			</list>
+		</property>
+	</bean>	                      
+	<bean id="autoProductInfoSchedule" class="com.zhaidou.jobCenter.schedule.ChainSchedule" parent="baseNodeModeSchedule">
+        <property name="scheduleName" value="AutoProductInfoSchedule" />
+   		<property name="chain" ref="autoProductInfoChain" />
+   	</bean>	   
+   <bean id="autoProductInfoScheduleTask" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject">
+			<ref bean="autoProductInfoSchedule" />
+		</property>
+        <property name="targetMethod" value="perform" />
+        <property name="concurrent" value="false" />
+    </bean>
+    <bean id="autoProductInfoScheduleTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+		<property name="jobDetail">
+			<ref bean="autoProductInfoScheduleTask" />
+		</property>
+		<!-- 60*1000 一分钟 -->
+        <property name="startDelay">
+            <value>30000</value>
+        </property>
+        <property name="repeatInterval">
+            <value>8000</value>
+        </property>
+	</bean>       
+	
+	<!--  autoImportInfoCmd   -->                     
+	<bean id="autoImportProductInfoCmd" class="com.zhaidou.jobCenter.schedule.cmd.AutoImportProductInfoCmd">
+		<property name="commandName" value="AutoImportProductInfoCmd" />
+	</bean>	
+    <bean id="autoImportProductInfoChain" class="com.zhaidou.jobCenter.chain.Chain">
+		<property name="chainName" value="AutoImportProductInfoChain" />
+		<property name="commands">
+			<list>
+				<ref bean="autoImportProductInfoCmd" />
+			</list>
+		</property>
+	</bean>	                      
+	<bean id="autoImportProductInfoSchedule" class="com.zhaidou.jobCenter.schedule.ChainSchedule" parent="baseNodeModeSchedule">
+        <property name="scheduleName" value="AutoImportProductInfoSchedule" />
+   		<property name="chain" ref="autoImportProductInfoChain" />
+   	</bean>	   
+   <bean id="autoImportProductInfoScheduleTask" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject">
+			<ref bean="autoImportProductInfoSchedule" />
+		</property>
+        <property name="targetMethod" value="perform" />
+        <property name="concurrent" value="false" />
+    </bean>
+    <bean id="autoImportProductInfoScheduleTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+		<property name="jobDetail">
+			<ref bean="autoImportProductInfoScheduleTask" />
+		</property>
+		<!-- 60*1000 一分钟 -->
+        <property name="startDelay">
+            <value>15000</value>
+        </property>
+        <property name="repeatInterval">
+            <value>8000</value>
+        </property>
+	</bean>       
+	
+	<!--  AutoCreateProductInfoCmd start  -->
+	<bean id="autoCreateProductInfoCmd" class="com.zhaidou.jobCenter.schedule.cmd.AutoCreateProductInfoCmd">
+		<property name="commandName" value="AutoCreateProductInfoCmd" />
+	</bean>	
+    <bean id="autoCreateProductInfoChain" class="com.zhaidou.jobCenter.chain.Chain">
+		<property name="chainName" value="AutoCreateProductInfoChain" />
+		<property name="commands">
+			<list>
+				<ref bean="autoCreateProductInfoCmd" />
+			</list>
+		</property>
+	</bean>	                      
+	<bean id="autoCreateProductInfoSchedule" class="com.zhaidou.jobCenter.schedule.ChainSchedule" parent="baseNodeModeSchedule">
+        <property name="scheduleName" value="AutoCreateProductInfoSchedule" />
+   		<property name="chain" ref="autoCreateProductInfoChain" />
+   	</bean>	   
+   <bean id="autoCreateProductInfoScheduleTask" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject">
+			<ref bean="autoCreateProductInfoSchedule" />
+		</property>
+        <property name="targetMethod" value="perform" />
+        <property name="concurrent" value="false" />
+    </bean>
+    <bean id="autoCreateProductInfoScheduleTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+		<property name="jobDetail">
+			<ref bean="autoCreateProductInfoScheduleTask" />
+		</property>
+		<!-- 60*1000 一分钟 -->
+        <property name="startDelay">
+            <value>15000</value>
+        </property>
+        <property name="repeatInterval">
+            <value>8000</value>
+        </property>
+	</bean>
+	<!--  AutoCreateProductInfoCmd end  -->
+
+	<!--  AutoSyncPurchaseStockCmd start  -->
+	<bean id="autoSyncPurchaseStockCmd" class="com.zhaidou.jobCenter.schedule.cmd.AutoSyncPurchaseStockCmd">
+		<property name="commandName" value="AutoSyncPurchaseStockCmd" />
+	</bean>
+    <bean id="autoSyncPurchaseStockChain" class="com.zhaidou.jobCenter.chain.Chain">
+		<property name="chainName" value="AutoSyncPurchaseStockChain" />
+		<property name="commands">
+			<list>
+				<ref bean="autoSyncPurchaseStockCmd" />
+			</list>
+		</property>
+	</bean>
+	<bean id="autoSyncPurchaseStockSchedule" class="com.zhaidou.jobCenter.schedule.ChainSchedule" parent="baseNodeModeSchedule">
+        <property name="scheduleName" value="AutoSyncPurchaseStockSchedule" />
+   		<property name="chain" ref="autoSyncPurchaseStockChain" />
+   	</bean>
+   <bean id="autoSyncPurchaseStockScheduleTask" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject">
+			<ref bean="autoSyncPurchaseStockSchedule" />
+		</property>
+        <property name="targetMethod" value="perform" />
+        <property name="concurrent" value="false" />
+    </bean>
+    <bean id="autoSyncPurchaseStockScheduleTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+		<property name="jobDetail">
+			<ref bean="autoSyncPurchaseStockScheduleTask" />
+		</property>
+		<!-- 60*1000 一分钟 -->
+        <property name="startDelay">
+            <value>15000</value>
+        </property>
+        <property name="repeatInterval">
+            <value>3600000</value>
+        </property>
+	</bean>
+	<!--  autoSyncPurchaseStockCmd end  -->
+		
+	<!-- autoSyncPurchaseRefundCmd start -->
+	<bean id="autoSyncPurchaseRefundCmd" class="com.zhaidou.jobCenter.schedule.cmd.AutoSyncPurchaseRefundCmd">
+		<property name="commandName" value="AutoSyncPurchaseRefundCmd" />
+	</bean>
+	<bean id="autoSyncPurchaseRefundChain" class="com.zhaidou.jobCenter.chain.Chain">
+		<property name="chainName" value="AutoSyncPurchaseRefundChain" />
+		<property name="commands">
+			<list>
+				<ref bean="autoSyncPurchaseRefundCmd" />
+			</list>
+		</property>
+	</bean>
+	<bean id="autoSyncPurchaseRefundSchedule" class="com.zhaidou.jobCenter.schedule.ChainSchedule" parent="baseNodeModeSchedule">
+        <property name="scheduleName" value="AutoSyncPurchaseRefundSchedule" />
+   		<property name="chain" ref="autoSyncPurchaseRefundChain" />
+   	</bean>
+   <bean id="autoSyncPurchaseRefundScheduleTask" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject">
+			<ref bean="autoSyncPurchaseRefundSchedule" />
+		</property>
+        <property name="targetMethod" value="perform" />
+        <property name="concurrent" value="false" />
+    </bean>
+    <bean id="autoSyncPurchaseRefundScheduleTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+		<property name="jobDetail">
+			<ref bean="autoSyncPurchaseRefundScheduleTask" />
+		</property>
+		<!-- 60*1000 一分钟 -->
+        <property name="startDelay">
+            <value>15000</value>
+        </property>
+        <property name="repeatInterval">
+            <value>3600000</value>
+        </property>
+	</bean>
+	<!-- autoSyncPurchaseRefundCmd end -->
+
+		<!-- autoSynvProductRefundGoodsCmd start -->
+	<bean id="autoSyncProductRefundGoodsCmd" class="com.zhaidou.jobCenter.schedule.cmd.AutoSyncProductRefundGoodsCmd">
+		<property name="commandName" value="AutoSyncProductRefundGoodsCmd"></property>
+	</bean>
+	<bean id="autoSyncProductRefundGoodsChain" class="com.zhaidou.jobCenter.chain.Chain">
+		<property name="chainName" value="AutoSyncProductRefundGoodsChain"></property>
+		<property name="commands">
+			<list>
+				<ref bean="autoSyncProductRefundGoodsCmd"/>
+			</list>
+		</property>
+	</bean>
+	<bean id="autoSyncProductRefundGoodsSchedule" class="com.zhaidou.jobCenter.schedule.ChainSchedule" parent="baseNodeModeSchedule">
+		<property name="scheduleName" value="AutoSyncProductRefundGoodsSchedule"></property>
+		<property name="chain" ref="autoSyncProductRefundGoodsChain"></property>
+	</bean>
+	<bean id="autoSyncProductRefundGoodsScheduleTask" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<ref bean="autoSyncProductRefundGoodsSchedule"/>
+		</property>
+		<property name="targetMethod" value="perform" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<bean id="autoSyncProductRefundGoodsScheduleTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+		<property name="jobDetail">
+			<ref bean="autoSyncProductRefundGoodsScheduleTask" />
+		</property>
+		<!-- 60*1000 一分钟 -->
+        <property name="startDelay">
+            <value>15000</value>
+        </property>
+        <property name="repeatInterval">
+            <value>10000</value>
+        </property>
+	</bean>
+	<!-- autoSynvProductRefundGoodsCms end -->
+	
+	<!-- AutoSyncStockFromRefundGoodsCmd start -->
+	<bean id="autoSyncStockFromRefundGoodsCmd" class="com.zhaidou.jobCenter.schedule.cmd.AutoSyncStockFromRefundGoodsCmd">
+		<property name="commandName" value="AutoSyncStockFromRefundGoodsCmd"></property>
+	</bean>
+	<bean id="autoSyncStockFromRefundGoodsChain" class="com.zhaidou.jobCenter.chain.Chain">
+		<property name="chainName" value="AutoSyncStockFromRefundGoodsChain"></property>
+		<property name="commands">
+			<list>
+				<ref bean="autoSyncStockFromRefundGoodsCmd"/>
+			</list>
+		</property>
+	</bean>
+	<bean id="autoSyncStockFromRefundGoodsSchedule" class="com.zhaidou.jobCenter.schedule.ChainSchedule" parent="baseNodeModeSchedule">
+		<property name="scheduleName" value="AutoSyncStockFromRefundGoodsSchedule"></property>
+		<property name="chain" ref="autoSyncStockFromRefundGoodsChain"></property>
+	</bean>
+	<bean id="autoSyncStockFromRefundGoodsScheduleTask" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<ref bean="autoSyncStockFromRefundGoodsSchedule"/>
+		</property>
+		<property name="targetMethod" value="perform"></property>
+		<property name="concurrent" value="false"></property>	
+	</bean>
+	<bean id="autoSyncStockFromRefundGoodsScheduleTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+		<property name="jobDetail">
+			<ref bean="autoSyncStockFromRefundGoodsScheduleTask" />
+		</property>
+		<!-- 60*1000 一分钟 -->
+        <property name="startDelay">
+            <value>15000</value>
+        </property>
+        <property name="repeatInterval">
+            <value>10000</value>
+        </property>
+	</bean>
+	<!-- AutoSyncStockFromRefundGoodsCmd end -->
+
+	<!--  AutoSyncStockFromPurchaseCmd start  -->
+	<bean id="autoSyncStockFromPurchaseCmd" class="com.zhaidou.jobCenter.schedule.cmd.AutoSyncStockFromPurchaseCmd">
+		<property name="commandName" value="AutoSyncStockFromPurchaseCmd" />
+	</bean>
+    <bean id="autoSyncStockFromPurchaseChain" class="com.zhaidou.jobCenter.chain.Chain">
+		<property name="chainName" value="AutoSyncStockFromPurchaseChain" />
+		<property name="commands">
+			<list>
+				<ref bean="autoSyncStockFromPurchaseCmd" />
+			</list>
+		</property>
+	</bean>
+	<bean id="autoSyncStockFromPurchaseSchedule" class="com.zhaidou.jobCenter.schedule.ChainSchedule" parent="baseNodeModeSchedule">
+        <property name="scheduleName" value="AutoSyncStockFromPurchaseSchedule" />
+   		<property name="chain" ref="autoSyncStockFromPurchaseChain" />
+   	</bean>
+   <bean id="autoSyncStockFromPurchaseScheduleTask" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject">
+			<ref bean="autoSyncStockFromPurchaseSchedule" />
+		</property>
+        <property name="targetMethod" value="perform" />
+        <property name="concurrent" value="false" />
+    </bean>
+    <bean id="autoSyncStockFromPurchaseScheduleTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+		<property name="jobDetail">
+			<ref bean="autoSyncStockFromPurchaseScheduleTask" />
+		</property>
+		<!-- 60*1000 一分钟 -->
+        <property name="startDelay">
+            <value>15000</value>
+        </property>
+        <property name="repeatInterval">
+            <value>10000</value>
+        </property>
+	</bean>
+	<!--  autoSyncStockFromPurchaseCmd end  -->
+	
+	<!--  autoViewProductInfoCmd   -->                     
+	<bean id="autoViewProductInfoCmd" class="com.zhaidou.jobCenter.schedule.cmd.AutoViewProductInfoCmd">
+		<property name="commandName" value="AutoViewProductInfoCmd" />
+	</bean>	
+    <bean id="autoViewProductInfoChain" class="com.zhaidou.jobCenter.chain.Chain">
+		<property name="chainName" value="AutoViewProductInfoChain" />
+		<property name="commands">
+			<list>
+				<ref bean="autoViewProductInfoCmd" />
+			</list>
+		</property>
+	</bean>	                      
+	<bean id="autoViewProductInfoSchedule" class="com.zhaidou.jobCenter.schedule.ChainSchedule" parent="baseNodeModeSchedule">
+        <property name="scheduleName" value="AutoViewProductInfoSchedule" />
+   		<property name="chain" ref="autoViewProductInfoChain" />
+   	</bean>	   
+   <bean id="autoViewProductInfoScheduleTask" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject">
+			<ref bean="autoViewProductInfoSchedule" />
+		</property>
+        <property name="targetMethod" value="perform" />
+        <property name="concurrent" value="false" />
+    </bean>
+    <bean id="autoViewProductInfoScheduleTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+		<property name="jobDetail">
+			<ref bean="autoViewProductInfoScheduleTask" />
+		</property>
+		<!-- 60*1000 一分钟 -->
+        <property name="startDelay">
+            <value>30000</value>
+        </property>
+        <property name="repeatInterval">
+            <value>8000</value>
+        </property>
+	</bean>       
+	
+	<!--  autoMemcacheInfoCmd   -->                     
+	<bean id="autoMemcacheProductInfoCmd" class="com.zhaidou.jobCenter.schedule.cmd.AutoMemcacheProductInfoCmd">
+		<property name="commandName" value="AutoMemcacheProductInfoCmd" />
+	</bean>	
+    <bean id="autoMemcacheProductInfoChain" class="com.zhaidou.jobCenter.chain.Chain">
+		<property name="chainName" value="AutoMemcacheProductInfoChain" />
+		<property name="commands">
+			<list>
+				<ref bean="autoMemcacheProductInfoCmd" />
+			</list>
+		</property>
+	</bean>	                      
+	<bean id="autoMemcacheProductInfoSchedule" class="com.zhaidou.jobCenter.schedule.ChainSchedule" parent="baseNodeModeSchedule">
+        <property name="scheduleName" value="AutoMemcacheProductInfoSchedule" />
+   		<property name="chain" ref="autoMemcacheProductInfoChain" />
+   	</bean>	   
+   <bean id="autoMemcacheProductInfoScheduleTask" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject">
+			<ref bean="autoMemcacheProductInfoSchedule" />
+		</property>
+        <property name="targetMethod" value="perform" />
+        <property name="concurrent" value="false" />
+    </bean>
+    <bean id="autoMemcacheProductInfoScheduleTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+		<property name="jobDetail">
+			<ref bean="autoMemcacheProductInfoScheduleTask" />
+		</property>
+		<!-- 60*1000 一分钟 -->
+        <property name="startDelay">
+            <value>15000</value>
+        </property>
+        <property name="repeatInterval">
+            <value>8000</value>
+        </property>
+	</bean>       
+	
+	<!--  autoMqInfoCmd   -->                     
+	<bean id="autoMqProductInfoCmd" class="com.zhaidou.jobCenter.schedule.cmd.AutoMqProductInfoCmd">
+		<property name="commandName" value="AutoMqProductInfoCmd" />
+	</bean>	
+    <bean id="autoMqProductInfoChain" class="com.zhaidou.jobCenter.chain.Chain">
+		<property name="chainName" value="AutoMqProductInfoChain" />
+		<property name="commands">
+			<list>
+				<ref bean="autoMqProductInfoCmd" />
+			</list>
+		</property>
+	</bean>	                      
+	<bean id="autoMqProductInfoSchedule" class="com.zhaidou.jobCenter.schedule.ChainSchedule" parent="baseNodeModeSchedule">
+        <property name="scheduleName" value="AutoMqProductInfoSchedule" />
+   		<property name="chain" ref="autoMqProductInfoChain" />
+   	</bean>	   
+   <bean id="autoMqProductInfoScheduleTask" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject">
+			<ref bean="autoMqProductInfoSchedule" />
+		</property>
+        <property name="targetMethod" value="perform" />
+        <property name="concurrent" value="false" />
+    </bean>
+    <bean id="autoMqProductInfoScheduleTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+		<property name="jobDetail">
+			<ref bean="autoMqProductInfoScheduleTask" />
+		</property>
+		<!-- 60*1000 一分钟 -->
+        <property name="startDelay">
+            <value>15000</value>
+        </property>
+        <property name="repeatInterval">
+            <value>8000</value>
+        </property>
+	</bean>       
+	
+	
+	
+	<!--  autoBrandCmd   -->                     
+	<bean id="autoBrandCmd" class="com.zhaidou.jobCenter.schedule.cmd.AutoBrandCmd">
+		<property name="commandName" value="AutoBrandCmd" />
+	</bean>	
+    <bean id="autoBrandChain" class="com.zhaidou.jobCenter.chain.Chain">
+		<property name="chainName" value="autoBrandChain" />
+		<property name="commands">
+			<list>
+				<ref bean="autoBrandCmd" />
+			</list>
+		</property>
+	</bean>	                      
+	<bean id="autoBrandSchedule" class="com.zhaidou.jobCenter.schedule.ChainSchedule" parent="baseNodeModeSchedule">
+        <property name="scheduleName" value="AutoBrandSchedule" />
+   		<property name="chain" ref="autoBrandChain" />
+   	</bean>	   
+   <bean id="autoBrandScheduleTask" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject">
+			<ref bean="autoBrandSchedule" />
+		</property>
+        <property name="targetMethod" value="perform" />
+        <property name="concurrent" value="false" />
+    </bean>
+    <bean id="autoBrandScheduleTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+		<property name="jobDetail">
+			<ref bean="autoBrandScheduleTask" />
+		</property>
+		<!-- 60*1000 一分钟 -->
+        <property name="startDelay">
+            <value>30000</value>
+        </property>
+        <property name="repeatInterval">
+            <value>8000</value>
+        </property>
+	</bean>       
+	
+	<!--  autoCatCmd   -->                     
+	<bean id="autoCatCmd" class="com.zhaidou.jobCenter.schedule.cmd.AutoCatCmd">
+		<property name="commandName" value="AutoCatCmd" />
+	</bean>	
+    <bean id="autoCatChain" class="com.zhaidou.jobCenter.chain.Chain">
+		<property name="chainName" value="AutoCatChain" />
+		<property name="commands">
+			<list>
+				<ref bean="autoCatCmd" />
+			</list>
+		</property>
+	</bean>	                      
+	<bean id="autoCatSchedule" class="com.zhaidou.jobCenter.schedule.ChainSchedule" parent="baseNodeModeSchedule">
+        <property name="scheduleName" value="AutoCatSchedule" />
+   		<property name="chain" ref="autoCatChain" />
+   	</bean>	   
+   <bean id="autoCatScheduleTask" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject">
+			<ref bean="autoCatSchedule" />
+		</property>
+        <property name="targetMethod" value="perform" />
+        <property name="concurrent" value="false" />
+    </bean>
+    <bean id="autoCatScheduleTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+		<property name="jobDetail">
+			<ref bean="autoCatScheduleTask" />
+		</property>
+		<!-- 60*1000 一分钟 -->
+        <property name="startDelay">
+            <value>30000</value>
+        </property>
+        <property name="repeatInterval">
+            <value>8000</value>
+        </property>
+	</bean>       
+	
+	
+	<!--  autoAttrCmd   -->                     
+	<bean id="autoAttrCmd" class="com.zhaidou.jobCenter.schedule.cmd.AutoAttrCmd">
+		<property name="commandName" value="AutoAttrCmd" />
+	</bean>	
+    <bean id="autoAttrChain" class="com.zhaidou.jobCenter.chain.Chain">
+		<property name="chainName" value="AutoAttrChain" />
+		<property name="commands">
+			<list>
+				<ref bean="autoAttrCmd" />
+			</list>
+		</property>
+	</bean>	                      
+	<bean id="autoAttrSchedule" class="com.zhaidou.jobCenter.schedule.ChainSchedule" parent="baseNodeModeSchedule">
+        <property name="scheduleName" value="AutoAttrSchedule" />
+   		<property name="chain" ref="autoAttrChain" />
+   	</bean>	   
+   <bean id="autoAttrScheduleTask" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject">
+			<ref bean="autoAttrSchedule" />
+		</property>
+        <property name="targetMethod" value="perform" />
+        <property name="concurrent" value="false" />
+    </bean>
+    <bean id="autoAttrScheduleTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+		<property name="jobDetail">
+			<ref bean="autoAttrScheduleTask" />
+		</property>
+		<!-- 60*1000 一分钟 -->
+        <property name="startDelay">
+            <value>30000</value>
+        </property>
+        <property name="repeatInterval">
+            <value>8000</value>
+        </property>
+	</bean>       
+	
+	
+	
+	<!--  autoStockCmd   -->                     
+	<bean id="autoStockCmd" class="com.zhaidou.jobCenter.schedule.cmd.AutoStockCmd">
+		<property name="commandName" value="AutoStockCmd" />
+	</bean>	
+    <bean id="autoStockChain" class="com.zhaidou.jobCenter.chain.Chain">
+		<property name="chainName" value="AutoStockChain" />
+		<property name="commands">
+			<list>
+				<ref bean="autoStockCmd" />
+			</list>
+		</property>
+	</bean>	                      
+	<bean id="autoStockSchedule" class="com.zhaidou.jobCenter.schedule.ChainSchedule" parent="baseNodeModeSchedule">
+        <property name="scheduleName" value="AutoStockSchedule" />
+   		<property name="chain" ref="autoStockChain" />
+   	</bean>	   
+   <bean id="autoStockScheduleTask" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject">
+			<ref bean="autoStockSchedule" />
+		</property>
+        <property name="targetMethod" value="perform" />
+        <property name="concurrent" value="false" />
+    </bean>
+    <bean id="autoStockScheduleTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+		<property name="jobDetail">
+			<ref bean="autoStockScheduleTask" />
+		</property>
+		<!-- 60*1000 一分钟 -->
+        <property name="startDelay">
+            <value>30000</value>
+        </property>
+        <property name="repeatInterval">
+            <value>8000</value>
+        </property>
+	</bean>       
+	
+	<!--  autoGetSupProductCmd   -->                     
+	<bean id="autoGetSupProductCmd" class="com.zhaidou.jobCenter.schedule.cmd.AutoGetSupProductCmd">
+		<property name="commandName" value="AutoGetSupProductCmd" />
+	</bean>	
+    <bean id="autoGetSupProductChain" class="com.zhaidou.jobCenter.chain.Chain">
+		<property name="chainName" value="AutoGetSupProductChain" />
+		<property name="commands">
+			<list>
+				<ref bean="autoGetSupProductCmd" />
+			</list>
+		</property>
+	</bean>	                      
+	<bean id="autoGetSupProductSchedule" class="com.zhaidou.jobCenter.schedule.ChainSchedule" parent="baseNodeModeSchedule">
+        <property name="scheduleName" value="AutoGetSupProductSchedule" />
+   		<property name="chain" ref="autoGetSupProductChain" />
+   	</bean>	   
+   <bean id="autoGetSupProductScheduleTask" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject">
+			<ref bean="autoGetSupProductSchedule" />
+		</property>
+        <property name="targetMethod" value="perform" />
+        <property name="concurrent" value="false" />
+    </bean>
+    <bean id="autoGetSupProductScheduleTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+		<property name="jobDetail">
+			<ref bean="autoGetSupProductScheduleTask" />
+		</property>
+		<!-- 60*1000 一分钟 -->
+        <property name="startDelay">
+            <value>30000</value>
+        </property>
+        <property name="repeatInterval">
+            <value>8000</value>
+        </property>
+	</bean>       
+	
+	<!--  autoGetSupProductCmd   -->                     
+	<bean id="autoProductAuditFailureCmd" class="com.zhaidou.jobCenter.schedule.cmd.AutoProductAuditFailureCmd">
+		<property name="commandName" value="AutoProductAuditFailureCmd" />
+	</bean>	
+    <bean id="autoProductAuditFailureChain" class="com.zhaidou.jobCenter.chain.Chain">
+		<property name="chainName" value="AutoGetSupProductChain" />
+		<property name="commands">
+			<list>
+				<ref bean="autoProductAuditFailureCmd" />
+			</list>
+		</property>
+	</bean>	                      
+	<bean id="autoProductAuditFailureSchedule" class="com.zhaidou.jobCenter.schedule.ChainSchedule" parent="baseNodeModeSchedule">
+        <property name="scheduleName" value="AutoProductAuditFailureSchedule" />
+   		<property name="chain" ref="autoProductAuditFailureChain" />
+   	</bean>	   
+   <bean id="autoProductAuditFailureScheduleTask" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject">
+			<ref bean="autoProductAuditFailureSchedule" />
+		</property>
+        <property name="targetMethod" value="perform" />
+        <property name="concurrent" value="false" />
+    </bean>
+    <bean id="autoProductAuditFailureScheduleTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+		<property name="jobDetail">
+			<ref bean="autoProductAuditFailureScheduleTask" />
+		</property>
+		<!-- 60*1000 一分钟 -->
+        <property name="startDelay">
+            <value>30000</value>
+        </property>
+        <property name="repeatInterval">
+            <value>8000</value>
+        </property>
+	</bean>
+	
+	<!--  AutoImportPraiseMessageCmd   -->                     
+	<bean id="autoImportPraiseMessageCmd" class="com.zhaidou.jobCenter.schedule.cmd.AutoImportPraiseMessageCmd">
+		<property name="commandName" value="AutoImportPraiseMessageCmd" />
+	</bean>	
+    <bean id="autoImportPraiseMessageChain" class="com.zhaidou.jobCenter.chain.Chain">
+		<property name="chainName" value="AutoImportPraiseMessageChain" />
+		<property name="commands">
+			<list>
+				<ref bean="autoImportPraiseMessageCmd" />
+			</list>
+		</property>
+	</bean>	                      
+	<bean id="autoImportPraiseMessageSchedule" class="com.zhaidou.jobCenter.schedule.ChainSchedule" parent="baseNodeModeSchedule">
+        <property name="scheduleName" value="AutoImportPraiseMessageSchedule" />
+   		<property name="chain" ref="autoImportPraiseMessageChain" />
+   	</bean>	   
+   <bean id="autoImportPraiseMessageScheduleTask" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject">
+			<ref bean="autoImportPraiseMessageSchedule" />
+		</property>
+        <property name="targetMethod" value="perform" />
+        <property name="concurrent" value="false" />
+    </bean>
+    
+    <bean id="autoImportPraiseMessageScheduleTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+		<!--声明要运行的实体 -->
+		<property name="jobDetail">
+			<ref local="autoImportPraiseMessageScheduleTask" />
+		</property>
+		<!-- 60*1000 一分钟 -->
+        <property name="startDelay">
+            <value>30000</value>
+        </property>
+        <property name="repeatInterval">
+            <value>8000</value>
+        </property>
+	</bean>
+	
+	 <!--  autoPraiseMessageCmd   -->      
+	<bean id="autoPraiseMessageCmd" class="com.zhaidou.jobCenter.schedule.cmd.AutoPraiseMessageCmd">
+		<property name="commandName" value="AutoPraiseMessageCmd" />
+	</bean>	
+    <bean id="autoPraiseMessageChain" class="com.zhaidou.jobCenter.chain.Chain">
+		<property name="chainName" value="AutoPraiseMessageChain" />
+		<property name="commands">
+			<list>
+				<ref bean="autoPraiseMessageCmd" />
+			</list>
+		</property>
+	</bean>	                      
+	<bean id="autoPraiseMessageSchedule" class="com.zhaidou.jobCenter.schedule.ChainSchedule" parent="baseNodeModeSchedule">
+        <property name="scheduleName" value="AutoPraiseMessageSchedule" />
+   		<property name="chain" ref="autoPraiseMessageChain" />
+   	</bean>	   
+   <bean id="autoPraiseMessageScheduleTask" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject">
+			<ref bean="autoPraiseMessageSchedule" />
+		</property>
+        <property name="targetMethod" value="perform" />
+        <property name="concurrent" value="false" />
+    </bean>
+    <bean id="autoPraiseMessageScheduleTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail">
+			<ref bean="autoPraiseMessageScheduleTask" />
+		</property>
+		<!-- 设置运行时间 ,每天 10:15执行  0 */1 * * * ?   0 15 10 ? * *-->
+		<property name="cronExpression">
+			<value> 0 30 10 ? * *</value>
+		</property>
+	</bean>       
+	
+	<!--  自动挂载规则   -->                     
+	<bean id="autoMountRuleCmd" class="com.zhaidou.jobCenter.schedule.cmd.AutoMountRuleCmd">
+		<property name="commandName" value="AutoMountRuleCmd" />
+	</bean>	
+    <bean id="autoMountRuleCmdChain" class="com.zhaidou.jobCenter.chain.Chain">
+		<property name="chainName" value="AutoMountRuleCmdChain" />
+		<property name="commands">
+			<list>
+				<ref bean="autoMountRuleCmd" />
+			</list>
+		</property>
+	</bean>	                      
+	<bean id="autoMountRuleSchedule" class="com.zhaidou.jobCenter.schedule.ChainSchedule" parent="baseNodeModeSchedule">
+        <property name="scheduleName" value="AutoMountRuleSchedule" />
+   		<property name="chain" ref="autoMountRuleCmdChain" />
+   	</bean>	   
+   <bean id="autoMountRuleScheduleTask" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject">
+			<ref bean="autoMountRuleSchedule" />
+		</property>
+        <property name="targetMethod" value="perform" />
+        <property name="concurrent" value="false" />
+    </bean>
+    <bean id="autoMountRuleCron" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail">
+			<ref bean="autoMountRuleScheduleTask" />
+		</property>
+		<property name="cronExpression">
+		    <!-- 0点开始执行    -->
+			<value>0 0 0 * * ?</value>
+		</property>
+	</bean>    
+	
+</beans>

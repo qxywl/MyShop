@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- Always ensure to use the correct XML header as above! -->
+<mapper namespace="ProductPurchaseStockDaoImpl">
+
+<resultMap id="productPurchaseStock_result" type="productPurchaseStock">
+    <result property="id" column="id"/>
+    <result property="purchaseId" column="purchase_id"/>
+    <result property="type" column="type"/>
+    <result property="djbh" column="djbh"/>
+    <result property="sh" column="sh"/>
+    <result property="purchaseShr" column="shr"/>
+    <result property="shrq" column="shrq"/>
+    <result property="spdm" column="spdm"/>
+    <result property="spmc" column="spmc"/>
+    <result property="skudm" column="skudm"/>
+    <result property="skumc" column="skumc"/>
+    <result property="sl" column="sl"/>
+    <result property="status" column="status"/>
+    <result property="realStock" column="real_stock"/>
+    <result property="assignPercent" column="assign_percent"/>
+    <result property="publicStock" column="public_stock"/>
+    <result property="assignStatus" column="assign_status"/>
+    <result property="assignBy" column="assign_by"/>
+    <result property="createTime" column="create_Time"/>
+    <result property="createBy" column="create_by"/>
+    <result property="updateTime" column="update_time"/>
+    <result property="updateBy" column="update_by"/>
+</resultMap>
+
+<sql id="ProductPurchaseStock_Query_List_Sharing">
+    <where>
+        <if test="id != null ">
+            and t_product_purchase_stock.id = #{id}
+        </if>
+        <if test="purchaseId != null ">
+            and t_product_purchase_stock.purchase_id = #{purchaseId}
+        </if>
+        <if test="type != null">
+        	and t_product_purchase_stock.type = #{type}
+        </if>
+        <if test="djbh != null ">
+            and t_product_purchase_stock.djbh = #{djbh}
+        </if>
+        <if test="sh != null ">
+            and t_product_purchase_stock.sh = #{sh}
+        </if>
+        <if test="purchaseShr != null and purchaseShr !='' ">
+            and t_product_purchase_stock.shr = #{purchaseShr}
+        </if>
+        <if test="shrq != null ">
+            and t_product_purchase_stock.shrq = #{shrq}
+        </if>
+        <if test="spdm != null and spdm !='' ">
+            and t_product_purchase_stock.spdm = #{spdm}
+        </if>
+        <if test="spmc != null and spmc !='' ">
+            and t_product_purchase_stock.spmc = #{spmc}
+        </if>
+        <if test="skudm != null and skudm !='' ">
+            and t_product_purchase_stock.skudm = #{skudm}
+        </if>
+        <if test="skumc != null and skumc !=''">
+            and t_product_purchase_stock.skumc = #{skumc}
+        </if>
+        <if test="sl != null ">
+            and t_product_purchase_stock.sl = #{sl}
+        </if>
+        <if test="status != null ">
+            and t_product_purchase_stock.status = #{status}
+        </if>
+        <if test="realStock != null ">
+            and t_product_purchase_stock.real_stock = #{realStock}
+        </if>
+        <if test="assignPercent != null ">
+            and t_product_purchase_stock.assign_percent = #{assignPercent}
+        </if>
+        <if test="publicStock != null ">
+            and t_product_purchase_stock.public_stock = #{publicStock}
+        </if>
+        <if test="assignStatus != null ">
+            and t_product_purchase_stock.assign_status = #{assignStatus}
+        </if>
+        <if test="assignBy != null ">
+            and t_product_purchase_stock.assign_by = #{assignBy}
+        </if>
+        <if test="createTime != null ">
+            and t_product_purchase_stock.create_Time = #{createTime}
+        </if>
+        <if test="createBy != null ">
+            and t_product_purchase_stock.create_by = #{createBy}
+        </if>
+        <if test="updateTime != null ">
+            and t_product_purchase_stock.update_time = #{updateTime}
+        </if>
+        <if test="updateBy != null ">
+            and t_product_purchase_stock.update_by = #{updateBy}
+        </if>
+	</where>
+</sql>
+
+<sql id="ProductPurchaseStock_List_Paramter">
+    <if test="orderItem != null ">
+          ORDER BY t_product_purchase_stock.${orderItem} ${orderType}
+    </if>
+</sql>
+
+<sql id="ProductPurchaseStock_column">
+        t_product_purchase_stock.id,
+        t_product_purchase_stock.purchase_id,
+        t_product_purchase_stock.type,
+        t_product_purchase_stock.djbh,
+        t_product_purchase_stock.sh,
+        t_product_purchase_stock.shr,
+        t_product_purchase_stock.shrq,
+        t_product_purchase_stock.spdm,
+        t_product_purchase_stock.spmc,
+        t_product_purchase_stock.skudm,
+        t_product_purchase_stock.skumc,
+        t_product_purchase_stock.sl,
+        t_product_purchase_stock.status,
+        t_product_purchase_stock.create_Time,
+        t_product_purchase_stock.create_by,
+        t_product_purchase_stock.update_time,
+        t_product_purchase_stock.update_by
+</sql>
+
+<sql id="ProductPurchaseStock_By_id">
+    WHERE t_product_purchase_stock.id = #{id}
+</sql>
+
+ <insert id="insert" parameterType="productPurchaseStock" >
+    INSERT INTO t_product_purchase_stock (
+    <include refid="ProductPurchaseStock_column" />
+    ) VALUES (
+                        #{id},
+                        #{purchaseId},
+                        #{type},
+                        #{djbh},
+                        #{sh},
+                        #{purchaseShr},
+                        #{shrq},
+                        #{spdm},
+                        #{spmc},
+                        #{skudm},
+                        #{skumc},
+                        #{sl},
+                        #{status},
+                        now(),
+                        #{createBy},
+                        now(),
+                        #{updateBy}
+    )
+    <!--  需要返回自增id，取消此注释即可
+     <selectKey resultType="long" keyProperty="id" order="AFTER">
+         SELECT LAST_INSERT_ID()
+     </selectKey>
+     -->
+</insert>  
+
+<update id="update" parameterType="productPurchaseStock">
+    UPDATE t_product_purchase_stock t_product_purchase_stock
+    <set>
+        <if test="purchaseId != null ">
+             t_product_purchase_stock.purchase_id = #{purchaseId},
+        </if>
+        <if test="type != null">
+        	 t_product_purchase_stock.type = #{type},
+        </if>
+        <if test="djbh != null ">
+             t_product_purchase_stock.djbh = #{djbh},
+        </if>
+        <if test="sh != null ">
+             t_product_purchase_stock.sh = #{sh},
+        </if>
+        <if test="purchaseShr != null ">
+             t_product_purchase_stock.shr = #{purchaseShr},
+        </if>
+        <if test="shrq != null ">
+             t_product_purchase_stock.shrq = #{shrq},
+        </if>
+        <if test="spdm != null ">
+             t_product_purchase_stock.spdm = #{spdm},
+        </if>
+        <if test="spmc != null ">
+             t_product_purchase_stock.spmc = #{spmc},
+        </if>
+        <if test="skudm != null ">
+             t_product_purchase_stock.skudm = #{skudm},
+        </if>
+        <if test="skumc != null ">
+             t_product_purchase_stock.skumc = #{skumc},
+        </if>
+        <if test="sl != null ">
+             t_product_purchase_stock.sl = #{sl},
+        </if>
+        <if test="status != null ">
+             t_product_purchase_stock.status = #{status},
+        </if>
+         <if test="realStock != null ">
+            t_product_purchase_stock.real_stock = #{realStock},
+        </if>
+        <if test="assignPercent != null ">
+           	t_product_purchase_stock.assign_percent = #{assignPercent},
+        </if>
+        <if test="publicStock != null ">
+            t_product_purchase_stock.public_stock = #{publicStock},
+        </if>
+        <if test="assignStatus != null ">
+            t_product_purchase_stock.assign_status = #{assignStatus},
+        </if>
+        <if test="assignBy != null ">
+            t_product_purchase_stock.assign_by = #{assignBy},
+        </if>
+        <if test="createTime != null ">
+             t_product_purchase_stock.create_Time = #{createTime},
+        </if>
+        <if test="createBy != null ">
+             t_product_purchase_stock.create_by = #{createBy},
+        </if>
+        <if test="updateTime != null ">
+             t_product_purchase_stock.update_time = #{updateTime},
+        </if>
+        <if test="updateBy != null ">
+             t_product_purchase_stock.update_by = #{updateBy},
+        </if>
+     </set>
+
+    <include refid="ProductPurchaseStock_By_id" />
+</update> 
+
+<select id="queryByParams" resultMap="productPurchaseStock_result" parameterType="productPurchaseStock">
+    SELECT
+     	<include refid="ProductPurchaseStock_column" />
+    FROM t_product_purchase_stock t_product_purchase_stock
+   <include refid="ProductPurchaseStock_Query_List_Sharing" />
+</select>
+
+<select id="queryOne"
+        resultMap="productPurchaseStock_result" parameterType="productPurchaseStock">
+    SELECT
+     	<include refid="ProductPurchaseStock_column" />      
+    FROM t_product_purchase_stock t_product_purchase_stock
+    <include refid="ProductPurchaseStock_By_id" />
+</select>
+
+<select id="queryListPage" resultMap="productPurchaseStock_result" parameterType="productPurchaseStock">
+    SELECT
+         <include refid="ProductPurchaseStock_column" />  
+    FROM t_product_purchase_stock t_product_purchase_stock
+	<include refid="ProductPurchaseStock_Query_List_Sharing" />
+
+</select>
+
+<select id="countListPage" resultType="java.lang.Long" parameterType="productPurchaseStock">
+    SELECT
+		COUNT(*)
+   	FROM t_product_purchase_stock t_product_purchase_stock
+	<include refid="ProductPurchaseStock_Query_List_Sharing" />
+</select>
+
+<delete id="delete" parameterType="productPurchaseStock">
+    DELETE  FROM  t_product_purchase_stock 
+    <include refid="ProductPurchaseStock_By_id" />
+</delete>
+
+</mapper>

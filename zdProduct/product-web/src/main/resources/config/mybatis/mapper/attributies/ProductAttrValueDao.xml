@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.zhaidou.product.attributies.dao.impl.ProductAttrValueDaoImpl">
+	
+	<resultMap type="ProductAttrValueModel" id="productAttrValueModel">
+		   <result property="attrId" column="attr_id" javaType="java.lang.Long" />
+		   <result property="attrValueId" column="attr_value_id" javaType="java.lang.Long" />
+		   <result property="attrValueCode" column="attr_value_code" javaType="java.lang.String" />
+		   <result property="attrCode" column="attr_code" javaType="java.lang.String" />
+		   <result property="attrValue" column="attr_value" javaType="java.lang.String" />
+		   <result property="attrValueNum" column="attr_value_num" javaType="java.lang.Integer" />
+		   <result property="createTime" column="create_time" javaType="java.lang.Long" />
+		   <result property="updateTime" column="update_time" javaType="java.lang.Long" />
+		   <result property="updateUser" column="update_user" javaType="java.lang.String" />
+		   <result property="creator" column="creator" javaType="java.lang.String" />
+		   <result property="attrValueStatus" column="attr_value_status" javaType="java.lang.Integer" />
+		   
+	</resultMap>
+
+    <insert id="insert" parameterType="ProductAttrValueModel" keyProperty="attrValueId" useGeneratedKeys="true">
+		insert into  t_product_attr_value
+		(
+	          			    
+	          			    attr_value_id,
+	          			    attr_value_code,
+	          			    attr_id,
+	          				attr_code,
+	          			    attr_value,
+	          			    attr_value_num,
+	          			    creator,
+	          			    create_time,
+	          			    update_user,
+	          			    update_time,
+	          			    attr_value_status
+        )
+		values
+		(
+	          			    #{attrValueId},
+	          			    #{attrValueCode},
+	          			    #{attrId},
+	          			    #{attrCode},
+	          			    #{attrValue},
+          				    #{attrValueNum},
+          				    #{creator},
+          				    #{createTime},
+          				    #{updateUser},
+          				    #{updateTime},
+          				    #{attrValueStatus}
+        )
+	</insert>
+
+
+	<update id="update" parameterType="ProductAttrValueModel">
+		update  t_product_attr_value t 
+		  <set>
+			      
+			        <if test="attrValueCode != null  and attrValueCode !=''">
+				          t.attr_value_code=#{attrValueCode},
+				    </if>
+			        <if test="attrCode != null  and attrCode !=''">
+				          t.attr_code=#{attrCode},
+				    </if>
+				    <if test="attrId != null  and attrId !=''">
+				          t.attr_Id=#{attrId},
+				    </if>
+			        <if test="attrValue != null  and attrValue !=''">
+				          t.attr_value=#{attrValue},
+				    </if>
+			        <if test="attrValueNum != null  and attrValueNum !=''">
+				          t.attr_value_num=#{attrValueNum},
+				    </if>
+				    <if test="updateTime != null  and updateTime !=''">
+				          t.update_time=#{updateTime},
+				    </if>
+				    <if test="attrValueStatus != null">
+				          t.attr_value_status=#{attrValueStatus}
+				    </if>
+		    </set>
+		where 
+		t.attr_value_id = #{attrValueId}
+	</update>
+	
+	
+	<delete id="delete" parameterType="java.lang.Long">
+    	update  t_product_attr_value set attr_value_status = 3  where  attr_value_id = #{attrValueId} 
+    </delete>
+    
+    
+    <delete id="deleteByAttrValueIds" parameterType="java.util.Map">
+    	update t_product_attr_value set attr_value_status = 3 where attr_value_id
+    	 in
+    	<foreach item="item" index="index" collection="listids" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+    </delete>
+
+    <sql id="query">
+	        <if test="attrValueId != null and attrValueId !=''">
+					and t.attr_value_id=#{attrValueId}
+		    </if>
+	        <if test="attrValueCode != null and attrValueCode !=''">
+		        	and t.attr_value_code like CONCAT(CONCAT('%', #{attrValueCode}), '%') 
+		    </if>
+	        <if test="attrCode != null and attrCode !=''">
+		        	and t.attr_code = #{attrCode}
+		    </if>
+	        <if test="attrValue != null and attrValue !=''">
+		        	and t.attr_value like CONCAT(CONCAT('%', #{attrValue}), '%') 
+		    </if>
+		     <if test="attrId != null and attrId !=''">
+		        	and t.attr_id like CONCAT(CONCAT('%', #{attrId}), '%') 
+		    </if>
+	        <if test="attrValueNum != null and attrValueNum !=''">
+					and t.attr_value_num=#{attrValueNum}
+		    </if>
+	    
+    </sql>
+
+
+	<select id="queryOne" parameterType="java.lang.Long" resultMap="productAttrValueModel">
+		select
+		          attr_id,
+		          
+		          attr_value_id,
+		          
+		          attr_value_code,
+		          
+		          attr_code,
+		          
+		          attr_value,
+		          
+		          attr_value_num,
+		          
+		          create_time,
+		          
+		          update_user,
+		           
+	          	 update_time
+		          
+		from  t_product_attr_value t
+		where t.attr_value_status != 3
+		 <if test="attrValueId != null and attrValueId !=''">
+					and t.attr_value_id=#{attrValueId}
+		    </if>
+	        <if test="attrValueCode != null and attrValueCode !=''">
+		        	and t.attr_value_code = #{attrValueCode}
+		    </if>
+	</select>
+	
+	
+
+	<select id="queryAttrValueByValueIds" parameterType="java.util.Map" resultMap="productAttrValueModel">
+		select 
+	          attr_id,
+	          
+	          attr_value_id,
+	    
+	          attr_value_code,
+	    
+	          attr_code,
+	    
+	          attr_value,
+	    
+	          attr_value_num,
+	          
+	          create_time,
+	          
+	          update_user,
+	           
+	          update_time
+	          
+	     from  t_product_attr_value t
+		
+		where t.attr_value_status != 3 and attr_value_id in
+		
+    	<foreach item="item" index="index" collection="valueIds" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</select>
+	
+	<select id="queryListPage" parameterType="ProductAttrValueModel" resultMap="productAttrValueModel">
+		select 
+	          attr_id,
+	          
+	          attr_value_id,
+	    
+	          attr_value_code,
+	    
+	          attr_code,
+	    
+	          attr_value,
+	    
+	          attr_value_num,
+	          
+	          create_time,
+	          
+	          update_user,
+	           
+	          update_time
+	          
+	     from  t_product_attr_value t
+		where t.attr_value_status != 3
+		<include refid="query"/>
+	</select>
+
+	<select id="countListPage" parameterType="ProductAttrValueModel"
+		resultType="java.lang.Long">
+		select count(1) from  t_product_attr_value t
+		where t.attr_value_status != 3
+		<include refid="query"/>
+	 </select>
+
+	<select id="getMaxId" resultType="java.lang.Long">
+		select  ifnull(max(attr_value_id),0)+1  from  t_product_attr_value 
+	</select>
+</mapper>

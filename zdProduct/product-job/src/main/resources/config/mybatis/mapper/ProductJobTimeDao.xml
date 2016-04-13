@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- Always ensure to use the correct XML header as above! -->
+<mapper namespace="ProductJobTimeDaoImpl">
+
+<resultMap id="productJobTimeModel" type="ProductJobTimeModel">
+    <result property="id" column="id"/>
+    <result property="startTime" column="start_time"/>
+    <result property="endTime" column="end_time"/>
+    <result property="type" column="type"/>
+    <result property="createTime" column="create_Time"/>
+    <result property="createBy" column="create_by"/>
+    <result property="updateTime" column="update_time"/>
+    <result property="updateBy" column="update_by"/>
+</resultMap>
+
+<sql id="ProductJobTime_Query_List_Sharing">
+    <where>
+        <if test="id != null ">
+            and t_product_job_time.id = #{id}
+        </if>
+        <if test="startTime != null ">
+            and t_product_job_time.start_time = #{startTime}
+        </if>
+        <if test="endTime != null ">
+        	and t_product_job_time.end_time = #{endTime}
+        </if>
+        <if test="type != null and type !=''  ">
+            and t_product_job_time.type = #{type}
+        </if>
+        <if test="createTime != null ">
+            and t_product_job_time.create_Time = #{createTime}
+        </if>
+        <if test="createBy != null">
+            and t_product_job_time.create_by = #{createBy}
+        </if>
+        <if test="updateBy != null ">
+            and t_product_job_time.update_by = #{updateBy}
+        </if>
+        <if test="updateTime != null ">
+            and t_product_job_time.update_time = #{updateTime}
+        </if>
+	</where>
+</sql>
+
+<sql id="ProductJobTime_column">
+        t_product_job_time.id,
+        t_product_job_time.start_time,
+        t_product_job_time.end_time,
+        t_product_job_time.type,
+        t_product_job_time.create_Time,
+        t_product_job_time.create_by,
+        t_product_job_time.update_by,
+        t_product_job_time.update_time
+</sql>
+
+<sql id="ProductJobTime_By_id">
+    WHERE t_product_job_time.id = #{id}
+</sql>
+
+	<select id="queryOne" parameterType="ProductJobTimeModel" resultMap="productJobTimeModel">
+	select
+	          id,
+	          start_time,
+	          end_time,
+	          type,
+	          create_Time,
+	          create_by,
+	          update_by,
+	          update_time
+	from  t_product_job_time t
+	where t.type = #{type} order by t.end_time desc limit 0,1 
+	</select>
+
+ <insert id="insert" parameterType="ProductJobTimeModel" >
+    INSERT INTO t_product_job_time (
+    <include refid="ProductJobTime_column" />
+    ) VALUES (
+                        #{id},
+                        #{startTime},
+                        #{endTime},
+                        #{type},
+                        now(),
+                        #{createBy},
+                        #{updateBy},
+                        now()
+    )
+    <!--  需要返回自增id，取消此注释即可
+     <selectKey resultType="long" keyProperty="id" order="AFTER">
+         SELECT LAST_INSERT_ID()
+     </selectKey>
+     -->
+</insert>  
+
+<select id="queryListPage" resultMap="productJobTimeModel" parameterType="ProductJobTimeModel">
+    SELECT
+         <include refid="ProductJobTime_column" />  
+    FROM t_product_job_time t_product_job_time
+	<include refid="ProductJobTime_Query_List_Sharing" />
+
+</select>
+
+<select id="countListPage" resultType="java.lang.Long" parameterType="ProductJobTimeModel">
+    SELECT
+		COUNT(*)
+   	FROM t_product_job_time t_product_job_time
+	<include refid="ProductJobTime_Query_List_Sharing" />
+</select>
+
+</mapper>
